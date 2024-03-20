@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vaayo/pages/pages.dart';
 import 'package:vaayo/pages/profile.dart';
+import 'package:vaayo/pages/search_ride.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 main() {
@@ -23,10 +24,11 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         navigatorKey: navKey,
         routes: {
-          "ProfilePage": (BuildContext context) => ProfilePage(userId: 3),
+          "ProfilePage": (BuildContext context) => UserProfilePage(userId: 3),
           "RideDetails": (BuildContext context) => const RideDetailsPage(
                 rideId: 3,
-              )
+              ),
+          "SearchRides": (BuildContext context) => SearchRidesPage()
         },
         theme: ThemeData(
             primaryColor: Colors.lightBlueAccent,

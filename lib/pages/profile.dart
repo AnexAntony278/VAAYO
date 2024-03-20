@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vaayo/pages/widgets.dart';
 
-class ProfilePage extends StatelessWidget {
-  ProfilePage({required this.userId});
+class UserProfilePage extends StatelessWidget {
+  UserProfilePage({required this.userId, super.key});
   final int userId;
   final Map user = {
     "name": "ANEX ANTONY",

@@ -27,7 +27,7 @@ class _RidePageState extends State<RidePage> {
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
-                  onTap: () => debugPrint("sssssss"),
+                  onTap: () => navKey.currentState?.pushNamed("SearchRides"),
                   child: const Card(
                       child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
@@ -203,26 +203,28 @@ class RideDetailsPage extends StatelessWidget {
                 ),
               ),
               Text("   Driver deattils"),
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Text("KL2012", style: TextStyle(fontSize: 30)),
-                          Text("CAR TYPE"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          CircleAvatar(radius: 40, child: Placeholder()),
-                          Text("DriverName", style: TextStyle(fontSize: 25))
-                        ],
-                      )
-                    ],
+              InkWell(
+                child: Card(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text("KL2012", style: TextStyle(fontSize: 30)),
+                            Text("CAR TYPE"),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            CircleAvatar(radius: 40, child: Placeholder()),
+                            Text("DriverName", style: TextStyle(fontSize: 25))
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
