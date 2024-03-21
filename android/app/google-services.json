@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "582823167228",
+    "project_id": "vaayo-app",
+    "storage_bucket": "vaayo-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582823167228:android:6790c60fe28b8d19558379",
+        "android_client_info": {
+          "package_name": "com.example.vaayo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7xdEoDYmtzJbBGEa9DiM4K-8Dq-b68Bg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
