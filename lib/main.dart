@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vaayo/pages/pages.dart';
 import 'package:vaayo/pages/profile.dart';
 import 'package:vaayo/pages/search_ride.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 main() {
