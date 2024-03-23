@@ -49,7 +49,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '582823167228',
     projectId: 'vaayo-app',
     authDomain: 'vaayo-app.firebaseapp.com',
-    databaseURL: 'https://vaayo-app-default-rtdb.firebaseio.com',
     storageBucket: 'vaayo-app.appspot.com',
     measurementId: 'G-RHZ261QG2B',
   );
@@ -59,7 +58,6 @@ class DefaultFirebaseOptions {
     appId: '1:582823167228:android:6790c60fe28b8d19558379',
     messagingSenderId: '582823167228',
     projectId: 'vaayo-app',
-    databaseURL: 'https://vaayo-app-default-rtdb.firebaseio.com',
     storageBucket: 'vaayo-app.appspot.com',
   );
 
@@ -68,7 +66,6 @@ class DefaultFirebaseOptions {
     appId: '1:582823167228:ios:3287d58705b17ba2558379',
     messagingSenderId: '582823167228',
     projectId: 'vaayo-app',
-    databaseURL: 'https://vaayo-app-default-rtdb.firebaseio.com',
     storageBucket: 'vaayo-app.appspot.com',
     iosBundleId: 'com.example.vaayo',
   );
@@ -78,7 +75,6 @@ class DefaultFirebaseOptions {
     appId: '1:582823167228:ios:c2002696453bbb35558379',
     messagingSenderId: '582823167228',
     projectId: 'vaayo-app',
-    databaseURL: 'https://vaayo-app-default-rtdb.firebaseio.com',
     storageBucket: 'vaayo-app.appspot.com',
     iosBundleId: 'com.example.vaayo.RunnerTests',
   );
