@@ -1,24 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vaayo/pages/widgets.dart';
 
-class UserProfilePage extends StatelessWidget {
+class UserProfilePage extends StatefulWidget {
   UserProfilePage({required this.userId, super.key});
   final int userId;
-  final Map user = {
-    "name": "ANEX ANTONY",
-    "age": 10,
-    "gender": 'M',
-    "phone": "7034456811",
-    "email": "anexantony278@gmail.com",
-    "bio": "I am a SOftware Enginerring student who loves Gaming",
-    "tags": ["pets", "music", "gaming"],
-    "cars": [
-      "KL2021",
-    ]
-  };
 
   @override
+  State<UserProfilePage> createState() => _UserProfilePageState();
+}
+
+class _UserProfilePageState extends State<UserProfilePage> {
+  final db = FirebaseFirestore.instance;
+
+  late Map user;
+
+  // final Map user = {
+  @override
   Widget build(BuildContext context) {
+    debugPrint("${db.collection("users")}");
+    db.collection("users").where('name', isEqualTo: 'anex').get().then((event) {
+      for (var doc in event.docs) {
+        user = doc.data();
+      }
+    });
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

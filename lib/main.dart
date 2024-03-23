@@ -7,6 +7,9 @@ import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 main() {
+  Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -30,7 +33,7 @@ class _MyAppState extends State<MyApp> {
           "RideDetails": (BuildContext context) => const RideDetailsPage(
                 rideId: 3,
               ),
-          "SearchRides": (BuildContext context) => SearchRidesPage()
+          "SearchRides": (BuildContext context) => const SearchRidesPage()
         },
         theme: ThemeData(
             primaryColor: Colors.lightBlueAccent,

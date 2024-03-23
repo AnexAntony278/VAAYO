@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "582823167228",
+    "firebase_url": "https://vaayo-app-default-rtdb.firebaseio.com",
     "project_id": "vaayo-app",
     "storage_bucket": "vaayo-app.appspot.com"
   },
