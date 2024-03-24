@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vaayo/pages/pages.dart';
-import 'package:vaayo/pages/profile.dart';
-import 'package:vaayo/pages/search_ride.dart';
+import 'package:vaayo/src/features/manage_rides/screens/ride_details.dart';
+import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
+import 'package:vaayo/src/features/profile_management/screens/user_profile.dart';
+import 'package:vaayo/src/features/manage_rides/screens/search_ride.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -28,9 +29,8 @@ class _MyAppState extends State<MyApp> {
         navigatorKey: navKey,
         routes: {
           "ProfilePage": (BuildContext context) => UserProfilePage(userId: 3),
-          "RideDetails": (BuildContext context) => const RideDetailsPage(
-                rideId: 3,
-              ),
+          "RideDetails": (BuildContext context) =>
+              const RideDetailsPage(rideId: 3),
           "SearchRides": (BuildContext context) => const SearchRidesPage()
         },
         theme: ThemeData(

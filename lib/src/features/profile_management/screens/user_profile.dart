@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:vaayo/pages/widgets.dart';
+import 'package:vaayo/src/common_widgets/widgets.dart';
 
 class UserProfilePage extends StatefulWidget {
-  UserProfilePage({required this.userId, super.key});
+  const UserProfilePage({required this.userId, super.key});
   final int userId;
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -26,17 +26,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
         "KL2021",
       ]
     };
-
-    // Future<Map<String, dynamic>> getUserData(FirebaseFirestore dataBase) {
-    //   return dataBase
-    //       .collection("user")
-    //       .where("name", isEqualTo: "ANEX ANTONY")
-    //       .snapshots().forEach((QuerySnapshot querySnapshot) {
-    //         querySnapshot.docs!.first
-    //        });
-    // }
-
-    // user = getUserData(db);
 
     return SafeArea(
       child: Scaffold(
