@@ -9,10 +9,8 @@ class FontTest extends StatelessWidget {
       home: Scaffold(
         body: Column(
           children: [
-            Text(
-              "TITLE LARGE",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+            Text("TITLE LARGE",
+                style: Theme.of(context).textTheme.headlineLarge),
             Text(
               "DISPLAY Large",
               style: Theme.of(context).textTheme.displayLarge,

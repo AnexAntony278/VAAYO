@@ -10,23 +10,30 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
-  final db = FirebaseFirestore.instance;
+  Map<String, dynamic>? user;
+  Future<void> getUserData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .where("name", isEqualTo: "ANEX ANTONY")
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      setState(() {
+        user = snapshot.docs.first.data();
+      });
+    } else {
+      debugPrint('User not found!');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> user;
-    user = {
-      "name": "ANEX ANTONY",
-      "age": 10,
-      "gender": 'M',
-      "phone": "7034456811",
-      "email": "anexantony278@gmail.com",
-      "bio": "I am a SOftware Enginerring student who loves Gaming",
-      "tags": ["pets", "music", "gaming"],
-      "cars": [
-        "KL2021",
-      ]
-    };
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -47,7 +54,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Hi There,\n${user["name"]},\n",
+                          "Hi There,\n${user?["name"] ?? ''},\n",
                           style: const TextStyle(fontSize: 30),
                         ),
                         CircleAvatar(
@@ -59,18 +66,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       children: [
                         TextDataBox(
                           text: "age",
-                          data: user["age"].toString(),
+                          data: user?["age"]?.toString() ?? '',
                           noOfBox: 2,
                         ),
                         TextDataBox(
                           text: "gender",
-                          data: user["gender"],
+                          data: user?["gender"] ?? '',
                           noOfBox: 2,
                         ),
                         TextDataBox(
-                            text: "email", data: user["email"], noOfBox: 1),
+                            text: "email",
+                            data: user?["email"] ?? '',
+                            noOfBox: 1),
                         TextDataBox(
-                            text: "Phone.no", data: user['phone'], noOfBox: 1),
+                            text: "Phone.no",
+                            data: user?['phone'] ?? '',
+                            noOfBox: 1),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 10),
@@ -98,17 +109,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                             alignment: WrapAlignment.start,
                                             spacing: 5,
                                             children: List.generate(
-                                                user['tags'].length,
+                                                user?['tags']?.length ?? 0,
                                                 (index) => Chip(
                                                     backgroundColor:
                                                         Colors.grey.shade200,
                                                     label: Text(
-                                                      '# ${user['tags'][index]}',
+                                                      '# ${user!['tags']![index]}',
                                                       style: const TextStyle(
                                                           color:
                                                               Colors.black54),
                                                     )))),
-                                        Text(user['bio']),
+                                        Text(user?['bio'] ?? ''),
                                       ],
                                     ))
                               ],
@@ -135,13 +146,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                     Column(
                         children: List.generate(
-                            user['cars'].length,
+                            user?['cars']?.length ?? 0,
                             (index) => Card(
                                     child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Column(
                                     children: [
-                                      Text("${user['cars'][index]}  -"),
+                                      Text("${user!['cars']![index]}  -"),
                                     ],
                                   ),
                                 ))))
@@ -151,7 +162,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             Card(
               child: Column(children: [
-                Text("Ratings and Rewiews"),
+                Text("Ratings and Reviews"),
               ]),
             )
           ]),
