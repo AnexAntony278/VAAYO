@@ -1,24 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vaayo/pages/widgets.dart';
 
-class UserProfilePage extends StatelessWidget {
+class UserProfilePage extends StatefulWidget {
   UserProfilePage({required this.userId, super.key});
   final int userId;
-  final Map user = {
-    "name": "ANEX ANTONY",
-    "age": 10,
-    "gender": 'M',
-    "phone": "7034456811",
-    "email": "anexantony278@gmail.com",
-    "bio": "I am a SOftware Enginerring student who loves Gaming",
-    "tags": ["pets", "music", "gaming"],
-    "cars": [
-      "KL2021",
-    ]
-  };
+  @override
+  State<UserProfilePage> createState() => _UserProfilePageState();
+}
 
+class _UserProfilePageState extends State<UserProfilePage> {
+  final db = FirebaseFirestore.instance;
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic> user;
+    user = {
+      "name": "ANEX ANTONY",
+      "age": 10,
+      "gender": 'M',
+      "phone": "7034456811",
+      "email": "anexantony278@gmail.com",
+      "bio": "I am a SOftware Enginerring student who loves Gaming",
+      "tags": ["pets", "music", "gaming"],
+      "cars": [
+        "KL2021",
+      ]
+    };
+
+    // Future<Map<String, dynamic>> getUserData(FirebaseFirestore dataBase) {
+    //   return dataBase
+    //       .collection("user")
+    //       .where("name", isEqualTo: "ANEX ANTONY")
+    //       .snapshots().forEach((QuerySnapshot querySnapshot) {
+    //         querySnapshot.docs!.first
+    //        });
+    // }
+
+    // user = getUserData(db);
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
