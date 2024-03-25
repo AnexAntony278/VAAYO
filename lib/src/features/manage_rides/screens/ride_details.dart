@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+Map<String, dynamic> ride = {
+  "start": "",
+  "time": DateTime,
+  "available_seats": 2,
+  "total_seats": 3
+};
+
 class RideDetailsPage extends StatelessWidget {
   const RideDetailsPage({super.key, required this.rideId});
   final int? rideId;

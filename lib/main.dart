@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaayo/Map.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_details.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
 import 'package:vaayo/src/features/profile_management/screens/user_profile.dart';
@@ -9,7 +10,7 @@ import 'firebase_options.dart';
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const MyApp());
+  runApp(const VaayoMap());
 }
 
 class MyApp extends StatefulWidget {
