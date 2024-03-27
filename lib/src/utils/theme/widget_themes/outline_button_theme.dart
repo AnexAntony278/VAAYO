@@ -1,8 +1,8 @@
 import 'package:vaayo/src/constants/color.dart';
 import 'package:flutter/material.dart';
 
-class TOutlinedButtonTheme {
-  TOutlinedButtonTheme._(); //avoid create instances
+class VOutlinedButtonTheme {
+  VOutlinedButtonTheme.F_(); //avoid create instances
 
   static final lightOutlinedButtonTheme = OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(

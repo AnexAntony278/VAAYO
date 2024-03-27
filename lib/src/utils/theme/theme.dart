@@ -18,8 +18,8 @@ class TAppTheme {
           color: Colors.black38,
           fontSize: 18,
         )),
-    outlinedButtonTheme: TOutlinedButtonTheme.lightOutlinedButtonTheme,
-    elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
+    outlinedButtonTheme: VOutlinedButtonTheme.lightOutlinedButtonTheme,
+    elevatedButtonTheme: VElevatedButtonTheme.lightElevatedButtonTheme,
   );
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
@@ -35,7 +35,7 @@ class TAppTheme {
           color: Colors.white30,
           fontSize: 18,
         )),
-    outlinedButtonTheme: TOutlinedButtonTheme.darkOutlinedButtonTheme,
-    elevatedButtonTheme: TElevatedButtonTheme.darkElevatedButtonTheme,
+    outlinedButtonTheme: VOutlinedButtonTheme.darkOutlinedButtonTheme,
+    elevatedButtonTheme: VElevatedButtonTheme.darkElevatedButtonTheme,
   );
 }

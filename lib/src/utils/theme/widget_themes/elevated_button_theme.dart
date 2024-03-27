@@ -1,8 +1,8 @@
 import 'package:vaayo/src/constants/color.dart';
 import 'package:flutter/material.dart';
 
-class TElevatedButtonTheme {
-  TElevatedButtonTheme._();
+class VElevatedButtonTheme {
+  VElevatedButtonTheme._();
   static final lightElevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,

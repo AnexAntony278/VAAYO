@@ -34,14 +34,19 @@ class _VaayoMapState extends State<VaayoMap> {
                   height: MediaQuery.of(context).size.height / 2,
                   child: FlutterMap(
                       options: MapOptions(
-                        initialCenter: LatLng(51.5, -0.09),
+                        initialCenter: LatLng(9.853135, 76.947712),
+                        initialZoom: 17,
                         backgroundColor: Colors.red,
                       ),
                       children: [
                         TileLayer(
                           urlTemplate:
                               'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          subdomains: ['a', 'b', 'c'],
+                          subdomains: [
+                            'a',
+                            'b',
+                            'c'
+                          ], // Subdomains for the tile server
                         ),
                       ]))
             ],

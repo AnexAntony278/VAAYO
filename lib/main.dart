@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vaayo/Map.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_details.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
+import 'package:vaayo/src/features/manage_trips/screen/create_trips.dart';
 import 'package:vaayo/src/features/profile_management/screens/user_profile.dart';
 import 'package:vaayo/src/features/manage_rides/screens/search_ride.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -9,8 +10,9 @@ import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const VaayoMap());
+  runApp(const CreateTripPage());
 }
 
 class MyApp extends StatefulWidget {
