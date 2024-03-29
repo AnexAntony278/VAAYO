@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:vaayo/src/utils/theme/widget_themes/elevated_button_theme.dart';
 
 class CreateTripPage extends StatefulWidget {
-  const CreateTripPage({super.key});
+  const CreateTripPage({Key? key}) : super(key: key);
 
   @override
   State<CreateTripPage> createState() => _CreateTripPageState();
 }
 
 class _CreateTripPageState extends State<CreateTripPage> {
+  DateTime _selectedDate = DateTime.now();
+  int? _totalseats = 3;
+  int? _availSeats = 3;
+  String? _selectedCar;
+
+  final List<String> _cars = ["KL8976", "KL670-8h78", "poor"];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCar = _cars[0];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueAccent,
           title: Text("CREATE TRIPS"),
@@ -23,43 +35,110 @@ class _CreateTripPageState extends State<CreateTripPage> {
             children: [
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("From"),
-                      Placeholder(
-                        child: Text("SearchBox"),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Enter departure location',
+                          filled: true,
+                        ),
                       ),
+                      SizedBox(height: 10),
                       Text("To"),
-                      Placeholder(
-                        child: Text("SearchBox"),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Enter destination location',
+                          filled: true,
+                        ),
                       ),
-                      Placeholder(child: Text("DateTime Selelct")),
-                      Placeholder(
-                        child: Text("Available Seats"),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2 - 50,
+                            child: TextField(
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    hintText: "Date",
+                                    prefixIcon: Icon(Icons.date_range)),
+                                readOnly: true,
+                                onTap: () {
+                                  _showDatePicker(context);
+                                  debugPrint("hhhhhhhhhhhh");
+                                }),
+                          ),
+                          SizedBox(height: 10),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 2 - 80,
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  hintText: "Time",
+                                  filled: true,
+                                  prefixIcon: Icon(Icons.alarm)),
+                              readOnly: true,
+                            ),
+                          ),
+                        ],
                       ),
-                      Placeholder(
-                        child: Text("TAGS"),
+                      Text("Available Seats"),
+                      //SEATS DROPDOWN
+                      DropdownButton<int>(
+                        value: _availSeats,
+                        onChanged: (value) {
+                          _availSeats = value;
+                          setState(() {});
+                        },
+                        items: List.generate(
+                          _totalseats!,
+                          (index) => DropdownMenuItem(
+                            value: _totalseats! - index,
+                            child: Text('${_totalseats! - index}'),
+                          ),
+                        ),
                       ),
-                      Placeholder(
-                        child: Text("Car select"),
-                      ),
+                      SizedBox(height: 10),
+                      Placeholder(child: Text("TAGS")),
+                      SizedBox(height: 10),
+                      Text("Car select"),
+                      //CARS DROPDOWN
+                      DropdownButton<String>(
+                          value: _selectedCar,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedCar = value;
+                            });
+                          },
+                          items: _cars.map((car) {
+                            return DropdownMenuItem<String>(
+                              value: car,
+                              child: Text(car),
+                            );
+                          }).toList()),
                     ],
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(onPressed: () {}, child: Text("CREATE")),
-                ],
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("CREATE"),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _showDatePicker(context) async {
+    await showDatePicker(
+        context: context,
+        currentDate: _selectedDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days: 7)));
   }
 }

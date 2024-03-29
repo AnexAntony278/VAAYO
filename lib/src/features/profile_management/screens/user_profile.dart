@@ -38,6 +38,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("MY PROFILE"),
+          actions: const [
+            Icon(
+              (Icons.supervised_user_circle),
+              size: 40,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
         ),
         body: Padding(
           padding: EdgeInsets.all(20),

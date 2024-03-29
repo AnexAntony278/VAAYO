@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:vaayo/main.dart';
 
-class RidesPage extends StatefulWidget {
-  const RidesPage({super.key});
+class TripsPage extends StatefulWidget {
+  const TripsPage({super.key});
 
   @override
-  State<RidesPage> createState() => _RidesPageState();
+  State<TripsPage> createState() => _TripsPageState();
 }
 
-class _RidesPageState extends State<RidesPage> {
+class _TripsPageState extends State<TripsPage> {
   final int _noOfRides = 2;
 
   @override
@@ -18,26 +18,26 @@ class _RidesPageState extends State<RidesPage> {
         backgroundColor: Colors.blueGrey[100],
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: const Text("My Rides"),
+          title: const Text("MY TRIPS"),
         ),
         body: ListView.builder(
           itemCount: _noOfRides + 1,
           itemBuilder: (context, index) {
             if (index == _noOfRides) {
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
-                  onTap: () => navKey.currentState?.pushNamed("SearchRides"),
+                  onTap: () => navKey.currentState?.pushNamed("CreateTrips"),
                   child: const Card(
                       child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Column(
                       children: [
                         Icon(
-                          Icons.search_rounded,
+                          Icons.add_rounded,
                           size: 50,
                         ),
-                        Text("Search and add new Ride")
+                        Text("Schedule a Trip")
                       ],
                     ),
                   )),
@@ -66,10 +66,6 @@ class _RidesPageState extends State<RidesPage> {
                                 Text(
                                   // TIME
                                   "$index:00",
-                                ),
-                                Text(
-                                  "Pick UP POint:$index",
-                                  style: const TextStyle(fontSize: 20),
                                 ),
                                 Expanded(
                                   child: Column(

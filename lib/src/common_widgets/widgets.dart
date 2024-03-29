@@ -30,7 +30,7 @@ class TextDataBox extends StatelessWidget {
             width:
                 (MediaQuery.of(context).size.width - 90 - (noOfBox - 1) * 20) /
                     noOfBox,
-            height: 30,
+            height: 40,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(data),
@@ -38,6 +38,17 @@ class TextDataBox extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CarCard extends StatelessWidget {
+  const CarCard({super.key, required this.carNo});
+  final String carNo;
+  @override
+  Widget build(BuildContext context) {
+    return Placeholder(
+      child: Text(carNo),
     );
   }
 }

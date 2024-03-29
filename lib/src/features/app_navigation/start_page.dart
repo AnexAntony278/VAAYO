@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+import 'package:vaayo/main.dart';
+import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
+import 'package:vaayo/src/features/manage_trips/screen/trip_list.dart';
+
+class StartPage extends StatefulWidget {
+  const StartPage({super.key});
+  @override
+  State<StartPage> createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> {
+  int _navBarIndex = 0;
+  Widget _selectedPage = const RidesPage();
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text("VAAYO"),
+            toolbarHeight: 80,
+            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).primaryColorDark,
+            actions: [
+              Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: GestureDetector(
+                    onTap: () {
+                      navKey.currentState?.pushNamed("ProfilePage");
+                    },
+                    child: const CircleAvatar(
+                      radius: 30,
+                      child: Icon(Icons.supervised_user_circle_sharp),
+                    ),
+                  ))
+            ],
+          ),
+          body: _selectedPage,
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _navBarIndex,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.emoji_transportation), label: "My Rides"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.time_to_leave), label: "My Trips"),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.settings), label: "Settings")
+            ],
+            elevation: 50,
+            onTap: (value) {
+              setState(() {
+                _navBarIndex = value;
+                switch (value) {
+                  case 0:
+                    _selectedPage = const RidesPage();
+                  case 1:
+                    _selectedPage = const TripsPage();
+                  case 2:
+                    _selectedPage = const Text("SETTINGS");
+                  default:
+                    _selectedPage = const RidesPage();
+                }
+              });
+            },
+          )),
+    );
+  }
+}

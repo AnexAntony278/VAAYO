@@ -1,94 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:vaayo/Map.dart';
+import 'package:vaayo/src/features/app_navigation/start_page.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_details.dart';
-import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
-import 'package:vaayo/src/features/manage_trips/screen/create_trips.dart';
-import 'package:vaayo/src/features/profile_management/screens/user_profile.dart';
 import 'package:vaayo/src/features/manage_rides/screens/search_ride.dart';
+import 'package:vaayo/src/features/manage_trips/screen/create_trips.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:vaayo/src/features/profile_management/screens/user_profile.dart';
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+
 main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const CreateTripPage());
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  int _navBarIndex = 0;
-  Widget _selectedPage = const RidePage();
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        navigatorKey: navKey,
-        routes: {
-          "ProfilePage": (BuildContext context) => UserProfilePage(userId: 3),
-          "RideDetails": (BuildContext context) =>
-              const RideDetailsPage(rideId: 3),
-          "SearchRides": (BuildContext context) => const SearchRidesPage()
-        },
-        theme: ThemeData(
-            primaryColor: Colors.lightBlueAccent,
-            fontFamily: "BebasNeue",
-            cardColor: Colors.blueAccent),
-        home: SafeArea(
-          child: Scaffold(
-              appBar: AppBar(
-                title: const Text("VAAYO"),
-                toolbarHeight: 80,
-                foregroundColor: Colors.white,
-                backgroundColor: Theme.of(context).primaryColorDark,
-                actions: [
-                  Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: GestureDetector(
-                        onTap: () {
-                          navKey.currentState?.pushNamed("ProfilePage");
-                        },
-                        child: const CircleAvatar(
-                          radius: 30,
-                          child: Icon(Icons.supervised_user_circle_sharp),
-                        ),
-                      ))
-                ],
-              ),
-              body: _selectedPage,
-              bottomNavigationBar: BottomNavigationBar(
-                currentIndex: _navBarIndex,
-                items: const [
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.location_city), label: "MyRides"),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.emoji_transportation), label: "MyTrips"),
-                  BottomNavigationBarItem(
-                      icon: Icon(Icons.settings), label: "Settings")
-                ],
-                elevation: 50,
-                onTap: (value) {
-                  setState(() {
-                    _navBarIndex = value;
-                    switch (value) {
-                      case 0:
-                        _selectedPage = const RidePage();
-                      case 1:
-                        _selectedPage = const Text("Trip");
-                      case 2:
-                        _selectedPage = const Text("SETTINGS");
-                      default:
-                        _selectedPage = const Text("RIDES");
-                    }
-                  });
-                },
-              )),
-        ));
-  }
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MaterialApp(
+    home: const StartPage(),
+    debugShowCheckedModeBanner: false,
+    navigatorKey: navKey,
+    routes: {
+      "ProfilePage": (BuildContext context) => const UserProfilePage(userId: 3),
+      "RideDetails": (BuildContext context) => const RideDetailsPage(rideId: 3),
+      "SearchRides": (BuildContext context) => const SearchRidesPage(),
+      "CreateTrips": (BuildContext context) => const CreateTripPage(),
+    },
+    theme: ThemeData(
+        primaryColor: Colors.lightBlueAccent,
+        fontFamily: "BebasNeue",
+        cardColor: Colors.blueAccent),
+  ));
 }

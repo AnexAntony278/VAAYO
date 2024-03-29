@@ -15,6 +15,17 @@ class RideDetailsPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Ride Details"),
+          actions: const [
+            Icon(
+              (Icons.emoji_transportation),
+              size: 40,
+            ),
+            SizedBox(
+              width: 20,
+            ),
+          ],
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.blue,
         ),
         backgroundColor: Colors.blueGrey[100],
         body: Padding(
