@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 
 class CreateTripPage extends StatefulWidget {
   const CreateTripPage({Key? key}) : super(key: key);
@@ -8,13 +9,16 @@ class CreateTripPage extends StatefulWidget {
 }
 
 class _CreateTripPageState extends State<CreateTripPage> {
-  DateTime _selectedDate = DateTime.now();
-  int? _totalseats = 3;
+  DateTime? _selectedDate = DateTime.now();
+  TimeOfDay? _selectedTime = TimeOfDay.now();
+  int? _totalseats = 4;
   int? _availSeats = 3;
   String? _selectedCar;
 
-  final List<String> _cars = ["KL8976", "KL670-8h78", "poor"];
+  final List<String> _cars = ["KL8976", "KL670-8h78", "rch"];
 
+  TextEditingController _dateFieldController = TextEditingController();
+  TextEditingController _timeController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -61,6 +65,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 2 - 50,
                             child: TextField(
+                                controller: _dateFieldController,
                                 decoration: InputDecoration(
                                     filled: true,
                                     hintText: "Date",
@@ -68,18 +73,18 @@ class _CreateTripPageState extends State<CreateTripPage> {
                                 readOnly: true,
                                 onTap: () {
                                   _showDatePicker(context);
-                                  debugPrint("hhhhhhhhhhhh");
                                 }),
                           ),
-                          SizedBox(height: 10),
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 2 - 80,
                             child: TextField(
+                              controller: _timeController,
                               decoration: InputDecoration(
                                   hintText: "Time",
                                   filled: true,
                                   prefixIcon: Icon(Icons.alarm)),
                               readOnly: true,
+                              onTap: () => _showTimePicker(context),
                             ),
                           ),
                         ],
@@ -122,10 +127,13 @@ class _CreateTripPageState extends State<CreateTripPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text("CREATE"),
+              SizedBox(
+                height: 20,
+                width: 10,
+                child: ElevatedButton(
+                  onPressed: () => _onCreateButtonClick,
+                  child: Text("CREATE"),
+                ),
               ),
             ],
           ),
@@ -135,10 +143,34 @@ class _CreateTripPageState extends State<CreateTripPage> {
   }
 
   Future<void> _showDatePicker(context) async {
-    await showDatePicker(
-        context: context,
-        currentDate: _selectedDate,
-        firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(Duration(days: 7)));
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 7)),
+    );
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+      _dateFieldController.text =
+          "${_selectedDate!.day} ${_selectedDate!.toMonth()} ${_selectedDate!.year}, ${_selectedDate!.toWeekday()} ";
+    }
+  }
+
+  Future<void> _showTimePicker(context) async {
+    final TimeOfDay? _pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (_pickedTime != null && _pickedTime != _selectedTime) {
+      _timeController.text =
+          "${_selectedTime!.hour} : ${_selectedTime!.minute} ";
+    }
+  }
+
+  Future<void> _onCreateButtonClick() async {
+    _selectedDate!.add(
+        Duration(hours: _selectedTime!.hour, minutes: _selectedTime!.minute));
   }
 }

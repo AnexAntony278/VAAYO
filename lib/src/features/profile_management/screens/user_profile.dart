@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vaayo/src/common_widgets/widgets.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -10,30 +10,47 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
+  final db = FirebaseFirestore.instance;
   Map<String, dynamic>? user;
-  Future<void> getUserData() async {
-    final snapshot = await FirebaseFirestore.instance
+  late QuerySnapshot<Map<String, dynamic>> _snapshot;
+  Future<void> _getUSerData() async {
+    _snapshot = await db
         .collection("users")
         .where("name", isEqualTo: "ANEX ANTONY")
         .get();
 
-    if (snapshot.docs.isNotEmpty) {
+    if (_snapshot.docs.isNotEmpty) {
       setState(() {
-        user = snapshot.docs.first.data();
+        user = _snapshot.docs.first.data();
+        debugPrint(user.toString());
       });
     } else {
-      debugPrint('User not found!');
+      debugPrint('User not found!+'); //EXCEPTION
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getUserData();
+    _getUSerData();
   }
 
   @override
   Widget build(BuildContext context) {
+    Map sampleUser = {
+      "phone": 7034456811,
+      "age": 18,
+      "gender": "F",
+      " email": "anexantony278@gmail.com",
+      "cars": [
+        {"no": "KL2021", "model": " Supra 22 red"},
+        {"model": " Popy Nano", "no": "KL2222"}
+      ],
+      "tags": ["pets", " music", "gaming"],
+      'bio': "blah blah blah about myself",
+      "name": "ANEX ANTONY"
+    };
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -49,17 +66,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: ListView(children: [
             Card(
               elevation: 10,
               child: Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -145,13 +162,31 @@ class _UserProfilePageState extends State<UserProfilePage> {
             Card(
               elevation: 10,
               child: Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "MY RIDES",
-                      style: TextStyle(fontSize: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "MY RIDES",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              _addCar(
+                                  no: "KL123", model: "parkum thalikaa choppa");
+                            },
+                            child: const Icon(
+                              Icons.add,
+                              size: 30,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Column(
                         children: List.generate(
@@ -159,9 +194,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             (index) => Card(
                                     child: Padding(
                                   padding: const EdgeInsets.all(10.0),
-                                  child: Column(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
-                                      Text("${user!['cars']![index]}  -"),
+                                      Text("${user!['cars']![index]['no']}"),
+                                      Text("${user!['cars']![index]['model']}"),
+                                      InkWell(
+                                        onTap: () => _deleteCar(index),
+                                        child: const Icon(
+                                          Icons.delete,
+                                          size: 17,
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ))))
@@ -169,7 +214,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ),
               ),
             ),
-            Card(
+            const Card(
               child: Column(children: [
                 Text("Ratings and Reviews"),
               ]),
@@ -178,5 +223,49 @@ class _UserProfilePageState extends State<UserProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _deleteCar(int index) async {
+    if (user != null) {
+      String? docId =
+          _snapshot.docs.isNotEmpty ? _snapshot.docs.first.id : null;
+      if (docId != null) {
+        List<Map<String, dynamic>> updatedCars = List.from(user!['cars']!);
+        updatedCars.removeAt(index);
+        try {
+          //To Update DB
+          await db.collection("users").doc(docId).update({
+            'cars': updatedCars,
+          });
+          setState(() {
+            //To Update DB
+            user!['cars'] = updatedCars;
+          });
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      } else {
+        debugPrint("\nUser not found\n");
+      }
+    } else {
+      debugPrint("User data not loaded yet");
+    }
+  }
+
+  Future<void> _addCar({required String no, required String model}) async {
+    if (user != null) {
+      String? docId = _snapshot.docs.first.id;
+      List<Map<String, dynamic>> updatedCars = List.from(user?['cars']);
+      try {
+        await db.collection("users").doc(docId).update({'cars': updatedCars});
+        setState(() {
+          user!['cars'] = updatedCars;
+        });
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    } else {
+      debugPrint("User data Loading..");
+    }
   }
 }

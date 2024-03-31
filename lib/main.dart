@@ -10,8 +10,9 @@ import 'firebase_options.dart';
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
 main() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(MaterialApp(
     home: const StartPage(),
     debugShowCheckedModeBanner: false,
