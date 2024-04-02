@@ -76,7 +76,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -177,8 +177,42 @@ class _UserProfilePageState extends State<UserProfilePage> {
                           ),
                           InkWell(
                             onTap: () {
-                              _addCar(
-                                  no: "KL123", model: "parkum thalikaa choppa");
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    final CarNoTextController =
+                                            TextEditingController(),
+                                        CarModelTextController =
+                                            TextEditingController();
+                                    return AlertDialog(
+                                      title: Text("Add Car Details"),
+                                      actions: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text("Car No"),
+                                            TextField(
+                                              controller: CarNoTextController,
+                                            ),
+                                            Text("Car Model "),
+                                            TextField(
+                                              controller:
+                                                  CarModelTextController,
+                                            ),
+                                            ElevatedButton(
+                                                onPressed: () => _addCar(
+                                                    no: CarNoTextController
+                                                        .text,
+                                                    model:
+                                                        CarModelTextController
+                                                            .text),
+                                                child: Text("SUBMIT"))
+                                          ],
+                                        )
+                                      ],
+                                    );
+                                  });
                             },
                             child: const Icon(
                               Icons.add,
@@ -196,7 +230,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text("${user!['cars']![index]['no']}"),
                                       Text("${user!['cars']![index]['model']}"),
@@ -256,6 +290,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (user != null) {
       String? docId = _snapshot.docs.first.id;
       List<Map<String, dynamic>> updatedCars = List.from(user?['cars']);
+      updatedCars.add({'no': no, 'model': model});
       try {
         await db.collection("users").doc(docId).update({'cars': updatedCars});
         setState(() {
