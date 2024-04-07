@@ -15,10 +15,11 @@ class _CreateTripPageState extends State<CreateTripPage> {
   int? _availSeats = 3;
   String? _selectedCar;
 
-  final List<String> _cars = ["KL8976", "KL670-8h78", "rch"];
+  final List<String> _cars = ["anex"];
 
   TextEditingController _dateFieldController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
