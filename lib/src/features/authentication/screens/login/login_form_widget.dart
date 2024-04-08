@@ -26,7 +26,7 @@ class LoginForm extends StatelessWidget {
           SizedBox(height: 10.0),
           TextFormField(
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.password_sharp),
+                  prefixIcon: Icon(Icons.key),
                   labelText: "Password",
                   border: OutlineInputBorder(),
                   hintText: "Passsword",

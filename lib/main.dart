@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vaayo/src/features/app_navigation/start_page.dart';
 import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_mail.dart';
 import 'package:vaayo/src/features/authentication/screens/login/login_screen.dart';
 import 'package:vaayo/src/features/authentication/screens/login/welcome.dart';
-import 'package:vaayo/src/features/authentication/signup/sign_up_screen.dart';
+import 'package:vaayo/src/features/authentication/screens/signup/sign_up_screen.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_details.dart';
 import 'package:vaayo/src/features/manage_rides/screens/search_ride.dart';
 import 'package:vaayo/src/features/manage_trips/screen/create_trips.dart';
@@ -18,9 +17,11 @@ main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(MaterialApp(
-    home: const SignUpScreen(),
+    home: const WelcomeScreen(),
+    debugShowCheckedModeBanner: false,
+    navigatorKey: navKey,
     routes: {
-      "Login": (BuildContext context) => const LoginScreen(),
+      "LogIn": (BuildContext context) => const LoginScreen(),
       "SignUp": (BuildContext context) => const SignUpScreen(),
       "ProfilePage": (BuildContext context) => const UserProfilePage(userId: 3),
       "RideDetails": (BuildContext context) => const RideDetailsPage(rideId: 3),

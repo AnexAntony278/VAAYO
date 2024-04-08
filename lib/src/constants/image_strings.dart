@@ -1,3 +1,3 @@
 // WelcomeScreen images
-const String tWelcomeScreenImage ="assets/images/logo.png";
-const String tGoogleImage ="assets/images/google.png";
+const String vWelcomeScreenImage = "assets/images/logo.png";
+const String vGoogleImage = "assets/images/google.png";

@@ -3,13 +3,13 @@ import 'package:vaayo/main.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
 import 'package:vaayo/src/features/manage_trips/screen/trip_list.dart';
 
-class StartPage extends StatefulWidget {
-  const StartPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
   @override
-  State<StartPage> createState() => _StartPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _StartPageState extends State<StartPage> {
+class _HomePageState extends State<HomePage> {
   int _navBarIndex = 0;
   Widget _selectedPage = const RidesPage();
   @override
@@ -53,12 +53,16 @@ class _StartPageState extends State<StartPage> {
                 switch (value) {
                   case 0:
                     _selectedPage = const RidesPage();
+                    break;
                   case 1:
                     _selectedPage = const TripsPage();
+                    break;
                   case 2:
                     _selectedPage = const Text("SETTINGS");
+                    break;
                   default:
                     _selectedPage = const RidesPage();
+                    break;
                 }
               });
             },

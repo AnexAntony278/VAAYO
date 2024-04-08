@@ -2,7 +2,6 @@ import 'package:vaayo/src/common_widgets/forms/form_header_widget.dart';
 import 'package:vaayo/src/constants/color.dart';
 import 'package:vaayo/src/constants/image_strings.dart';
 import 'package:vaayo/src/features/authentication/screens/login/login_form_widget.dart';
-import 'package:vaayo/src/features/authentication/screens/login/login_header_widget.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -18,7 +17,7 @@ class SignUpScreen extends StatelessWidget {
             child: Column(
               children: [
                 FormHeaderWidget(
-                    image: tWelcomeScreenImage,
+                    image: vWelcomeScreenImage,
                     title: "Get On Board!",
                     subTitle: "Create your profile to start your Journey"),
                 Container(

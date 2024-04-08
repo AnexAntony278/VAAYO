@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaayo/main.dart';
 
 class LoginFooterWidget extends StatelessWidget {
   const LoginFooterWidget({
@@ -8,37 +9,33 @@ class LoginFooterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text("OR"),
-              SizedBox(height: 10.0,),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  icon: Image(image: AssetImage("assets/images/google.png"),width: 30.0),
-                  onPressed: (){},
-                   label: Text("Sign-in with Google")
-                   ),
-              ),
-              const SizedBox(height: 10.0,),
-              TextButton(
-                onPressed: (){},
-                 child: Text.rich(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text("OR"),
+        SizedBox(
+          height: 10.0,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton.icon(
+              icon: Image(
+                  image: AssetImage("assets/images/google.png"), width: 30.0),
+              onPressed: () {},
+              label: Text("Sign-in with Google")),
+        ),
+        const SizedBox(
+          height: 10.0,
+        ),
+        TextButton(
+            onPressed: () => navKey.currentState?.pushNamed("SignUp"),
+            child: Text.rich(TextSpan(
+                text: "Don't have an Account?",
+                style: Theme.of(context).textTheme.bodySmall,
+                children: [
                   TextSpan(
-                  text: "Don't have an Account?",
-                  style: Theme.of(context).textTheme.bodySmall,
-                  children: [
-                    TextSpan(
-                      text: "Signup",
-                      style: TextStyle(color:Colors.blue)
-                      ),
-                    
-                  ]
-                  )
-                  )
-                 )
-            ],
-          );
+                      text: "Signup", style: TextStyle(color: Colors.blue)),
+                ])))
+      ],
+    );
   }
 }
-

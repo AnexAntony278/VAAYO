@@ -1,10 +1,8 @@
-//import 'package:vaayo/src/constants/color.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/constants/color.dart';
 import 'package:vaayo/src/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 
-//import 'package:vaayo/src/constants/sizes.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -13,7 +11,7 @@ class WelcomeScreen extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
     var height = mediaQuery.size.height;
     var brightness = mediaQuery.platformBrightness;
-    final isDarkMode = brightness == Brightness.dark;
+    final isDarkMode = brightness == Brightness.light;
 
     return Scaffold(
         backgroundColor: isDarkMode ? vSecondaryColor : vPrimaryColor,
@@ -23,7 +21,7 @@ class WelcomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image(
-                  image: AssetImage(tWelcomeScreenImage), height: height * 0.6),
+                  image: AssetImage(vWelcomeScreenImage), height: height * 0.6),
               Column(
                 children: [
                   Text(
@@ -42,17 +40,19 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   Expanded(
                       child: OutlinedButton(
-                          onPressed: () =>
-                              navKey.currentState?.pushNamed("LogIn"),
-                          child: Text("Login".toUpperCase()))),
+                          onPressed: () {
+                            navKey.currentState?.pushNamed("LogIn");
+                          },
+                          child: Text("LOGIN"))),
                   const SizedBox(
                     width: 10.0,
                   ),
                   Expanded(
                       child: ElevatedButton(
-                          onPressed: () =>
-                              navKey.currentState?.pushNamed("SignUp"),
-                          child: Text('Signup'.toUpperCase())))
+                          onPressed: () {
+                            navKey.currentState?.pushNamed("SignUp");
+                          },
+                          child: Text('Signup')))
                 ],
               )
             ],
