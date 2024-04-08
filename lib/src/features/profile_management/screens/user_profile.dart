@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/common_widgets/widgets.dart';
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({required this.userId, super.key});
-  final int userId;
+  const UserProfilePage({super.key});
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
 }
@@ -13,19 +13,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final db = FirebaseFirestore.instance;
   Map<String, dynamic>? user;
   late QuerySnapshot<Map<String, dynamic>> _snapshot;
-  Future<void> _getUSerData() async {
-    _snapshot = await db
-        .collection("users")
-        .where("name", isEqualTo: "ANEX ANTONY")
-        .get();
+  String? uid = "";
 
+  Future<void> _getUSerData() async {
+    final prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+    debugPrint("uid is '$uid'");
+    _snapshot = await db.collection("users").where("uid", isEqualTo: uid).get();
     if (_snapshot.docs.isNotEmpty) {
       setState(() {
         user = _snapshot.docs.first.data();
         debugPrint(user.toString());
       });
     } else {
-      debugPrint('User not found!+'); //EXCEPTION
+      debugPrint('User not found!'); //EXCEPTION
     }
   }
 
@@ -37,20 +38,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Map sampleUser = {
-      "phone": 7034456811,
-      "age": 18,
-      "gender": "F",
-      " email": "anexantony278@gmail.com",
-      "cars": [
-        {"no": "KL2021", "model": " Supra 22 red"},
-        {"model": " Popy Nano", "no": "KL2222"}
-      ],
-      "tags": ["pets", " music", "gaming"],
-      'bio': "blah blah blah about myself",
-      "name": "ANEX ANTONY"
-    };
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

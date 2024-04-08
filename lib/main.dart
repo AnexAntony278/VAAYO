@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:vaayo/src/features/app_management/start_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vaayo/src/features/app_management/home_page.dart';
 import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_mail.dart';
 import 'package:vaayo/src/features/authentication/screens/login/login_screen.dart';
 import 'package:vaayo/src/features/authentication/screens/login/welcome.dart';
@@ -17,8 +18,9 @@ final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  Widget startScreen = WelcomeScreen();
+  final prefs = await SharedPreferences.getInstance();
+  String? uid = prefs.getString('uid');
+  Widget startScreen = (uid != '') ? HomePage() : const WelcomeScreen();
   runApp(MaterialApp(
     home: startScreen,
     debugShowCheckedModeBanner: false,
@@ -26,12 +28,12 @@ main() async {
     routes: {
       "Welcome": (BuildContext context) => const WelcomeScreen(),
       "LogIn": (BuildContext context) => const LoginScreen(),
-      "SignUp": (BuildContext context) => const SignUpScreen(),
-      "Home": (BuildContext context) => const HomePage(),
-      "ProfilePage": (BuildContext context) => const UserProfilePage(userId: 3),
-      "RideDetails": (BuildContext context) => const RideDetailsPage(rideId: 3),
-      "SearchRides": (BuildContext context) => const SearchRidesPage(),
-      "CreateTrips": (BuildContext context) => const CreateTripPage(),
+      "SignUp": (BuildContext context) => SignUpScreen(),
+      "Home": (BuildContext context) => HomePage(),
+      "ProfilePage": (BuildContext context) => UserProfilePage(),
+      "RideDetails": (BuildContext context) => RideDetailsPage(),
+      "SearchRides": (BuildContext context) => SearchRidesPage(),
+      "CreateTrips": (BuildContext context) => CreateTripPage(),
       "ForgotPasswordMail": (BuildContext context) =>
           const ForgetPasswordMailScreen(),
     },

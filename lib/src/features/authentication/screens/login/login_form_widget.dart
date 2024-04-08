@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_model_button_sheet.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,10 @@ class _LoginFormState extends State<LoginForm> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(_error_message),
+              Text(
+                _error_message,
+                style: TextStyle(color: Colors.red),
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -69,6 +73,8 @@ class _LoginFormState extends State<LoginForm> {
                             email: _emailTextController.text,
                             password: _passwordTextController.text);
                     User? user = userCredential.user;
+                    final prefs = await SharedPreferences.getInstance();
+                    prefs.setString('uid', userCredential.user?.uid ?? '');
                     debugPrint(user.toString());
                     navKey.currentState?.pop();
                     navKey.currentState?.pushNamed("Home");
@@ -79,7 +85,7 @@ class _LoginFormState extends State<LoginForm> {
                     //TODO- EXCEPTION HANDLING
                   }
                 },
-                child: const Text("LOGIN")),
+                child: const Text(" LOGIN")),
           ),
         ],
       ),

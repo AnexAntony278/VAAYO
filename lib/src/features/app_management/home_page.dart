@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vaayo/main.dart';
-import 'package:vaayo/src/features/app_management/settingspage.dart';
+import 'package:vaayo/src/features/app_management/settings_page.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
 import 'package:vaayo/src/features/manage_trips/screen/trip_list.dart';
 

@@ -8,8 +8,7 @@ Map<String, dynamic> ride = {
 };
 
 class RideDetailsPage extends StatelessWidget {
-  const RideDetailsPage({super.key, required this.rideId});
-  final int? rideId;
+  const RideDetailsPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

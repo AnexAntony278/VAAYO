@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -20,8 +21,10 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Column(children: [
         TextButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              final prefs = await SharedPreferences.getInstance();
+              prefs.setString('uid', '');
               navKey.currentState?.pop();
               navKey.currentState?.pushNamed("Welcome");
             },
