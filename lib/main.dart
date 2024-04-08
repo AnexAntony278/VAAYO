@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vaayo/src/features/app_management/start_page.dart';
 import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_mail.dart';
 import 'package:vaayo/src/features/authentication/screens/login/login_screen.dart';
 import 'package:vaayo/src/features/authentication/screens/login/welcome.dart';
@@ -16,13 +18,16 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  Widget startScreen = WelcomeScreen();
   runApp(MaterialApp(
-    home: const WelcomeScreen(),
+    home: startScreen,
     debugShowCheckedModeBanner: false,
     navigatorKey: navKey,
     routes: {
+      "Welcome": (BuildContext context) => const WelcomeScreen(),
       "LogIn": (BuildContext context) => const LoginScreen(),
       "SignUp": (BuildContext context) => const SignUpScreen(),
+      "Home": (BuildContext context) => const HomePage(),
       "ProfilePage": (BuildContext context) => const UserProfilePage(userId: 3),
       "RideDetails": (BuildContext context) => const RideDetailsPage(rideId: 3),
       "SearchRides": (BuildContext context) => const SearchRidesPage(),
@@ -31,8 +36,6 @@ main() async {
           const ForgetPasswordMailScreen(),
     },
     theme: ThemeData(
-        primaryColor: Colors.lightBlueAccent,
-        fontFamily: "BebasNeue",
-        cardColor: Colors.blueAccent),
+        primaryColor: Colors.lightBlueAccent, cardColor: Colors.blueAccent),
   ));
 }

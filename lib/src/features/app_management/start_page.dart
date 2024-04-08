@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vaayo/main.dart';
+import 'package:vaayo/src/features/app_management/settingspage.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
 import 'package:vaayo/src/features/manage_trips/screen/trip_list.dart';
 
@@ -58,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                     _selectedPage = const TripsPage();
                     break;
                   case 2:
-                    _selectedPage = const Text("SETTINGS");
+                    _selectedPage = SettingsPage();
                     break;
                   default:
                     _selectedPage = const RidesPage();

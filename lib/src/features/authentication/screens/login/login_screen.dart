@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                             Text("Get there with Vaayo"),
                           ],
                         ),
-                        const LoginForm(),
+                        LoginForm(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -50,8 +50,10 @@ class LoginScreen extends StatelessWidget {
                               height: 10.0,
                             ),
                             TextButton(
-                                onPressed: () =>
-                                    navKey.currentState?.pushNamed("SignUp"),
+                                onPressed: () {
+                                  navKey.currentState?.pop();
+                                  navKey.currentState?.pushNamed("SignUp");
+                                },
                                 child: Text.rich(TextSpan(
                                     text: "Don't have an Account?",
                                     style:

@@ -1,13 +1,21 @@
-import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_button_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vaayo/main.dart';
 import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_model_button_sheet.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({
+class LoginForm extends StatefulWidget {
+  LoginForm({
     super.key,
   });
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  String _error_message = "";
+  final TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +26,7 @@ class LoginForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
+              controller: _emailTextController,
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person_outline_outlined),
                   labelText: "Email",
@@ -25,26 +34,52 @@ class LoginForm extends StatelessWidget {
                   hintText: "Email")),
           SizedBox(height: 10.0),
           TextFormField(
+              controller: _passwordTextController,
+              obscureText: true,
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.key),
                   labelText: "Password",
                   border: OutlineInputBorder(),
                   hintText: "Passsword",
                   suffixIcon: IconButton(
-                      onPressed: null,
+                      onPressed: () {},
                       icon: Icon(Icons.remove_red_eye_sharp)))),
           const SizedBox(height: 10.0),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-                onPressed: () {
-                  ForgetPasswordScreen.buildShowModelBottomSheet(context);
-                },
-                child: Text("Forgot Password?")),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(_error_message),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                    onPressed: () {
+                      ForgetPasswordScreen.buildShowModelBottomSheet(context);
+                    },
+                    child: Text("Forgot Password?")),
+              ),
+            ],
           ),
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(onPressed: () {}, child: Text("LOGIN")),
+            child: ElevatedButton(
+                onPressed: () async {
+                  try {
+                    final UserCredential userCredential =
+                        await FirebaseAuth.instance.signInWithEmailAndPassword(
+                            email: _emailTextController.text,
+                            password: _passwordTextController.text);
+                    User? user = userCredential.user;
+                    debugPrint(user.toString());
+                    navKey.currentState?.pop();
+                    navKey.currentState?.pushNamed("Home");
+                  } on FirebaseAuthException catch (e) {
+                    setState(() {
+                      _error_message = e.code;
+                    });
+                    //TODO- EXCEPTION HANDLING
+                  }
+                },
+                child: const Text("LOGIN")),
           ),
         ],
       ),

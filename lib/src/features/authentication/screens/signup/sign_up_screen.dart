@@ -1,7 +1,6 @@
+import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/forms/form_header_widget.dart';
-import 'package:vaayo/src/constants/color.dart';
 import 'package:vaayo/src/constants/image_strings.dart';
-import 'package:vaayo/src/features/authentication/screens/login/login_form_widget.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -15,6 +14,7 @@ class SignUpScreen extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(30.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 FormHeaderWidget(
                     image: vWelcomeScreenImage,
@@ -24,7 +24,6 @@ class SignUpScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 20.0),
                     child: Form(
                         child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextFormField(
                           decoration: const InputDecoration(
@@ -59,6 +58,26 @@ class SignUpScreen extends StatelessWidget {
                             prefixIcon: Icon(Icons.password_sharp),
                           ),
                         ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            label: Text('Age'),
+                          ),
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            label: Text('Gender'),
+                          ),
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            label: Text('Occupation'),
+                          ),
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            label: Text('Bio'),
+                          ),
+                        ),
                         const SizedBox(
                           height: 20.0,
                         ),
@@ -84,7 +103,10 @@ class SignUpScreen extends StatelessWidget {
                       ),
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          navKey.currentState?.pop();
+                          navKey.currentState?.pushNamed("LogIn");
+                        },
                         child: Text.rich(TextSpan(children: [
                           TextSpan(
                               text: "Already have an Account?",
