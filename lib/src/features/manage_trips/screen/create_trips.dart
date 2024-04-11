@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 
 class CreateTripPage extends StatefulWidget {
@@ -9,16 +10,20 @@ class CreateTripPage extends StatefulWidget {
 }
 
 class _CreateTripPageState extends State<CreateTripPage> {
-  DateTime? _selectedDate = DateTime.now();
-  TimeOfDay? _selectedTime = TimeOfDay.now();
+  DateTime? _selectedDate;
+  TimeOfDay? _selectedTime;
   int? _totalseats = 4;
   int? _availSeats = 3;
   String? _selectedCar;
 
   final List<String> _cars = ["anex"];
 
-  TextEditingController _dateFieldController = TextEditingController();
-  TextEditingController _timeController = TextEditingController();
+  final TextEditingController _departureFieldController =
+      TextEditingController();
+  final TextEditingController _destinationFieldController =
+      TextEditingController();
+  final TextEditingController _dateFieldController = TextEditingController();
+  final TextEditingController _timeController = TextEditingController();
 
   @override
   void initState() {
@@ -46,6 +51,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                     children: [
                       Text("From"),
                       TextField(
+                        controller: _departureFieldController,
                         decoration: InputDecoration(
                           hintText: 'Enter departure location',
                           filled: true,
@@ -54,6 +60,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                       SizedBox(height: 10),
                       Text("To"),
                       TextField(
+                        controller: _destinationFieldController,
                         decoration: InputDecoration(
                           hintText: 'Enter destination location',
                           filled: true,
@@ -132,7 +139,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 height: 20,
                 width: 10,
                 child: ElevatedButton(
-                  onPressed: () => _onCreateButtonClick,
+                  onPressed: () => _createTrip(),
                   child: Text("CREATE"),
                 ),
               ),
@@ -143,6 +150,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
     );
   }
 
+//FUNCTIONS
   Future<void> _showDatePicker(context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -160,18 +168,43 @@ class _CreateTripPageState extends State<CreateTripPage> {
   }
 
   Future<void> _showTimePicker(context) async {
-    final TimeOfDay? _pickedTime = await showTimePicker(
+    final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
-    if (_pickedTime != null && _pickedTime != _selectedTime) {
+    if (pickedTime != null && pickedTime != _selectedTime) {
+      _selectedTime = pickedTime;
       _timeController.text =
-          "${_selectedTime!.hour} : ${_selectedTime!.minute} ";
+          "${_selectedTime!.hour % 12} : ${_selectedTime!.minute} ${(_selectedTime!.hour < 12) ? "AM" : "PM"} ";
     }
+    debugPrint(_selectedTime.toString());
   }
 
-  Future<void> _onCreateButtonClick() async {
+  void _createTrip() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('uid');
+    debugPrint(_selectedDate.toString());
     _selectedDate!.add(
         Duration(hours: _selectedTime!.hour, minutes: _selectedTime!.minute));
+
+    Map<String, dynamic> trip = {
+      'driver_uid': uid,
+      'departure': _departureFieldController.text,
+      'destination': _destinationFieldController.text,
+      'departure_time': _selectedDate.toString(),
+      'available_seats': _availSeats,
+    };
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: Card(
+              child: SizedBox(
+                  height: 200,
+                  width: 300,
+                  child: Text("${trip.toString()} \n CREATED ")),
+            ),
+          );
+        });
   }
 }

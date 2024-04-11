@@ -18,12 +18,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Future<void> _getUSerData() async {
     final prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid');
-    debugPrint("uid is '$uid'");
+    debugPrint("Profile Page :uid is '$uid'");
     _snapshot = await db.collection("users").where("uid", isEqualTo: uid).get();
     if (_snapshot.docs.isNotEmpty) {
       setState(() {
         user = _snapshot.docs.first.data();
-        debugPrint(user.toString());
+        debugPrint("Profile${user.toString()}");
       });
     } else {
       debugPrint('User not found!'); //EXCEPTION

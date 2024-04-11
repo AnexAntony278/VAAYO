@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/features/app_management/home_page.dart';
@@ -20,7 +19,10 @@ main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
-  Widget startScreen = (uid != '') ? HomePage() : const WelcomeScreen();
+  debugPrint("\nMainPage  uid:$uid"); //DP
+  Widget startScreen =
+      (uid != 'none' || uid != null) ? const HomePage() : const WelcomeScreen();
+
   runApp(MaterialApp(
     home: startScreen,
     debugShowCheckedModeBanner: false,
@@ -29,11 +31,11 @@ main() async {
       "Welcome": (BuildContext context) => const WelcomeScreen(),
       "LogIn": (BuildContext context) => const LoginScreen(),
       "SignUp": (BuildContext context) => SignUpScreen(),
-      "Home": (BuildContext context) => HomePage(),
-      "ProfilePage": (BuildContext context) => UserProfilePage(),
-      "RideDetails": (BuildContext context) => RideDetailsPage(),
-      "SearchRides": (BuildContext context) => SearchRidesPage(),
-      "CreateTrips": (BuildContext context) => CreateTripPage(),
+      "Home": (BuildContext context) => const HomePage(),
+      "ProfilePage": (BuildContext context) => const UserProfilePage(),
+      "RideDetails": (BuildContext context) => const RideDetailsPage(),
+      "SearchRides": (BuildContext context) => const SearchRidesPage(),
+      "CreateTrips": (BuildContext context) => const CreateTripPage(),
       "ForgotPasswordMail": (BuildContext context) =>
           const ForgetPasswordMailScreen(),
     },

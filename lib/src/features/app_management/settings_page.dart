@@ -24,7 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               final prefs = await SharedPreferences.getInstance();
-              prefs.setString('uid', '');
+              prefs.setString('uid', "none");
               navKey.currentState?.pop();
               navKey.currentState?.pushNamed("Welcome");
             },
