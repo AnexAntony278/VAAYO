@@ -66,3 +66,6 @@ flutter {
 
 dependencies {
 }
+android{
+    compileSdkVersion 34
+}

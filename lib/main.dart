@@ -20,8 +20,9 @@ main() async {
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
   debugPrint("\nMainPage  uid:$uid"); //DP
-  Widget startScreen =
-      (uid != 'none' || uid != null) ? const HomePage() : const WelcomeScreen();
+  Widget startScreen = (uid != 'none' || uid != null || uid != '')
+      ? const HomePage()
+      : const WelcomeScreen();
 
   runApp(MaterialApp(
     home: startScreen,

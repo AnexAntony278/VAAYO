@@ -16,7 +16,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
   int? _availSeats = 3;
   String? _selectedCar;
 
-  final List<String> _cars = ["anex"];
+  final List<String> _cars = ["toyota supra", "ford mustang", "chevyy"];
 
   final TextEditingController _departureFieldController =
       TextEditingController();
@@ -24,6 +24,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       TextEditingController();
   final TextEditingController _dateFieldController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+  List<String> predictions = [];
 
   @override
   void initState() {
@@ -52,9 +53,21 @@ class _CreateTripPageState extends State<CreateTripPage> {
                       Text("From"),
                       TextField(
                         controller: _departureFieldController,
+                        onChanged: (value) => _onDepartureFieldChanged(value),
                         decoration: InputDecoration(
                           hintText: 'Enter departure location',
                           filled: true,
+                        ),
+                      ),
+                      SizedBox(
+                        height: _cars.length * 10.0,
+                        child: ListView.builder(
+                          itemCount: _cars.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text("LocatioNSUggest$index"),
+                            );
+                          },
                         ),
                       ),
                       SizedBox(height: 10),
@@ -156,7 +169,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       context: context,
       initialDate: _selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 7)),
+      lastDate: DateTime.now().add(const Duration(days: 7)),
     );
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
@@ -206,5 +219,9 @@ class _CreateTripPageState extends State<CreateTripPage> {
             ),
           );
         });
+  }
+
+  void _onDepartureFieldChanged(String? input) async {
+    if (input!.isNotEmpty) {}
   }
 }

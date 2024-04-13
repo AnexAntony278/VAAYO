@@ -37,11 +37,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.27.0
   cloud_firestore: ^4.15.8
-  google_fonts: ^6.2.0
   latlong2: ^0.9.0
   firebase_auth: ^4.17.8
   shared_preferences: ^2.2.2
   google_maps_flutter: ^2.5.3
+  http: ^0.13.0
+  google_place: ^0.4.7
 
 dev_dependencies:
   flutter_test:
