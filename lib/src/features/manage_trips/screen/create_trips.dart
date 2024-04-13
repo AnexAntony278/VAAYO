@@ -38,7 +38,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueAccent,
-          title: Text("CREATE TRIPS"),
+          title: const Text("CREATE TRIPS"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -50,36 +50,26 @@ class _CreateTripPageState extends State<CreateTripPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("From"),
+                      const Text("From"),
                       TextField(
                         controller: _departureFieldController,
                         onChanged: (value) => _onDepartureFieldChanged(value),
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter departure location',
                           filled: true,
                         ),
                       ),
-                      SizedBox(
-                        height: _cars.length * 10.0,
-                        child: ListView.builder(
-                          itemCount: _cars.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text("LocatioNSUggest$index"),
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text("To"),
+
+                      const SizedBox(height: 10),
+                      const Text("To"),
                       TextField(
                         controller: _destinationFieldController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           hintText: 'Enter destination location',
                           filled: true,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -87,7 +77,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                             width: MediaQuery.of(context).size.width / 2 - 50,
                             child: TextField(
                                 controller: _dateFieldController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     filled: true,
                                     hintText: "Date",
                                     prefixIcon: Icon(Icons.date_range)),
@@ -100,7 +90,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                             width: MediaQuery.of(context).size.width / 2 - 80,
                             child: TextField(
                               controller: _timeController,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   hintText: "Time",
                                   filled: true,
                                   prefixIcon: Icon(Icons.alarm)),
@@ -110,7 +100,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                           ),
                         ],
                       ),
-                      Text("Available Seats"),
+                      const Text("Available Seats"),
                       //SEATS DROPDOWN
                       DropdownButton<int>(
                         value: _availSeats,
@@ -126,10 +116,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
-                      Placeholder(child: Text("TAGS")),
-                      SizedBox(height: 10),
-                      Text("Car select"),
+                      const SizedBox(height: 10),
+                      const Placeholder(child: Text("TAGS")),
+                      const SizedBox(height: 10),
+                      const Text("Car select"),
                       //CARS DROPDOWN
                       DropdownButton<String>(
                           value: _selectedCar,
@@ -153,7 +143,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 width: 10,
                 child: ElevatedButton(
                   onPressed: () => _createTrip(),
-                  child: Text("CREATE"),
+                  child: const Text("CREATE"),
                 ),
               ),
             ],
