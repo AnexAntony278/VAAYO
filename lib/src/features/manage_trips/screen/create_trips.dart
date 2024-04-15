@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
+import 'dart:convert';
+import 'package:google_place/google_place.dart';
+import 'package:uuid/uuid.dart';
+import 'package:http/http.dart' as http;
+import 'package:vaayo/src/constants/keys.dart';
 
 class CreateTripPage extends StatefulWidget {
   const CreateTripPage({Key? key}) : super(key: key);
@@ -15,16 +20,15 @@ class _CreateTripPageState extends State<CreateTripPage> {
   int? _totalseats = 4;
   int? _availSeats = 3;
   String? _selectedCar;
-
   final List<String> _cars = ["toyota supra", "ford mustang", "chevyy"];
-
-  final TextEditingController _departureFieldController =
-      TextEditingController();
-  final TextEditingController _destinationFieldController =
-      TextEditingController();
+  //AUTOCOMPLETE
+  GooglePlace googlePlace = GooglePlace(vaayoMapsAPIKey);
+  var uuid = const Uuid();
+  String sessionToken = "1234456";
+  List<String> predictions = [];
+  String? _departure, _destination;
   final TextEditingController _dateFieldController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
-  List<String> predictions = [];
 
   @override
   void initState() {
@@ -51,23 +55,33 @@ class _CreateTripPageState extends State<CreateTripPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text("From"),
-                      TextField(
-                        controller: _departureFieldController,
-                        onChanged: (value) => _onDepartureFieldChanged(value),
-                        decoration: const InputDecoration(
-                          hintText: 'Enter departure location',
-                          filled: true,
-                        ),
+                      Autocomplete<String>(
+                        optionsBuilder: (textEditingValue) {
+                          if (textEditingValue.text.isEmpty) {
+                            return [];
+                          } else {
+                            _getPredictions(textEditingValue.text);
+                            return predictions;
+                          }
+                        },
+                        onSelected: (option) {
+                          _departure = option;
+                        },
                       ),
-
                       const SizedBox(height: 10),
                       const Text("To"),
-                      TextField(
-                        controller: _destinationFieldController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter destination location',
-                          filled: true,
-                        ),
+                      Autocomplete<String>(
+                        optionsBuilder: (textEditingValue) {
+                          if (textEditingValue.text.isEmpty) {
+                            return [];
+                          } else {
+                            _getPredictions(textEditingValue.text);
+                            return predictions;
+                          }
+                        },
+                        onSelected: (option) {
+                          _destination = option;
+                        },
                       ),
                       const SizedBox(height: 10),
                       Row(
@@ -186,32 +200,56 @@ class _CreateTripPageState extends State<CreateTripPage> {
   void _createTrip() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uid = prefs.getString('uid');
-    debugPrint(_selectedDate.toString());
-    _selectedDate!.add(
-        Duration(hours: _selectedTime!.hour, minutes: _selectedTime!.minute));
+
+    DateTime tripDateTime = _selectedDate!.add(Duration(
+      hours: _selectedTime!.hour,
+      minutes: _selectedTime!.minute,
+    ));
+
+    debugPrint(tripDateTime.toString());
 
     Map<String, dynamic> trip = {
       'driver_uid': uid,
-      'departure': _departureFieldController.text,
-      'destination': _destinationFieldController.text,
-      'departure_time': _selectedDate.toString(),
+      'departure': _departure,
+      'destination': _destination,
+      'departure_time': tripDateTime.toString(),
       'available_seats': _availSeats,
     };
+
     showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: Card(
-              child: SizedBox(
-                  height: 200,
-                  width: 300,
-                  child: Text("${trip.toString()} \n CREATED ")),
+      context: context,
+      builder: (context) {
+        return Center(
+          child: Card(
+            child: SizedBox(
+              height: 200,
+              width: 300,
+              child: Text("${trip.toString()} \n CREATED "),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
-  void _onDepartureFieldChanged(String? input) async {
-    if (input!.isNotEmpty) {}
+  void _getPredictions(String? input) async {
+    //GET PREDICTIONS
+    if (sessionToken == null) {
+      setState(() {
+        sessionToken = uuid.v4();
+      });
+    }
+    predictions = [];
+    var url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input="$input"&key=$vaayoMapsAPIKey');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+      for (int i = 0; i < decodedResponse['predictions'].length; i++) {
+        predictions
+            .add(decodedResponse['predictions'][i]['description'].toString());
+      }
+      setState(() {});
+    }
   }
 }

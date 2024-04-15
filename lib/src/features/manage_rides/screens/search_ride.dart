@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_place/google_place.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
@@ -16,13 +14,10 @@ class SearchRidesPage extends StatefulWidget {
 
 class _SearchRidesPageState extends State<SearchRidesPage> {
   GooglePlace googlePlace = GooglePlace(vaayoMapsAPIKey);
-
-  final TextEditingController _departureTextController =
-      TextEditingController();
   var uuid = Uuid();
   String sessionToken = "1234456";
-  var predictions = [];
-
+  List<String> predictions = [];
+  String? depature, destination;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,26 +38,58 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text("From"),
-              TextFormField(
-                controller: _departureTextController,
-                decoration:
-                    const InputDecoration(hintText: "departure location"),
-                onChanged: (value) {
-                  _getPredictions(value);
+              Autocomplete<String>(
+                optionsBuilder: (textEditingValue) {
+                  if (textEditingValue.text.isEmpty) {
+                    return [];
+                  } else {
+                    _getPredictions(textEditingValue.text);
+                    return predictions;
+                  }
+                },
+                onSelected: (option) {
+                  depature = option;
                 },
               ),
-              Expanded(
-                  child: ListView.builder(
-                itemCount: predictions.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                      onTap: () =>
-                          _departureTextController.text = predictions[index],
-                      tileColor: Colors.blueGrey,
-                      style: ListTileStyle.list,
-                      title: Text(predictions[index]));
+              const Text("To"),
+              Autocomplete<String>(
+                optionsBuilder: (textEditingValue) {
+                  if (textEditingValue.text.isEmpty) {
+                    return [];
+                  } else {
+                    _getPredictions(textEditingValue.text);
+                    return predictions;
+                  }
                 },
-              )),
+                onSelected: (option) {
+                  destination = option;
+                },
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    debugPrint("$depature to $destination");
+                  },
+                  child: const Text("Search"))
+              // TextFormField(
+              //   controller: _departureTextController,
+              //   decoration:
+              //       const InputDecoration(hintText: "departure location"),
+              //   onChanged: (value) {
+              //     _getPredictions(value);
+              //   },
+              // ),
+              // Expanded(
+              //     child: ListView.builder(
+              //   itemCount: predictions.length,
+              //   itemBuilder: (context, index) {
+              //     return ListTile(
+              //         onTap: () =>
+              //             _departureTextController.text = predictions[index],
+              //         tileColor: Colors.blueGrey,
+              //         style: ListTileStyle.list,
+              //         title: Text(predictions[index]));
+              //   },
+              // )),
             ],
           ),
         ));
@@ -77,7 +104,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
     }
     predictions = [];
     var url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input="$input"&key=AIzaSyC_uWCSfqg7888q_qQ9TyhOrJ4iEOGPfGY');
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input="$input"&key=$vaayoMapsAPIKey');
     var response = await http.get(url);
     if (response.statusCode == 200) {
       Map<String, dynamic> decodedResponse = jsonDecode(response.body);
