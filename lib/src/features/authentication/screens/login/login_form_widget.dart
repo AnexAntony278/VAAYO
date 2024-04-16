@@ -5,7 +5,7 @@ import 'package:vaayo/src/features/authentication/screens/forget-password/forget
 import 'package:flutter/material.dart';
 
 class LoginForm extends StatefulWidget {
-  LoginForm({
+  const LoginForm({
     super.key,
   });
 
@@ -14,7 +14,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  String _error_message = "";
+  String errorMessage = "";
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
 
@@ -28,30 +28,30 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           TextFormField(
               controller: _emailTextController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person_outline_outlined),
                   labelText: "Email",
                   border: OutlineInputBorder(),
                   hintText: "Email")),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           TextFormField(
               controller: _passwordTextController,
               obscureText: true,
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.key),
+                  prefixIcon: const Icon(Icons.key),
                   labelText: "Password",
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   hintText: "Passsword",
                   suffixIcon: IconButton(
                       onPressed: () {},
-                      icon: Icon(Icons.remove_red_eye_sharp)))),
+                      icon: const Icon(Icons.remove_red_eye_sharp)))),
           const SizedBox(height: 10.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                _error_message,
-                style: TextStyle(color: Colors.red),
+                errorMessage,
+                style: const TextStyle(color: Colors.red),
               ),
               Align(
                 alignment: Alignment.centerRight,
@@ -59,7 +59,7 @@ class _LoginFormState extends State<LoginForm> {
                     onPressed: () {
                       ForgetPasswordScreen.buildShowModelBottomSheet(context);
                     },
-                    child: Text("Forgot Password?")),
+                    child: const Text("Forgot Password?")),
               ),
             ],
           ),
@@ -74,13 +74,13 @@ class _LoginFormState extends State<LoginForm> {
                             password: _passwordTextController.text);
                     User? user = userCredential.user;
                     final prefs = await SharedPreferences.getInstance();
-                    prefs.setString('uid', userCredential.user?.uid ?? '');
-                    debugPrint(user.toString());
+                    prefs.setString('uid', userCredential.user?.uid ?? 'null');
+                    debugPrint("\nLoginPage: uid:${prefs.getString('uid')}");
                     navKey.currentState?.pop();
                     navKey.currentState?.pushNamed("Home");
                   } on FirebaseAuthException catch (e) {
                     setState(() {
-                      _error_message = e.code;
+                      errorMessage = e.code;
                     });
                     //TODO- EXCEPTION HANDLING
                   }

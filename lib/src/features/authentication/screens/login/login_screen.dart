@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
       child: Scaffold(
           body: SingleChildScrollView(
               child: Container(
-                  padding: EdgeInsets.all(30.0),
+                  padding: const EdgeInsets.all(30.0),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -21,11 +21,11 @@ class LoginScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Image(
-                              image: AssetImage(vWelcomeScreenImage),
+                              image: const AssetImage(vWelcomeScreenImage),
                               height: size.height * 0.2,
                             ),
-                            Text("Welcome Back"),
-                            Text("Get there with Vaayo"),
+                            const Text("Welcome Back"),
+                            const Text("Get there with Vaayo"),
                           ],
                         ),
                         LoginForm(),
@@ -33,18 +33,18 @@ class LoginScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text("OR"),
-                            SizedBox(
+                            const SizedBox(
                               height: 10.0,
                             ),
                             SizedBox(
                               width: double.infinity,
                               child: OutlinedButton.icon(
-                                  icon: Image(
+                                  icon: const Image(
                                       image: AssetImage(
                                           "assets/images/google.png"),
                                       width: 30.0),
                                   onPressed: () {},
-                                  label: Text("Sign-in with Google")),
+                                  label: const Text("Sign-in with Google")),
                             ),
                             const SizedBox(
                               height: 10.0,
@@ -58,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                                     text: "Don't have an Account?",
                                     style:
                                         Theme.of(context).textTheme.bodySmall,
-                                    children: [
+                                    children: const [
                                       TextSpan(
                                           text: "Signup",
                                           style: TextStyle(color: Colors.blue)),

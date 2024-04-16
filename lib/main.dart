@@ -19,10 +19,9 @@ main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
-  debugPrint("\nMainPage  uid:$uid"); //DP
-  Widget startScreen = (uid != 'none' || uid != null || uid != '')
-      ? const HomePage()
-      : const WelcomeScreen();
+  debugPrint("\nMainPage  uid:$uid");
+  Widget startScreen =
+      (uid == null || uid == "null") ? const WelcomeScreen() : const HomePage();
 
   runApp(MaterialApp(
     home: startScreen,

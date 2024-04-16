@@ -12,23 +12,8 @@ class UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<UserProfilePage> {
   final db = FirebaseFirestore.instance;
   Map<String, dynamic>? user;
-  late QuerySnapshot<Map<String, dynamic>> _snapshot;
+  late DocumentSnapshot<Map<String, dynamic>> _snapshot;
   String? uid = "";
-
-  Future<void> _getUSerData() async {
-    final prefs = await SharedPreferences.getInstance();
-    uid = prefs.getString('uid');
-    debugPrint("Profile Page :uid is '$uid'");
-    _snapshot = await db.collection("users").where("uid", isEqualTo: uid).get();
-    if (_snapshot.docs.isNotEmpty) {
-      setState(() {
-        user = _snapshot.docs.first.data();
-        debugPrint("Profile${user.toString()}");
-      });
-    } else {
-      debugPrint('User not found!'); //EXCEPTION
-    }
-  }
 
   @override
   void initState() {
@@ -246,16 +231,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
+  Future<void> _getUSerData() async {
+    final prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString('uid');
+    debugPrint("Profile Page :uid is '$uid'");
+    try {
+      _snapshot = await db.collection("users").doc(uid).get();
+      setState(() {
+        user = _snapshot.data();
+        debugPrint("Profile${user.toString()}");
+      });
+    } on FirebaseException catch (e) {
+      debugPrint("Profile Page Error: ${e.toString()}");
+    }
+  }
+
   Future<void> _deleteCar(int index) async {
     if (user != null) {
-      String? docId =
-          _snapshot.docs.isNotEmpty ? _snapshot.docs.first.id : null;
-      if (docId != null) {
+      if (uid != null) {
         List<Map<String, dynamic>> updatedCars = List.from(user!['cars']!);
         updatedCars.removeAt(index);
         try {
           //To Update DB
-          await db.collection("users").doc(docId).update({
+          await db.collection("users").doc(uid).update({
             'cars': updatedCars,
           });
           setState(() {
@@ -275,11 +273,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
   Future<void> _addCar({required String no, required String model}) async {
     if (user != null) {
-      String? docId = _snapshot.docs.first.id;
       List<Map<String, dynamic>> updatedCars = List.from(user?['cars']);
       updatedCars.add({'no': no, 'model': model});
       try {
-        await db.collection("users").doc(docId).update({'cars': updatedCars});
+        await db.collection("users").doc(uid).update({'cars': updatedCars});
         setState(() {
           user!['cars'] = updatedCars;
         });

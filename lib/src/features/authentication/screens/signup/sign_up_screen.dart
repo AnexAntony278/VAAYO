@@ -33,13 +33,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FormHeaderWidget(
+                const FormHeaderWidget(
                     image: vWelcomeScreenImage,
                     title: "Get On Board!",
                     subTitle: "Create your profile to start your Journey"),
-                Container(
-                    child: Form(
-                        child: Column(
+                Form(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
@@ -123,7 +122,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   .createUserWithEmailAndPassword(
                                       email: _emailTextController.text,
                                       password: _passwordTextController.text);
-                              _userMap['uid'] = userCredential.user?.uid;
                               _userMap['email'] = userCredential.user?.email;
                               _userMap['name'] = _nameTextController.text;
                               _userMap['phone'] = _phoneTextController.text;
@@ -134,11 +132,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               _userMap['tags'] = [];
                               await FirebaseFirestore.instance
                                   .collection("users")
-                                  .add(_userMap);
+                                  .doc(userCredential.user?.uid)
+                                  .set(_userMap);
                               //STORE UID LOCALLY
                               final prefs =
                                   await SharedPreferences.getInstance();
-                              prefs.setString('uid', _userMap['uid']);
+                              prefs.setString(
+                                  'uid', userCredential.user?.uid ?? "null");
                               //SWITCH SCREENS
                               navKey.currentState?.pop();
                               navKey.currentState?.pushNamed("Home");
@@ -155,7 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: const Text("SIGNUP")),
                     )
                   ],
-                ))),
+                )),
                 Column(
                   children: [
                     const Text("OR"),

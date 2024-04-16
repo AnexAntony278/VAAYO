@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
@@ -17,10 +18,12 @@ class CreateTripPage extends StatefulWidget {
 class _CreateTripPageState extends State<CreateTripPage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
-  int? _totalseats = 4;
+  final int? _totalseats = 4;
   int? _availSeats = 3;
-  String? _selectedCar;
-  final List<String> _cars = ["toyota supra", "ford mustang", "chevyy"];
+
+  List<Map<String, dynamic>> _cars = [];
+  Map<String, dynamic>? _selectedCar;
+
   //AUTOCOMPLETE
   GooglePlace googlePlace = GooglePlace(vaayoMapsAPIKey);
   var uuid = const Uuid();
@@ -30,10 +33,17 @@ class _CreateTripPageState extends State<CreateTripPage> {
   final TextEditingController _dateFieldController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
+  String? _message;
+
   @override
   void initState() {
     super.initState();
-    _selectedCar = _cars[0];
+    _getUserData();
+    if (_cars.isEmpty) {
+      _message = "No Car Added. Got to Profile Page ";
+    } else {
+      _selectedCar = _cars[0];
+    }
   }
 
   @override
@@ -135,7 +145,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                       const SizedBox(height: 10),
                       const Text("Car select"),
                       //CARS DROPDOWN
-                      DropdownButton<String>(
+                      DropdownButton<Map<String, dynamic>>(
                           value: _selectedCar,
                           onChanged: (value) {
                             setState(() {
@@ -143,11 +153,15 @@ class _CreateTripPageState extends State<CreateTripPage> {
                             });
                           },
                           items: _cars.map((car) {
-                            return DropdownMenuItem<String>(
+                            return DropdownMenuItem<Map<String, dynamic>>(
                               value: car,
-                              child: Text(car),
+                              child: Text("${car['no']}-${car['model']} "),
                             );
                           }).toList()),
+                      Text(
+                        _message ?? "",
+                        style: const TextStyle(color: Colors.red),
+                      )
                     ],
                   ),
                 ),
@@ -168,6 +182,16 @@ class _CreateTripPageState extends State<CreateTripPage> {
   }
 
 //FUNCTIONS
+  Future<void> _getUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('uid');
+    await FirebaseFirestore.instance.collection("users").doc(uid).get().then(
+      (documentSnapshot) {
+        _cars = documentSnapshot.data()?['cars'];
+      },
+    );
+  }
+
   Future<void> _showDatePicker(context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -209,11 +233,13 @@ class _CreateTripPageState extends State<CreateTripPage> {
     debugPrint(tripDateTime.toString());
 
     Map<String, dynamic> trip = {
-      'driver_uid': uid,
+      'driver_uid\n': uid,
       'departure': _departure,
       'destination': _destination,
       'departure_time': tripDateTime.toString(),
       'available_seats': _availSeats,
+      'total_seats': _availSeats,
+      'car_no': _selectedCar
     };
 
     showDialog(
@@ -234,11 +260,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
 
   void _getPredictions(String? input) async {
     //GET PREDICTIONS
-    if (sessionToken == null) {
-      setState(() {
-        sessionToken = uuid.v4();
-      });
-    }
     predictions = [];
     var url = Uri.parse(
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input="$input"&key=$vaayoMapsAPIKey');
