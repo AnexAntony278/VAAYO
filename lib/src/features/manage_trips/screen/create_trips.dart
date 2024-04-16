@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'dart:convert';
 import 'package:google_place/google_place.dart';
@@ -39,11 +40,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
   void initState() {
     super.initState();
     _getUserData();
-    if (_cars.isEmpty) {
-      _message = "No Car Added. Got to Profile Page ";
-    } else {
-      _selectedCar = _cars[0];
-    }
   }
 
   @override
@@ -129,14 +125,15 @@ class _CreateTripPageState extends State<CreateTripPage> {
                       DropdownButton<int>(
                         value: _availSeats,
                         onChanged: (value) {
-                          _availSeats = value;
-                          setState(() {});
+                          setState(() {
+                            _availSeats = value;
+                          });
                         },
                         items: List.generate(
                           _totalseats!,
                           (index) => DropdownMenuItem(
-                            value: _totalseats! - index,
-                            child: Text('${_totalseats! - index}'),
+                            value: _totalseats - index,
+                            child: Text('${_totalseats - index}'),
                           ),
                         ),
                       ),
@@ -187,9 +184,16 @@ class _CreateTripPageState extends State<CreateTripPage> {
     String? uid = prefs.getString('uid');
     await FirebaseFirestore.instance.collection("users").doc(uid).get().then(
       (documentSnapshot) {
-        _cars = documentSnapshot.data()?['cars'];
+        _cars =
+            List<Map<String, dynamic>>.from(documentSnapshot.data()?['cars']);
+        setState(() {});
       },
     );
+    if (_cars.isEmpty) {
+      _message = "No Car Added. Got to Profile Page ";
+    } else {
+      _selectedCar = _cars[0];
+    }
   }
 
   Future<void> _showDatePicker(context) async {
@@ -218,7 +222,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
       _timeController.text =
           "${_selectedTime!.hour % 12} : ${_selectedTime!.minute} ${(_selectedTime!.hour < 12) ? "AM" : "PM"} ";
     }
-    debugPrint(_selectedTime.toString());
   }
 
   void _createTrip() async {
@@ -230,29 +233,36 @@ class _CreateTripPageState extends State<CreateTripPage> {
       minutes: _selectedTime!.minute,
     ));
 
-    debugPrint(tripDateTime.toString());
-
     Map<String, dynamic> trip = {
-      'driver_uid\n': uid,
+      'driver_uid': uid,
       'departure': _departure,
       'destination': _destination,
-      'departure_time': tripDateTime.toString(),
+      'departure_time': Timestamp.fromDate(tripDateTime),
       'available_seats': _availSeats,
       'total_seats': _availSeats,
-      'car_no': _selectedCar
+      'passenegers': [],
+      'car_no': _selectedCar?['no'].toString() ?? '',
+      'car_model': _selectedCar?['model'].toString() ?? '',
+      'status': "created"
     };
+
+    await FirebaseFirestore.instance.collection("trips").add(trip);
 
     showDialog(
       context: context,
       builder: (context) {
-        return Center(
-          child: Card(
-            child: SizedBox(
-              height: 200,
-              width: 300,
-              child: Text("${trip.toString()} \n CREATED "),
+        return AlertDialog(
+          content: Text("Trip created successfully!"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+                navKey.currentState?.pushNamed("Home");
+              },
+              child: Text("OK"),
             ),
-          ),
+          ],
         );
       },
     );

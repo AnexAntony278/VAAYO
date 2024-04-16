@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
+import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 
 class TripsPage extends StatefulWidget {
   const TripsPage({super.key});
@@ -9,7 +12,14 @@ class TripsPage extends StatefulWidget {
 }
 
 class _TripsPageState extends State<TripsPage> {
-  final int _noOfRides = 2;
+  var _trips = [];
+  int _noOfTrips = 0;
+
+  @override
+  void initState() {
+    _getTripData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +31,9 @@ class _TripsPageState extends State<TripsPage> {
           title: const Text("MY TRIPS"),
         ),
         body: ListView.builder(
-          itemCount: _noOfRides + 1,
+          itemCount: _noOfTrips + 1,
           itemBuilder: (context, index) {
-            if (index == _noOfRides) {
+            if (index == _noOfTrips) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
@@ -44,6 +54,8 @@ class _TripsPageState extends State<TripsPage> {
                 ),
               );
             } else {
+              DateTime date =
+                  (_trips[index]['departure_time'] as Timestamp).toDate();
               return InkWell(
                 onTap: () {
                   navKey.currentState?.pushNamed("RideDetails", arguments: 2);
@@ -61,11 +73,14 @@ class _TripsPageState extends State<TripsPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(// LOCATION
-                                    "startlocation $index ---> Endlocation$index"),
+                                Text(
+                                  // LOCATION
+                                  "${_trips[index]['departure']}  ->\n${_trips[index]['destination']}",
+                                  overflow: TextOverflow.visible,
+                                ),
                                 Text(
                                   // TIME
-                                  "$index:00",
+                                  "${date.day} ${date.toMonth()} ${date.year}   ${date.hour % 12} :${date.minute} ${date.hour < 12 ? 'AM' : 'PM'}",
                                 ),
                                 Expanded(
                                   child: Column(
@@ -75,7 +90,8 @@ class _TripsPageState extends State<TripsPage> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text("$index/4"),
+                                          Text(
+                                              "${_trips[index]['total_seats'] - _trips[index]['available_seats']}/${_trips[index]['total_seats']}"),
                                           const Padding(
                                               padding:
                                                   EdgeInsets.only(right: 3)),
@@ -84,7 +100,7 @@ class _TripsPageState extends State<TripsPage> {
                                       ),
                                       Text(
                                         // RIDE STATUS
-                                        "status$index",
+                                        "${_trips[index]['status']}",
                                         style: const TextStyle(
                                             color: Colors.green),
                                       )
@@ -98,7 +114,7 @@ class _TripsPageState extends State<TripsPage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text("KL2012$index",
+                                  Text("${_trips[index]['car_no']}",
                                       style: const TextStyle(fontSize: 20)),
                                   const CircleAvatar(
                                       radius: 35, child: Placeholder()),
@@ -116,5 +132,22 @@ class _TripsPageState extends State<TripsPage> {
         ),
       ),
     );
+  }
+
+  void _getTripData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await FirebaseFirestore.instance
+        .collection('trips')
+        .where('driver_uid', isEqualTo: prefs.getString('uid'))
+        .where('status', isEqualTo: 'created')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      setState(() {
+        _trips = List<Map<String, dynamic>>.from(
+            querySnapshot.docs.map((doc) => doc.data()).toList());
+        _noOfTrips = _trips.length;
+      });
+    });
   }
 }
