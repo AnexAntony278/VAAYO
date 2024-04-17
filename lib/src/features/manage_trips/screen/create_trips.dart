@@ -240,10 +240,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
       'departure_time': Timestamp.fromDate(tripDateTime),
       'available_seats': _availSeats,
       'total_seats': _availSeats,
-      'passenegers': [],
+      'passengers': [],
       'car_no': _selectedCar?['no'].toString() ?? '',
       'car_model': _selectedCar?['model'].toString() ?? '',
-      'status': "created"
+      'status': "CREATED"
     };
 
     await FirebaseFirestore.instance.collection("trips").add(trip);

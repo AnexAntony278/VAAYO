@@ -17,8 +17,8 @@ class _TripsPageState extends State<TripsPage> {
 
   @override
   void initState() {
-    _getTripData();
     super.initState();
+    _getTripData();
   }
 
   @override
@@ -58,7 +58,8 @@ class _TripsPageState extends State<TripsPage> {
                   (_trips[index]['departure_time'] as Timestamp).toDate();
               return InkWell(
                 onTap: () {
-                  navKey.currentState?.pushNamed("RideDetails", arguments: 2);
+                  navKey.currentState
+                      ?.pushNamed("TripDetails", arguments: _trips[index]);
                 },
                 child: Padding(
                   padding:
@@ -80,7 +81,7 @@ class _TripsPageState extends State<TripsPage> {
                                 ),
                                 Text(
                                   // TIME
-                                  "${date.day} ${date.toMonth()} ${date.year}   ${date.hour % 12} :${date.minute} ${date.hour < 12 ? 'AM' : 'PM'}",
+                                  "${date.day} ${date.toMonth()} ${date.year}   ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                 ),
                                 Expanded(
                                   child: Column(
@@ -140,7 +141,7 @@ class _TripsPageState extends State<TripsPage> {
     await FirebaseFirestore.instance
         .collection('trips')
         .where('driver_uid', isEqualTo: prefs.getString('uid'))
-        .where('status', isEqualTo: 'created')
+        .where('status', isEqualTo: 'CREATED')
         .get()
         .then((QuerySnapshot querySnapshot) {
       setState(() {
