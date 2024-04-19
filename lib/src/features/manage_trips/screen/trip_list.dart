@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
@@ -17,8 +18,8 @@ class _TripsPageState extends State<TripsPage> {
 
   @override
   void initState() {
-    _getTripData();
     super.initState();
+    _getTripData();
   }
 
   @override
@@ -56,9 +57,18 @@ class _TripsPageState extends State<TripsPage> {
             } else {
               DateTime date =
                   (_trips[index]['departure_time'] as Timestamp).toDate();
+              List<String> departure =
+                  (_trips[index]['departure'].contains('-'))
+                      ? _trips[index]['departure'].split('- ')
+                      : _trips[index]['departure'].split(', ');
+              List<String> destination =
+                  (_trips[index]['destination'].contains('-'))
+                      ? _trips[index]['destination'].split('- ')
+                      : _trips[index]['destination'].split(', ');
               return InkWell(
                 onTap: () {
-                  navKey.currentState?.pushNamed("RideDetails", arguments: 2);
+                  navKey.currentState
+                      ?.pushNamed("TripDetails", arguments: _trips[index]);
                 },
                 child: Padding(
                   padding:
@@ -69,25 +79,44 @@ class _TripsPageState extends State<TripsPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(15),
                           child: Row(children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  // LOCATION
-                                  "${_trips[index]['departure']}  ->\n${_trips[index]['destination']}",
-                                  overflow: TextOverflow.visible,
-                                ),
-                                Text(
-                                  // TIME
-                                  "${date.day} ${date.toMonth()} ${date.year}   ${date.hour % 12} :${date.minute} ${date.hour < 12 ? 'AM' : 'PM'}",
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          // LOCATION
+                                          "${departure[0]}\n${departure[1]}",
+                                          textAlign: TextAlign.left),
+                                      Text(
+                                        // LOCATION
+                                        "${destination[0]}\n${destination[1]}",
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    // TIME
+                                    "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      Text(
+                                        // RIDE STATUS
+                                        "${_trips[index]['status']}",
+                                        style: const TextStyle(
+                                            color: Colors.green),
+                                      ),
                                       Row(
                                         children: [
                                           Text(
@@ -98,30 +127,12 @@ class _TripsPageState extends State<TripsPage> {
                                           const Icon(Icons.person)
                                         ],
                                       ),
-                                      Text(
-                                        // RIDE STATUS
-                                        "${_trips[index]['status']}",
-                                        style: const TextStyle(
-                                            color: Colors.green),
-                                      )
+                                      Text("${_trips[index]['car_no']}"),
                                     ],
                                   ),
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text("${_trips[index]['car_no']}",
-                                      style: const TextStyle(fontSize: 20)),
-                                  const CircleAvatar(
-                                      radius: 35, child: Placeholder()),
-                                  Text("DriverName$index")
                                 ],
                               ),
-                            )
+                            ),
                           ]),
                         )),
                   ),
@@ -140,7 +151,7 @@ class _TripsPageState extends State<TripsPage> {
     await FirebaseFirestore.instance
         .collection('trips')
         .where('driver_uid', isEqualTo: prefs.getString('uid'))
-        .where('status', isEqualTo: 'created')
+        .where('status', isEqualTo: 'CREATED')
         .get()
         .then((QuerySnapshot querySnapshot) {
       setState(() {
