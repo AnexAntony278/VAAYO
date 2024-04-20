@@ -20,20 +20,20 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
   List<String> predictions = [];
   String? depature, destination;
   List<Map<String, dynamic>> _rides = [
-    // {
-    //   //SAMPLE DATA FOR DEBUGGING PURPOSE
-    //   'id': "hUxdjdFTzJtTNb6yj1s2",
-    //   "available_seats": 3,
-    //   "passengers": [],
-    //   "total_seats": 3,
-    //   'departure_time': Timestamp.now(),
-    //   "departure": 'Painavu,Kerala,India',
-    //   'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-    //   'destination': 'Cheruthoni, Kerala, India',
-    //   'car_no': 'KL47C7993',
-    //   'car_model': 'Toyota Supra',
-    //   'status': 'CREATED'
-    // },
+    {
+      //SAMPLE DATA FOR DEBUGGING PURPOSE
+      'id': "hUxdjdFTzJtTNb6yj1s2",
+      "available_seats": 3,
+      "passengers": [],
+      "total_seats": 3,
+      'departure_time': Timestamp.now(),
+      "departure": 'Painavu,Kerala,India',
+      'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
+      'destination': 'Cheruthoni, Kerala, India',
+      'car_no': 'KL47C7993',
+      'car_model': 'Toyota Supra',
+      'status': 'CREATED'
+    },
   ];
 
   @override
@@ -54,7 +54,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 3 - 20,
+                    height: MediaQuery.of(context).size.height / 3 - 50,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +114,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                                   .toDate();
                           return InkWell(
                             onTap: () {
-                              navKey.currentState?.pushNamed("BookRides",
+                              navKey.currentState?.pushNamed("TripDetails",
                                   arguments: _rides[index]);
                             },
                             child: Padding(

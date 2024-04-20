@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'package:vaayo/src/constants/theme.dart';
@@ -13,30 +12,29 @@ class BookRidePage extends StatefulWidget {
 }
 
 class _BookRidePageState extends State<BookRidePage> {
-  Map<String, dynamic>? ride = {
+  Map<String, dynamic> trip = {
     //SAMPLE DATA FOR DEBUGGING PURPOSE
-    // 'id': "hUxdjdFTzJtTNb6yj1s2",
-    // "available_seats": 3,
-    // "passengers": [],
-    // "total_seats": 3,
-    // 'departure_time': Timestamp.now(),
-    // "departure": 'Painavu,Kerala,India',
-    // 'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-    // 'destination': 'Cheruthoni, Kerala, India',
-    // 'car_no': 'KL47C7993',
-    // 'car_model': 'Toyota Supra',
-    // 'status': 'CREATED'
+    'id': "hUxdjdFTzJtTNb6yj1s2",
+    "available_seats": 3,
+    "passengers": [],
+    "total_seats": 3,
+    'departure_time': Timestamp.now(),
+    "departure": 'Painavu,Kerala,India',
+    'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
+    'destination': 'Cheruthoni, Kerala, India',
+    'car_no': 'KL47C7993',
+    'car_model': 'Toyota Supra',
+    'status': 'CREATED'
   };
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    ride = ModalRoute.of(context)?.settings.arguments
-        as Map<String, dynamic>; //TODO:REMOVE
+    trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
   }
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = (ride!['departure_time'] as Timestamp).toDate();
+    DateTime date = (trip['departure_time'] as Timestamp).toDate();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Ride Details"),
@@ -72,7 +70,7 @@ class _BookRidePageState extends State<BookRidePage> {
                         children: [
                           Flexible(
                             child: Text(
-                              ride!['departure'],
+                              trip['departure'],
                               maxLines: 3,
                               textAlign: TextAlign.left,
                               style: VaayoTheme.largeBold,
@@ -88,7 +86,7 @@ class _BookRidePageState extends State<BookRidePage> {
                           ),
                           Flexible(
                             child: Text(
-                              ride!['destination'],
+                              trip['destination'],
                               maxLines: 3,
                               textAlign: TextAlign.right,
                               style: VaayoTheme.largeBold,
@@ -111,19 +109,19 @@ class _BookRidePageState extends State<BookRidePage> {
                             color: Colors.black,
                             thickness: .5,
                           ),
-                          Text(ride!['status'],
+                          Text(trip['status'],
                               style:
                                   TextStyle(fontSize: 20, color: Colors.green)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(((List.from(ride!['passengers'])).isEmpty)
+                              Text(((List.from(trip['passengers'])).isEmpty)
                                   ? ""
                                   : "   Passengers"),
                               Column(
                                 children: [
                                   Text(
-                                      "${List.from(ride!['passengers']).length}/${ride!['available_seats']}",
+                                      "${List.from(trip['passengers']).length}/${trip['available_seats']}",
                                       style: VaayoTheme.mediumBold),
                                   const Icon(Icons.person),
                                 ],
@@ -148,9 +146,9 @@ class _BookRidePageState extends State<BookRidePage> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text("Confirm Booking"),
+                                title: const Text("Confirm Delete"),
                                 content: const Text(
-                                    "Are you sure you want to Book this trip?"),
+                                    "Are you sure you want to delete this trip?"),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
@@ -161,19 +159,19 @@ class _BookRidePageState extends State<BookRidePage> {
                                   TextButton(
                                     onPressed: () {
                                       //DELETE TRIP CODE
-                                      _bookTrip();
+                                      _deleteTrip();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                       navKey.currentState?.pushNamed("Home");
                                     },
-                                    child: const Text("Confirm"),
+                                    child: const Text("Delete"),
                                   ),
                                 ],
                               );
                             },
                           );
                         },
-                        child: const Text("BOOK RIDE")),
+                        child: const Text("CANCEL RIDE")),
                   ],
                 ),
               )
@@ -182,16 +180,12 @@ class _BookRidePageState extends State<BookRidePage> {
         ));
   }
 
-  void _bookTrip() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? uid = prefs.getString('uid');
-    (ride!['passengers'] as List).add(uid);
+  void _deleteTrip() async {
     try {
       await FirebaseFirestore.instance
           .collection('trips')
-          .doc(ride!['id'])
-          .update(ride as Map<String, dynamic>);
-      debugPrint(ride.toString());
+          .doc(trip['id'])
+          .delete();
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
