@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 
-Map<String, dynamic> ride = {
-  "start": "",
-  "time": DateTime,
-  "available_seats": 2,
-  "total_seats": 3
-};
-
-class RideDetailsPage extends StatelessWidget {
+class RideDetailsPage extends StatefulWidget {
   const RideDetailsPage({super.key});
+
+  @override
+  State<RideDetailsPage> createState() => _RideDetailsPageState();
+}
+
+class _RideDetailsPageState extends State<RideDetailsPage> {
+  Map<String, dynamic> ride = {
+    "start": "",
+    "time": DateTime,
+    "available_seats": 2,
+    "total_seats": 3
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

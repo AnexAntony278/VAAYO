@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
+import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 
 class RidesPage extends StatefulWidget {
   const RidesPage({super.key});
@@ -9,7 +12,12 @@ class RidesPage extends StatefulWidget {
 }
 
 class _RidesPageState extends State<RidesPage> {
-  final int _noOfRides = 2;
+  final List<Map<String, dynamic>> _rides = [];
+  @override
+  void initState() {
+    super.initState();
+    _getRides();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +29,9 @@ class _RidesPageState extends State<RidesPage> {
           title: const Text("My Rides"),
         ),
         body: ListView.builder(
-          itemCount: _noOfRides + 1,
+          itemCount: _rides.length + 1,
           itemBuilder: (context, index) {
-            if (index == _noOfRides) {
+            if (index == _rides.length) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
@@ -44,6 +52,8 @@ class _RidesPageState extends State<RidesPage> {
                 ),
               );
             } else {
+              DateTime date =
+                  (_rides[index]['departure_time'] as Timestamp).toDate();
               return InkWell(
                 onTap: () {
                   navKey.currentState?.pushNamed("RideDetails");
@@ -62,15 +72,17 @@ class _RidesPageState extends State<RidesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(// LOCATION
-                                    "startlocation $index ---> Endlocation$index"),
+                                    "${_rides[index]['departure']}-> ${_rides[index]['destination']}"),
                                 Text(
                                   // TIME
-                                  "$index:00",
+                                  "${date.day} ${date.toMonth()} ${date.year}  ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
-                                Text(
-                                  "Pick UP POint:$index",
-                                  style: const TextStyle(fontSize: 20),
-                                ),
+                                // Text(
+                                //   "Pick UP POint:$index",
+                                //   style: const TextStyle(fontSize: 20),
+                                // ),
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.end,
@@ -79,7 +91,8 @@ class _RidesPageState extends State<RidesPage> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text("$index/4"),
+                                          Text(
+                                              "${List.from(_rides[index]['passengers']).length}/${_rides[index]['total_seats']}"),
                                           const Padding(
                                               padding:
                                                   EdgeInsets.only(right: 3)),
@@ -88,10 +101,10 @@ class _RidesPageState extends State<RidesPage> {
                                       ),
                                       Text(
                                         // RIDE STATUS
-                                        "status$index",
+                                        "${_rides[index]['status']}",
                                         style: const TextStyle(
                                             color: Colors.green),
-                                      )
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -102,7 +115,7 @@ class _RidesPageState extends State<RidesPage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text("KL2012$index",
+                                  Text("${_rides[index]['car_no']}",
                                       style: const TextStyle(fontSize: 20)),
                                   const CircleAvatar(
                                       radius: 35, child: Placeholder()),
@@ -120,5 +133,22 @@ class _RidesPageState extends State<RidesPage> {
         ),
       ),
     );
+  }
+
+  void _getRides() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? uid = prefs.getString('uid');
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('trips')
+          .where('passengers', arrayContains: uid)
+          .get();
+      for (var i = 0; i < querySnapshot.docs.length; i++) {
+        _rides.add(querySnapshot.docs[i].data() as Map<String, dynamic>);
+      }
+      setState(() {});
+    } on FirebaseException catch (e) {
+      debugPrint(e.code);
+    }
   }
 }

@@ -92,7 +92,7 @@ class _TripsPageState extends State<TripsPage> {
                                           style: VaayoTheme.mediumBold,
                                         ),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 150,
                                       ),
                                       Flexible(
@@ -128,7 +128,7 @@ class _TripsPageState extends State<TripsPage> {
                                       Row(
                                         children: [
                                           Text(
-                                              "${_trips[index]['total_seats'] - _trips[index]['available_seats']}/${_trips[index]['total_seats']}"),
+                                              "${List.from(_trips[index]['passengers']).length}/${_trips[index]['total_seats']}"),
                                           const Padding(
                                               padding:
                                                   EdgeInsets.only(right: 3)),
