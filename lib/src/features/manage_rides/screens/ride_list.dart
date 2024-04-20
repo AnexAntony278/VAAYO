@@ -25,7 +25,7 @@ class _RidesPageState extends State<RidesPage> {
           itemBuilder: (context, index) {
             if (index == _noOfRides) {
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
                   onTap: () => navKey.currentState?.pushNamed("SearchRides"),
                   child: const Card(
@@ -46,7 +46,7 @@ class _RidesPageState extends State<RidesPage> {
             } else {
               return InkWell(
                 onTap: () {
-                  navKey.currentState?.pushNamed("RideDetails", arguments: 2);
+                  navKey.currentState?.pushNamed("RideDetails");
                 },
                 child: Padding(
                   padding:

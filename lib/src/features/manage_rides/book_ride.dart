@@ -1,18 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'package:vaayo/src/constants/theme.dart';
 
-class TripDetailsPage extends StatefulWidget {
-  const TripDetailsPage({super.key});
+class BookRidePage extends StatefulWidget {
+  const BookRidePage({super.key});
 
   @override
-  State<TripDetailsPage> createState() => _TripDetailsPageState();
+  State<BookRidePage> createState() => _BookRidePageState();
 }
 
-class _TripDetailsPageState extends State<TripDetailsPage> {
+class _BookRidePageState extends State<BookRidePage> {
   Map<String, dynamic> trip = {
     //SAMPLE DATA FOR DEBUGGING PURPOSE
     'id': "hUxdjdFTzJtTNb6yj1s2",
