@@ -152,34 +152,34 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    final CarNoTextController =
+                                    final carNoTextController =
                                             TextEditingController(),
-                                        CarModelTextController =
+                                        carModelTextController =
                                             TextEditingController();
                                     return AlertDialog(
-                                      title: Text("Add Car Details"),
+                                      title: const Text("Add Car Details"),
                                       actions: [
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text("Car No"),
+                                            const Text("Car No"),
                                             TextField(
-                                              controller: CarNoTextController,
+                                              controller: carNoTextController,
                                             ),
-                                            Text("Car Model "),
+                                            const Text("Car Model "),
                                             TextField(
                                               controller:
-                                                  CarModelTextController,
+                                                  carModelTextController,
                                             ),
                                             ElevatedButton(
                                                 onPressed: () => _addCar(
-                                                    no: CarNoTextController
+                                                    no: carNoTextController
                                                         .text,
                                                     model:
-                                                        CarModelTextController
+                                                        carModelTextController
                                                             .text),
-                                                child: Text("SUBMIT"))
+                                                child: const Text("SUBMIT"))
                                           ],
                                         )
                                       ],
@@ -234,12 +234,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Future<void> _getUSerData() async {
     final prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid');
-    debugPrint("Profile Page :uid is '$uid'");
+    debugPrint("Profile Page :uid is '$uid'"); //TODO
     try {
       _snapshot = await db.collection("users").doc(uid).get();
       setState(() {
         user = _snapshot.data();
-        debugPrint("Profile${user.toString()}");
       });
     } on FirebaseException catch (e) {
       debugPrint("Profile Page Error: ${e.toString()}");
@@ -252,12 +251,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
         List<Map<String, dynamic>> updatedCars = List.from(user!['cars']!);
         updatedCars.removeAt(index);
         try {
-          //To Update DB
           await db.collection("users").doc(uid).update({
             'cars': updatedCars,
           });
           setState(() {
-            //To Update DB
             user!['cars'] = updatedCars;
           });
         } catch (e) {
