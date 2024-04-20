@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
+import 'package:vaayo/src/constants/theme.dart';
 
 class TripsPage extends StatefulWidget {
   const TripsPage({super.key});
@@ -13,7 +15,7 @@ class TripsPage extends StatefulWidget {
 }
 
 class _TripsPageState extends State<TripsPage> {
-  var _trips = [];
+  List<Map<String, dynamic>> _trips = [];
   int _noOfTrips = 0;
 
   @override
@@ -57,14 +59,6 @@ class _TripsPageState extends State<TripsPage> {
             } else {
               DateTime date =
                   (_trips[index]['departure_time'] as Timestamp).toDate();
-              List<String> departure =
-                  (_trips[index]['departure'].contains('-'))
-                      ? _trips[index]['departure'].split('- ')
-                      : _trips[index]['departure'].split(', ');
-              List<String> destination =
-                  (_trips[index]['destination'].contains('-'))
-                      ? _trips[index]['destination'].split('- ')
-                      : _trips[index]['destination'].split(', ');
               return InkWell(
                 onTap: () {
                   navKey.currentState
@@ -86,17 +80,31 @@ class _TripsPageState extends State<TripsPage> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                          // LOCATION
-                                          "${departure[0]}\n${departure[1]}",
-                                          textAlign: TextAlign.left),
-                                      Text(
-                                        // LOCATION
-                                        "${destination[0]}\n${destination[1]}",
-                                        textAlign: TextAlign.right,
+                                      Flexible(
+                                        child: Text(
+                                          "${_trips[index]['departure']}",
+                                          textAlign: TextAlign.left,
+                                          softWrap: true,
+                                          maxLines: 3,
+                                          style: VaayoTheme.mediumBold,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 150,
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          "${_trips[index]['destination']}",
+                                          textAlign: TextAlign.right,
+                                          softWrap: true,
+                                          maxLines: 3,
+                                          style: VaayoTheme.mediumBold,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -104,6 +112,8 @@ class _TripsPageState extends State<TripsPage> {
                                     // TIME
                                     "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                     textAlign: TextAlign.center,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
                                   ),
                                   Row(
                                     mainAxisAlignment:

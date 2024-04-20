@@ -9,6 +9,7 @@ import 'package:vaayo/src/features/manage_rides/screens/ride_details.dart';
 import 'package:vaayo/src/features/manage_rides/screens/search_ride.dart';
 import 'package:vaayo/src/features/manage_trips/screen/create_trips.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:vaayo/src/features/manage_trips/screen/trip_details.dart';
 import 'package:vaayo/src/features/profile_management/screens/user_profile.dart';
 import 'firebase_options.dart';
 
@@ -34,6 +35,7 @@ main() async {
       "Home": (BuildContext context) => const HomePage(),
       "ProfilePage": (BuildContext context) => const UserProfilePage(),
       "RideDetails": (BuildContext context) => const RideDetailsPage(),
+      "TripDetails": (BuildContext context) => const TripDetailsPage(),
       "SearchRides": (BuildContext context) => const SearchRidesPage(),
       "CreateTrips": (BuildContext context) => const CreateTripPage(),
       "ForgotPasswordMail": (BuildContext context) =>
