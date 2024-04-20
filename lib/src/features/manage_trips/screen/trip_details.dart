@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'package:vaayo/src/constants/theme.dart';
@@ -57,7 +56,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              Row(
+              const Row(
                   //MAP
                   children: []),
               Card(
@@ -111,8 +110,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                             thickness: .5,
                           ),
                           Text(trip['status'],
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.green)),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.green)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

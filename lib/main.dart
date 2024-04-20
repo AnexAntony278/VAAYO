@@ -36,7 +36,6 @@ main() async {
       "Home": (BuildContext context) => const HomePage(),
       "ProfilePage": (BuildContext context) => const UserProfilePage(),
       "RideDetails": (BuildContext context) => const RideDetailsPage(),
-      "TripDetails": (BuildContext context) => const TripDetailsPage(),
       "SearchRides": (BuildContext context) => const SearchRidesPage(),
       "CreateTrips": (BuildContext context) => const CreateTripPage(),
       "BookRides": (BuildContext context) => const BookRidePage(),
