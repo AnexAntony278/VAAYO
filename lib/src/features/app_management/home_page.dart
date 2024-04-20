@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _navBarIndex = 0;
-  Widget _selectedPage = const TripsPage();
+  Widget _selectedPage = const RidesPage();
   @override
   Widget build(BuildContext context) {
     return SafeArea(

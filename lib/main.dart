@@ -5,7 +5,7 @@ import 'package:vaayo/src/features/authentication/screens/forget-password/forget
 import 'package:vaayo/src/features/authentication/screens/login/login_screen.dart';
 import 'package:vaayo/src/features/authentication/screens/login/welcome.dart';
 import 'package:vaayo/src/features/authentication/screens/signup/sign_up_screen.dart';
-import 'package:vaayo/src/features/manage_rides/book_ride.dart';
+import 'package:vaayo/src/features/manage_rides/screens/book_ride.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_details.dart';
 import 'package:vaayo/src/features/manage_rides/screens/search_ride.dart';
 import 'package:vaayo/src/features/manage_trips/screen/create_trips.dart';
