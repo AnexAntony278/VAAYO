@@ -39,7 +39,7 @@ class _BookRidePageState extends State<BookRidePage> {
     DateTime date = (ride!['departure_time'] as Timestamp).toDate();
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Ride Details"),
+          title: const Text("Book Ride"),
           actions: const [
             Icon(
               (Icons.emoji_transportation),

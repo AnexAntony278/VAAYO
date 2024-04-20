@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_place/google_place.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'package:vaayo/src/constants/keys.dart';
@@ -19,22 +21,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
   GooglePlace googlePlace = GooglePlace(vaayoMapsAPIKey);
   List<String> predictions = [];
   String? depature, destination;
-  List<Map<String, dynamic>> _rides = [
-    {
-      //SAMPLE DATA FOR DEBUGGING PURPOSE
-      'id': "hUxdjdFTzJtTNb6yj1s2",
-      "available_seats": 3,
-      "passengers": [],
-      "total_seats": 3,
-      'departure_time': Timestamp.now(),
-      "departure": 'Painavu,Kerala,India',
-      'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-      'destination': 'Cheruthoni, Kerala, India',
-      'car_no': 'KL47C7993',
-      'car_model': 'Toyota Supra',
-      'status': 'CREATED'
-    },
-  ];
+  List<Map<String, dynamic>> _rides = [];
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +41,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                 child: Padding(
                   padding: EdgeInsets.all(10),
                   child: SizedBox(
-                    height: MediaQuery.of(context).size.height / 3 - 50,
+                    height: MediaQuery.of(context).size.height / 3 - 20,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +101,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                                   .toDate();
                           return InkWell(
                             onTap: () {
-                              navKey.currentState?.pushNamed("TripDetails",
+                              navKey.currentState?.pushNamed("BookRides",
                                   arguments: _rides[index]);
                             },
                             child: Padding(
@@ -185,21 +172,27 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
   }
 
   void _getRidesData() async {
-    if (depature == null || destination == null) {
-      return;
-    }
-    await FirebaseFirestore.instance
-        .collection('trips')
-        .where('status', isEqualTo: 'CREATED')
-        .where('destination', isEqualTo: destination)
-        .where('departure', isEqualTo: depature)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      setState(() {
-        _rides = List<Map<String, dynamic>>.from(
-            querySnapshot.docs.map((doc) => doc.data()).toList());
+    try {
+      if (depature == null || destination == null) {
+        return;
+      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? uid = prefs.getString('uid');
+      await FirebaseFirestore.instance
+          .collection('trips')
+          .where('status', isEqualTo: 'CREATED')
+          .where('destination', isEqualTo: destination)
+          .where('departure', isEqualTo: depature)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        setState(() {
+          _rides = List<Map<String, dynamic>>.from(
+              querySnapshot.docs.map((doc) => doc.data()).toList());
+        });
       });
-    });
+    } on FirebaseException catch (e) {
+      debugPrint(e.message);
+    }
   }
 
   void _getPredictions(String? input) async {
