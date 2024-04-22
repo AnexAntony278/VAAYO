@@ -242,10 +242,8 @@ class _CreateTripPageState extends State<CreateTripPage> {
       'total_seats': _availSeats,
       'passengers': [],
       'car_no': _selectedCar?['no'].toString() ?? '',
-      'car_model': _selectedCar?['model'].toString() ?? '',
       'status': "CREATED"
     };
-
     DocumentReference _docRef =
         await FirebaseFirestore.instance.collection("trips").add(trip);
     trip['id'] = _docRef.id;

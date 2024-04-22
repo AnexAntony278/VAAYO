@@ -56,7 +56,8 @@ class _RidesPageState extends State<RidesPage> {
                   (_rides[index]['departure_time'] as Timestamp).toDate();
               return InkWell(
                 onTap: () {
-                  navKey.currentState?.pushNamed("RideDetails");
+                  navKey.currentState
+                      ?.pushNamed("RideDetails", arguments: _rides[index]);
                 },
                 child: Padding(
                   padding:

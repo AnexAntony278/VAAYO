@@ -183,12 +183,15 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
           .where('status', isEqualTo: 'CREATED')
           .where('destination', isEqualTo: destination)
           .where('departure', isEqualTo: depature)
+          .where('driver_uid', isNotEqualTo: uid)
           .get()
           .then((QuerySnapshot querySnapshot) {
-        setState(() {
-          _rides = List<Map<String, dynamic>>.from(
-              querySnapshot.docs.map((doc) => doc.data()).toList());
-        });
+        _rides = List<Map<String, dynamic>>.from(
+            querySnapshot.docs.map((doc) => doc.data()).toList());
+        _rides.removeWhere(
+          (element) => List.from(element['passengers']).contains(uid),
+        );
+        setState(() {});
       });
     } on FirebaseException catch (e) {
       debugPrint(e.message);

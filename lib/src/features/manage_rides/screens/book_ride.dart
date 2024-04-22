@@ -160,7 +160,7 @@ class _BookRidePageState extends State<BookRidePage> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      //DELETE TRIP CODE
+                                      //BOOK TRIP CODE
                                       _bookTrip();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
@@ -191,7 +191,6 @@ class _BookRidePageState extends State<BookRidePage> {
           .collection('trips')
           .doc(ride!['id'])
           .update(ride as Map<String, dynamic>);
-      debugPrint(ride.toString());
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
