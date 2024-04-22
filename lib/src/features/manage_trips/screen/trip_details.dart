@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'package:vaayo/src/constants/theme.dart';
@@ -17,7 +18,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     'status': 'CREATED',
     'total_seats': 3,
     'id': 'CkwnJWIrDttowxMhyvsz',
-    'departure': ' Painavu, Kerala, India',
+    'departure': 'Sample Data:PLeasae remove',
     'destination': ' Cheruthoni,Kerala, India',
     'available_seats': 3,
     'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
@@ -34,15 +35,15 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       'phone': "7736110274",
       'tags': [],
       'name': 'Anandu',
-      'gender': 'Male',
+      'gender': 'M',
       'email': 'anandudina2003@gmail.com'
     }
   ];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    // _getPassengerDetails();
+    trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    _getPassengerDetails();
   }
 
   @override
@@ -50,10 +51,10 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     DateTime date = (trip['departure_time'] as Timestamp).toDate();
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Ride Details"),
+          title: const Text("Trip Details"),
           actions: const [
             Icon(
-              (Icons.emoji_transportation),
+              (Icons.time_to_leave),
               size: 40,
             ),
             SizedBox(
@@ -74,7 +75,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                   children: []),
               Card(
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
                       Row(
@@ -141,7 +142,65 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                               ),
                             ],
                           ),
-                          //ADD LISTVIEW HERE
+                          SingleChildScrollView(
+                            physics: const ScrollPhysics(),
+                            child: Column(
+                              children: <Widget>[
+                                ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: passengers.length,
+                                    itemBuilder: (context, index) {
+                                      return InkWell(
+                                          onTap: null,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 3),
+                                            child: Card(
+                                              elevation: 50,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(15.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                            '${passengers[index]['name']},\t\t\t${passengers[index]['age']}'),
+                                                        (passengers[index][
+                                                                    'gender'] ==
+                                                                'M')
+                                                            ? Icon(
+                                                                Icons.male,
+                                                                color:
+                                                                    Colors.blue,
+                                                              )
+                                                            : Icon(Icons.female,
+                                                                color:
+                                                                    Colors.pink)
+                                                      ],
+                                                    ),
+                                                    ElevatedButton(
+                                                        onPressed: () =>
+                                                            _callPhone(
+                                                                passengers[
+                                                                        index]
+                                                                    ['phone']),
+                                                        child: Text('CALL'))
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ));
+                                    })
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -219,6 +278,12 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
-    debugPrint(passengers.toString());
+  }
+
+  void _callPhone(String phone) async {
+    final Uri _url = Uri(scheme: 'tel', path: "+91$phone");
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }

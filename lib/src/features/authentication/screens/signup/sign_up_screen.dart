@@ -81,9 +81,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       controller: _genderTextController,
-                      decoration: const InputDecoration(
-                        label: Text('Gender'),
+                      decoration: InputDecoration(
+                        labelText: 'Gender',
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your gender';
+                        }
+                        String lowercaseValue = value.toLowerCase();
+                        if (lowercaseValue != 'M' && lowercaseValue != 'F') {
+                          return 'Gender must be either "M" or "F"';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(
                       height: 10.0,

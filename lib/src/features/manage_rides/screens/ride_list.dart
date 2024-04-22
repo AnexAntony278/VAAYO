@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
+import 'package:vaayo/src/constants/theme.dart';
 
 class RidesPage extends StatefulWidget {
   const RidesPage({super.key});
@@ -13,6 +14,7 @@ class RidesPage extends StatefulWidget {
 
 class _RidesPageState extends State<RidesPage> {
   final List<Map<String, dynamic>> _rides = [];
+  final List<Map<String, dynamic>> _drivers = [];
   @override
   void initState() {
     super.initState();
@@ -114,13 +116,17 @@ class _RidesPageState extends State<RidesPage> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text("${_rides[index]['car_no']}",
-                                      style: const TextStyle(fontSize: 20)),
+                                      style: VaayoTheme.mediumBold),
                                   const CircleAvatar(
                                       radius: 35, child: Placeholder()),
-                                  Text("DriverName$index")
+                                  Text(
+                                    "${_drivers[index]['name']}",
+                                    style: VaayoTheme.mediumBold,
+                                  )
                                 ],
                               ),
                             )
@@ -144,9 +150,20 @@ class _RidesPageState extends State<RidesPage> {
           .collection('trips')
           .where('passengers', arrayContains: uid)
           .get();
-      for (var i = 0; i < querySnapshot.docs.length; i++) {
-        _rides.add(querySnapshot.docs[i].data() as Map<String, dynamic>);
+      for (var i in querySnapshot.docs) {
+        if (i.exists) {
+          _rides.add(i.data() as Map<String, dynamic>);
+          debugPrint(_rides.toString());
+        }
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_rides.last['driver_uid'])
+            .get()
+            .then((value) {
+          _drivers.add(value.data() as Map<String, dynamic>);
+        });
       }
+
       setState(() {});
     } on FirebaseException catch (e) {
       debugPrint(e.code);

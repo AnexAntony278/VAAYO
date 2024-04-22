@@ -72,7 +72,6 @@ class _LoginFormState extends State<LoginForm> {
                         await FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: _emailTextController.text,
                             password: _passwordTextController.text);
-                    User? user = userCredential.user;
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setString('uid', userCredential.user?.uid ?? 'null');
                     debugPrint("\nLoginPage: uid:${prefs.getString('uid')}");
