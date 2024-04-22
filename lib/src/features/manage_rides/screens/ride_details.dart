@@ -74,11 +74,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                               " ${trip['departure']}",
                               maxLines: 2,
                               textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 25),
+                              style: const TextStyle(fontSize: 25),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Icon(
                               Icons.arrow_forward,
                               size: 50,
@@ -90,7 +90,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                               "${trip['destination']}",
                               maxLines: 2,
                               textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 25),
+                              style: const TextStyle(fontSize: 25),
                             ),
                           ),
                         ],
@@ -144,7 +144,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                       Column(
                         children: [
                           CircleAvatar(radius: 40, child: Placeholder()),
-                          Text("DriverName", style: TextStyle(fontSize: 25))
+                          Text("DriverName", style: TextStyle(fontSize: 25)),
                         ],
                       )
                     ],
@@ -152,7 +152,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 20, left: 10, bottom: 150),
+                padding: const EdgeInsets.only(top: 20, left: 10, bottom: 150),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -188,7 +188,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                             },
                           );
                         },
-                        child: Text("CANCEL")),
+                        child: const Text("CANCEL")),
                   ],
                 ),
               )

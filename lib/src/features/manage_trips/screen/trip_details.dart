@@ -13,23 +13,36 @@ class TripDetailsPage extends StatefulWidget {
 
 class _TripDetailsPageState extends State<TripDetailsPage> {
   Map<String, dynamic> trip = {
-    //SAMPLE DATA FOR DEBUGGING PURPOSE
-    'id': "hUxdjdFTzJtTNb6yj1s2",
-    "available_seats": 3,
-    "passengers": [],
-    "total_seats": 3,
     'departure_time': Timestamp.now(),
-    "departure": 'Painavu,Kerala,India',
-    'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-    'destination': 'Cheruthoni, Kerala, India',
-    'car_no': 'KL47C7993',
-    'car_model': 'Toyota Supra',
-    'status': 'CREATED'
+    'status': 'CREATED',
+    'total_seats': 3,
+    'id': 'CkwnJWIrDttowxMhyvsz',
+    'departure': ' Painavu, Kerala, India',
+    'destination': ' Cheruthoni,Kerala, India',
+    'available_seats': 3,
+    'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
+    'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
+    'car_no': 'KL21K2222'
   };
+  List<Map<String, dynamic>> passengers = [
+    {
+      'age': 21,
+      ' cars': [
+        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+      ],
+      'bio': ' Btech student',
+      'phone': "7736110274",
+      'tags': [],
+      'name': 'Anandu',
+      'gender': 'Male',
+      'email': 'anandudina2003@gmail.com'
+    }
+  ];
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    // trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    // _getPassengerDetails();
   }
 
   @override
@@ -127,7 +140,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                                 ],
                               ),
                             ],
-                          )
+                          ),
+                          //ADD LISTVIEW HERE
                         ],
                       ),
                     ],
@@ -189,5 +203,22 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
+  }
+
+  void _getPassengerDetails() async {
+    try {
+      for (String passengerId in trip['passengers']) {
+        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(passengerId)
+            .get();
+        if (documentSnapshot.exists) {
+          passengers.add(documentSnapshot.data() as Map<String, dynamic>);
+        }
+      }
+    } on FirebaseException catch (e) {
+      debugPrint(e.message);
+    }
+    debugPrint(passengers.toString());
   }
 }
