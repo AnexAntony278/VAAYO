@@ -58,8 +58,8 @@ class _RidesPageState extends State<RidesPage> {
                   (_rides[index]['departure_time'] as Timestamp).toDate();
               return InkWell(
                 onTap: () {
-                  navKey.currentState
-                      ?.pushNamed("RideDetails", arguments: _rides[index]);
+                  navKey.currentState?.pushNamed("RideDetails",
+                      arguments: [_rides[index], _drivers[index]]);
                 },
                 child: Padding(
                   padding:
@@ -153,7 +153,6 @@ class _RidesPageState extends State<RidesPage> {
       for (var i in querySnapshot.docs) {
         if (i.exists) {
           _rides.add(i.data() as Map<String, dynamic>);
-          debugPrint(_rides.toString());
         }
         await FirebaseFirestore.instance
             .collection('users')

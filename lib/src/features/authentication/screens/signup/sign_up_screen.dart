@@ -22,7 +22,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _genderTextController = TextEditingController();
   final TextEditingController _bioTextController = TextEditingController();
   String _errorMessage = "";
-  Map<String, dynamic> _userMap = {};
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -48,7 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         prefixIcon: Icon(Icons.person_outline_rounded),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     TextFormField(
@@ -58,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         prefixIcon: Icon(Icons.email_outlined),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     TextFormField(
@@ -68,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         prefixIcon: Icon(Icons.numbers),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10.0,
                     ),
                     TextFormField(
@@ -81,7 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     TextFormField(
                       controller: _genderTextController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Gender',
                       ),
                       validator: (value) {
@@ -123,46 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () async {
-                            //SIGN UP
-                            try {
-                              //GET DATA FROM FIREAUTH
-                              UserCredential userCredential = await FirebaseAuth
-                                  .instance
-                                  .createUserWithEmailAndPassword(
-                                      email: _emailTextController.text,
-                                      password: _passwordTextController.text);
-                              _userMap['email'] = userCredential.user?.email;
-                              _userMap['name'] = _nameTextController.text;
-                              _userMap['phone'] = _phoneTextController.text;
-                              _userMap['gender'] = _genderTextController.text;
-                              _userMap['age'] = _ageTextController.text;
-                              _userMap['bio'] = _bioTextController.text;
-                              _userMap['cars'] = [];
-                              _userMap['tags'] = [];
-                              await FirebaseFirestore.instance
-                                  .collection("users")
-                                  .doc(userCredential.user?.uid)
-                                  .set(_userMap);
-                              //STORE UID LOCALLY
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString(
-                                  'uid', userCredential.user?.uid ?? "null");
-                              //SWITCH SCREENS
-                              navKey.currentState?.pop();
-                              navKey.currentState?.pushNamed("Home");
-                              //REMOVE ERROR MESSAGE IF ANY
-                              setState(() {
-                                _errorMessage = "";
-                              });
-                            } on FirebaseAuthException catch (e) {
-                              setState(() {
-                                _errorMessage = e.code;
-                              });
-                            }
-                          },
-                          child: const Text("SIGNUP")),
+                          onPressed: _signUp, child: const Text("SIGNUP")),
                     )
                   ],
                 )),
@@ -173,7 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         onPressed: () {},
-                        icon: Image(
+                        icon: const Image(
                           image: AssetImage("assets/images/google.png"),
                           width: 20.0,
                         ),
@@ -189,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           TextSpan(
                               text: "Already have an Account?",
                               style: Theme.of(context).textTheme.bodySmall),
-                          TextSpan(text: " LOGIN"),
+                          const TextSpan(text: " LOGIN"),
                         ])))
                   ],
                 )
@@ -199,5 +159,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  void _signUp() async {
+    //SIGN UP
+    try {
+      Map<String, dynamic> userMap = {};
+      //GET DATA FROM FIREAUTH
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailTextController.text,
+              password: _passwordTextController.text);
+      userMap['email'] = userCredential.user?.email;
+      userMap['name'] = _nameTextController.text;
+      userMap['phone'] = _phoneTextController.text;
+      userMap['gender'] = _genderTextController.text;
+      userMap['age'] = _ageTextController.text;
+      userMap['bio'] = _bioTextController.text;
+      userMap['cars'] = [];
+      userMap['tags'] = [];
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.user?.uid)
+          .set(userMap);
+      //STORE UID LOCALLY
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('uid', userCredential.user?.uid ?? "null");
+      //SWITCH SCREENS
+      navKey.currentState?.pop();
+      navKey.currentState?.pushNamed("Home");
+      //REMOVE ERROR MESSAGE IF ANY
+      setState(() {
+        _errorMessage = "";
+      });
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = e.code;
+      });
+    }
   }
 }

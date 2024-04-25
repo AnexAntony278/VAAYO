@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'package:vaayo/src/constants/theme.dart';
@@ -14,23 +15,58 @@ class RideDetailsPage extends StatefulWidget {
 
 class _RideDetailsPageState extends State<RideDetailsPage> {
   Map<String, dynamic> trip = {
-    //SAMPLE DATA FOR DEBUGGING PURPOSE
-    // 'id': "hUxdjdFTzJtTNb6yj1s2",
-    // "available_seats": 3,
-    // "passengers": [],
-    // "total_seats": 3,
-    // 'departure_time': Timestamp.now(),
-    // 'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-    // 'destination': 'Cheruthoni, Kerala, India',
-    // 'departure': 'Cheruthoni, Kerala, India',
-    // 'car_no': 'KL47C7993',
-    // 'car_model': 'Toyota Supra',
-    // 'status': 'CREATED'
-  };
+        // SAMPLE DATA FOR DEBUGGING PURPOSE
+        'id': "hUxdjdFTzJtTNb6yj1s2",
+        "available_seats": 3,
+        "passengers": [],
+        "total_seats": 3,
+        'departure_time': Timestamp.now(),
+        'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
+        'destination': 'Cheruthoni, Kerala, India',
+        'departure': 'Cheruthoni, Kerala, India',
+        'car_no': 'KL47C7993',
+        'car_model': 'Toyota Supra',
+        'status': 'CREATED'
+      },
+      driver = {
+        'age': 21,
+        ' cars': [
+          {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+        ],
+        'bio': ' Btech student',
+        'phone': "7736110274",
+        'tags': [],
+        'name': 'Anandu',
+        'gender': 'M',
+        'email': 'anandudina2003@gmail.com'
+      };
+  final List<Map<String, dynamic>> passengers = [
+    // {
+    //   'age': 21,
+    //   ' cars': [
+    //     {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+    //   ],
+    //   'bio': ' Btech student',
+    //   'phone': "7736110274",
+    //   'tags': [],
+    //   'name': 'Anandu',
+    //   'gender': 'M',
+    //   'email': 'anandudina2003@gmail.com'
+    // }
+  ];
+  @override
+  void initState() {
+    super.initState();
+    _getPassengerDetails();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    trip = (ModalRoute.of(context)?.settings.arguments
+        as List<Map<String, dynamic>>)[0];
+    driver = (ModalRoute.of(context)?.settings.arguments
+        as List<Map<String, dynamic>>)[1];
   }
 
   @override
@@ -57,9 +93,19 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              const Row(
-                  //MAP
-                  children: []),
+              Builder(
+                builder: (context) {
+                  return (trip['status'] == 'CREATED')
+                      ? SizedBox(
+                          height: 10,
+                        )
+                      : Card(
+                          child: SizedBox(
+                            height: 400,
+                          ),
+                        );
+                },
+              ),
               Card(
                 child: Padding(
                   padding: EdgeInsets.all(10),
@@ -135,20 +181,89 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("${trip['car_no']}",
-                              style: TextStyle(fontSize: 30)),
-                          Text("${trip['car_model']}"),
+                              style: VaayoTheme.largeBold),
+                          Text(
+                            "${trip['car_model']}",
+                            style: VaayoTheme.mediumBold,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ElevatedButton(
+                              onPressed: () => _callPhone(driver['phone']),
+                              child: const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Icon(Icons.call),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text('CALL'),
+                                ],
+                              ))
                         ],
                       ),
                       Column(
                         children: [
-                          CircleAvatar(radius: 40, child: Placeholder()),
-                          Text("DriverName", style: TextStyle(fontSize: 25)),
+                          const CircleAvatar(radius: 40, child: Placeholder()),
+                          Text("${driver['name']}",
+                              style: VaayoTheme.mediumBold),
                         ],
                       )
                     ],
                   ),
+                ),
+              ),
+              Text((passengers.isEmpty) ? "" : "\t\t  Passenger Details"),
+              SingleChildScrollView(
+                physics: const ScrollPhysics(),
+                child: Column(
+                  children: <Widget>[
+                    ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: passengers.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                              onTap: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 3),
+                                child: Card(
+                                  elevation: 50,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                                '${passengers[index]['name']},\t\t\t${passengers[index]['age']}'),
+                                            (passengers[index]['gender'] == 'M')
+                                                ? Icon(
+                                                    Icons.male,
+                                                    color: Colors.blue,
+                                                  )
+                                                : Icon(Icons.female,
+                                                    color: Colors.pink)
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ));
+                        })
+                  ],
                 ),
               ),
               Padding(
@@ -208,6 +323,29 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
           .update(trip);
     } on FirebaseException catch (e) {
       debugPrint(e.message);
+    }
+  }
+
+  void _getPassengerDetails() async {
+    try {
+      for (String passengerId in trip['passengers']) {
+        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(passengerId)
+            .get();
+        if (documentSnapshot.exists) {
+          passengers.add(documentSnapshot.data() as Map<String, dynamic>);
+        }
+      }
+    } on FirebaseException catch (e) {
+      debugPrint(e.message);
+    }
+  }
+
+  void _callPhone(String phone) async {
+    final Uri _url = Uri(scheme: 'tel', path: "+91$phone");
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
     }
   }
 }

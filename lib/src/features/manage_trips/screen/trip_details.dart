@@ -14,30 +14,30 @@ class TripDetailsPage extends StatefulWidget {
 
 class _TripDetailsPageState extends State<TripDetailsPage> {
   Map<String, dynamic> trip = {
-    'departure_time': Timestamp.now(),
-    'status': 'CREATED',
-    'total_seats': 3,
-    'id': 'CkwnJWIrDttowxMhyvsz',
-    'departure': 'Sample Data:PLeasae remove',
-    'destination': ' Cheruthoni,Kerala, India',
-    'available_seats': 3,
-    'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
-    'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
-    'car_no': 'KL21K2222'
+    // 'departure_time': Timestamp.now(),
+    // 'status': 'CREATED',
+    // 'total_seats': 3,
+    // 'id': 'CkwnJWIrDttowxMhyvsz',
+    // 'departure': 'Sample Data:PLeasae remove',
+    // 'destination': ' Cheruthoni,Kerala, India',
+    // 'available_seats': 3,
+    // 'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
+    // 'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
+    // 'car_no': 'KL21K2222'
   };
   List<Map<String, dynamic>> passengers = [
-    {
-      'age': 21,
-      ' cars': [
-        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-      ],
-      'bio': ' Btech student',
-      'phone': "7736110274",
-      'tags': [],
-      'name': 'Anandu',
-      'gender': 'M',
-      'email': 'anandudina2003@gmail.com'
-    }
+    // {
+    // 'age': 21,
+    // ' cars': [
+    //   {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+    // ],
+    // 'bio': ' Btech student',
+    // 'phone': "7736110274",
+    // 'tags': [],
+    // 'name': 'Anandu',
+    // 'gender': 'M',
+    // 'email': 'anandudina2003@gmail.com'
+    // }
   ];
   @override
   void didChangeDependencies() {
@@ -275,6 +275,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           passengers.add(documentSnapshot.data() as Map<String, dynamic>);
         }
       }
+      setState(() {});
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
