@@ -58,7 +58,7 @@ class _BookRidePageState extends State<BookRidePage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              Row(
+              const Row(
                   //MAP
                   children: []),
               Card(
@@ -79,7 +79,7 @@ class _BookRidePageState extends State<BookRidePage> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(15.0),
                             child: Icon(
                               Icons.arrow_forward,
                               size: 45,
@@ -112,8 +112,8 @@ class _BookRidePageState extends State<BookRidePage> {
                             thickness: .5,
                           ),
                           Text(ride!['status'],
-                              style:
-                                  TextStyle(fontSize: 20, color: Colors.green)),
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.green)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

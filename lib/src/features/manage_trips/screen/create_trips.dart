@@ -19,7 +19,7 @@ class CreateTripPage extends StatefulWidget {
 class _CreateTripPageState extends State<CreateTripPage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
-  final int? _totalseats = 4;
+  final int _totalseats = 4;
   int? _availSeats = 3;
 
   List<Map<String, dynamic>> _cars = [];
@@ -130,7 +130,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                           });
                         },
                         items: List.generate(
-                          _totalseats!,
+                          _totalseats,
                           (index) => DropdownMenuItem(
                             value: _totalseats - index,
                             child: Text('${_totalseats - index}'),
@@ -244,15 +244,15 @@ class _CreateTripPageState extends State<CreateTripPage> {
       'car_no': _selectedCar?['no'].toString() ?? '',
       'status': "CREATED"
     };
-    DocumentReference _docRef =
+    DocumentReference docRef =
         await FirebaseFirestore.instance.collection("trips").add(trip);
-    trip['id'] = _docRef.id;
-    _docRef.update(trip);
+    trip['id'] = docRef.id;
+    docRef.update(trip);
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          content: Text("Trip created successfully!"),
+          content: const Text("Trip created successfully!"),
           actions: [
             TextButton(
               onPressed: () {
@@ -260,7 +260,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                 Navigator.pop(context);
                 navKey.currentState?.pushNamed("Home");
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );

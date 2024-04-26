@@ -74,13 +74,13 @@ class _RidesPageState extends State<RidesPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(// LOCATION
+                                Text(
                                     "${_rides[index]['departure']}-> ${_rides[index]['destination']}"),
                                 Text(
-                                  // TIME
                                   "${date.day} ${date.toMonth()} ${date.year}  ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600),
                                 ),
                                 // Text(
                                 //   "Pick UP POint:$index",

@@ -96,10 +96,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
               Builder(
                 builder: (context) {
                   return (trip['status'] == 'CREATED')
-                      ? SizedBox(
+                      ? const SizedBox(
                           height: 10,
                         )
-                      : Card(
+                      : const Card(
                           child: SizedBox(
                             height: 400,
                           ),
@@ -108,7 +108,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
               ),
               Card(
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     children: [
                       Row(
@@ -165,18 +165,19 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                               "${List.from(trip['passengers']).length}/${trip['available_seats']}",
                               style: VaayoTheme.mediumBold),
 
-                          Icon(Icons.person)
+                          const Icon(Icons.person)
                         ],
                       ),
                     ],
                   ),
                 ),
               ),
-              Text("   Driver details"),
+              const Text("   Driver details"),
               Card(
                 color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -190,7 +191,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                             "${trip['car_model']}",
                             style: VaayoTheme.mediumBold,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           ElevatedButton(
@@ -249,11 +250,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                             Text(
                                                 '${passengers[index]['name']},\t\t\t${passengers[index]['age']}'),
                                             (passengers[index]['gender'] == 'M')
-                                                ? Icon(
+                                                ? const Icon(
                                                     Icons.male,
                                                     color: Colors.blue,
                                                   )
-                                                : Icon(Icons.female,
+                                                : const Icon(Icons.female,
                                                     color: Colors.pink)
                                           ],
                                         ),
@@ -343,9 +344,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   }
 
   void _callPhone(String phone) async {
-    final Uri _url = Uri(scheme: 'tel', path: "+91$phone");
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
+    final Uri url = Uri(scheme: 'tel', path: "+91$phone");
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
     }
   }
 }

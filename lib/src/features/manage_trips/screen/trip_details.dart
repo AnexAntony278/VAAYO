@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
@@ -14,36 +16,41 @@ class TripDetailsPage extends StatefulWidget {
 
 class _TripDetailsPageState extends State<TripDetailsPage> {
   Map<String, dynamic> trip = {
-    // 'departure_time': Timestamp.now(),
-    // 'status': 'CREATED',
-    // 'total_seats': 3,
-    // 'id': 'CkwnJWIrDttowxMhyvsz',
-    // 'departure': 'Sample Data:PLeasae remove',
-    // 'destination': ' Cheruthoni,Kerala, India',
-    // 'available_seats': 3,
-    // 'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
-    // 'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
-    // 'car_no': 'KL21K2222'
+    'departure_time': Timestamp.now(),
+    'status': 'WAITING',
+    'total_seats': 3,
+    'id': 'CkwnJWIrDttowxMhyvsz',
+    'departure': 'Sample Data:PLeasae remove',
+    'destination': ' Sample dataaaaaaaaa',
+    'available_seats': 3,
+    'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
+    'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
+    'car_no': 'KL21K2222'
   };
   List<Map<String, dynamic>> passengers = [
-    // {
-    // 'age': 21,
-    // ' cars': [
-    //   {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-    // ],
-    // 'bio': ' Btech student',
-    // 'phone': "7736110274",
-    // 'tags': [],
-    // 'name': 'Anandu',
-    // 'gender': 'M',
-    // 'email': 'anandudina2003@gmail.com'
-    // }
+    {
+      'age': 21,
+      ' cars': [
+        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+      ],
+      'bio': ' Btech student',
+      'phone': "7736110274",
+      'tags': [],
+      'name': 'Anandu',
+      'gender': 'M',
+      'email': 'anandudina2003@gmail.com'
+    }
   ];
+  LatLng currentLocation = const LatLng(0, 0);
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    _getPassengerDetails();
+    // trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    if ((trip['passengers'] as List).isNotEmpty &&
+        trip['passengers'].length != passengers.length) {
+      _getPassengerDetails();
+    }
   }
 
   @override
@@ -70,9 +77,31 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              const Row(
+              Row(
                   //MAP
-                  children: []),
+                  children: [
+                    (trip['status'] != "CREATED")
+                        ? Card(
+                            child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 30,
+                                height: 300,
+                                child: Builder(
+                                  builder: (context) {
+                                    _getCurrentLocation().then((value) {
+                                      setState(() {
+                                        currentLocation = LatLng(
+                                            value.latitude, value.longitude);
+                                        debugPrint(currentLocation.toString());
+                                      });
+                                    });
+                                    return GoogleMap(
+                                        initialCameraPosition: CameraPosition(
+                                            target: currentLocation, zoom: 13));
+                                  },
+                                )),
+                          )
+                        : const Text("")
+                  ]),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -91,7 +120,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(15.0),
                             child: Icon(
                               Icons.arrow_forward,
                               size: 45,
@@ -147,7 +176,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                             child: Column(
                               children: <Widget>[
                                 ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: passengers.length,
                                     itemBuilder: (context, index) {
@@ -175,12 +205,13 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                                                         (passengers[index][
                                                                     'gender'] ==
                                                                 'M')
-                                                            ? Icon(
+                                                            ? const Icon(
                                                                 Icons.male,
                                                                 color:
                                                                     Colors.blue,
                                                               )
-                                                            : Icon(Icons.female,
+                                                            : const Icon(
+                                                                Icons.female,
                                                                 color:
                                                                     Colors.pink)
                                                       ],
@@ -191,7 +222,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                                                                 passengers[
                                                                         index]
                                                                     ['phone']),
-                                                        child: Text('CALL'))
+                                                        child:
+                                                            const Text('CALL'))
                                                   ],
                                                 ),
                                               ),
@@ -282,9 +314,24 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   }
 
   void _callPhone(String phone) async {
-    final Uri _url = Uri(scheme: 'tel', path: "+91$phone");
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
+    final Uri url = Uri(scheme: 'tel', path: "+91$phone");
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
     }
+  }
+
+  Future<Position> _getCurrentLocation() async {
+    LocationPermission locationPermission = await Geolocator.checkPermission();
+    if (locationPermission == LocationPermission.denied) {
+      locationPermission = await Geolocator.requestPermission();
+      if (locationPermission == LocationPermission.denied) {
+        return Future.error('Trip Details Page: Location permissions denied');
+      }
+    }
+    if (locationPermission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Trip Details Page: Location permissions denied Permanantly');
+    }
+    return await Geolocator.getCurrentPosition();
   }
 }

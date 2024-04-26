@@ -38,7 +38,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
               Card(
                 elevation: 20,
                 child: Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height / 3 - 20,
                     child: Column(
@@ -87,11 +87,11 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                 ),
               ),
               SingleChildScrollView(
-                physics: ScrollPhysics(),
+                physics: const ScrollPhysics(),
                 child: Column(
                   children: <Widget>[
                     ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         itemCount: _rides.length,
                         itemBuilder: (context, index) {

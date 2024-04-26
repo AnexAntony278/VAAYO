@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
                             const Text("Get there with Vaayo"),
                           ],
                         ),
-                        LoginForm(),
+                        const LoginForm(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [

@@ -16,19 +16,20 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: isDarkMode ? vSecondaryColor : vPrimaryColor,
         body: Container(
-          padding: EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(5.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Image(
-                  image: AssetImage(vWelcomeScreenImage), height: height * 0.6),
+                  image: const AssetImage(vWelcomeScreenImage),
+                  height: height * 0.6),
               Column(
                 children: [
                   Text(
                     'Vaayo',
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  SizedBox(width: 10.0),
+                  const SizedBox(width: 10.0),
                   Text(
                     'Get there with Vaayo',
                     style: Theme.of(context).textTheme.bodyMedium,
@@ -43,7 +44,7 @@ class WelcomeScreen extends StatelessWidget {
                           onPressed: () {
                             navKey.currentState?.pushNamed("LogIn");
                           },
-                          child: Text("LOGIN"))),
+                          child: const Text("LOGIN"))),
                   const SizedBox(
                     width: 10.0,
                   ),
@@ -52,7 +53,7 @@ class WelcomeScreen extends StatelessWidget {
                           onPressed: () {
                             navKey.currentState?.pushNamed("SignUp");
                           },
-                          child: Text('Signup')))
+                          child: const Text('Signup')))
                 ],
               )
             ],

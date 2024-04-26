@@ -8,7 +8,7 @@ class ForgetPasswordScreen {
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       builder: (context) => Container(
-          padding: EdgeInsets.all(30.0),
+          padding: const EdgeInsets.all(30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -17,7 +17,7 @@ class ForgetPasswordScreen {
               Text(
                   "Select one of the options given below to reset your password.",
                   style: Theme.of(context).textTheme.bodySmall),
-              SizedBox(
+              const SizedBox(
                 height: 30.0,
               ),
               ForgetPassButtonWidget(
@@ -28,7 +28,7 @@ class ForgetPasswordScreen {
                     Navigator.pop(context);
                     navKey.currentState?.pushNamed("ForgotPasswordMail");
                   }),
-              SizedBox(
+              const SizedBox(
                 height: 30.0,
               ),
               ForgetPassButtonWidget(

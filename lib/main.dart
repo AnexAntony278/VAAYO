@@ -16,15 +16,13 @@ import 'package:vaayo/src/features/profile_management/screens/user_profile.dart'
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+String? fcmToken = '';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await FirebaseMessaging.instance.setAutoInitEnabled(true);
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  debugPrint("\nFCM :\n$fcmToken");
-
+  _fcmInit();
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
   debugPrint("\nMainPage  uid:$uid");
@@ -39,7 +37,7 @@ main() async {
     routes: {
       "Welcome": (BuildContext context) => const WelcomeScreen(),
       "LogIn": (BuildContext context) => const LoginScreen(),
-      "SignUp": (BuildContext context) => SignUpScreen(),
+      "SignUp": (BuildContext context) => const SignUpScreen(),
       "Home": (BuildContext context) => const HomePage(),
       "ProfilePage": (BuildContext context) => const UserProfilePage(),
       "RideDetails": (BuildContext context) => const RideDetailsPage(),
@@ -53,4 +51,29 @@ main() async {
     theme: ThemeData(
         primaryColor: Colors.lightBlueAccent, cardColor: Colors.blueAccent),
   ));
+}
+
+void _fcmInit() async {
+  try {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    // debugPrint('User granted permission: ${settings.authorizationStatus}');
+    await messaging.getToken().then((value) => fcmToken = value);
+  } on FirebaseException catch (e) {
+    debugPrint(e.message);
+  }
+}
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  debugPrint("Handling a background message: ${message.messageId}");
 }

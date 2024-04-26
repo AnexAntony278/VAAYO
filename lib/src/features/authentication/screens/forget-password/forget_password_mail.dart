@@ -29,7 +29,7 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                 child: Column(
               children: [
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text("Email"),
                     hintText: "Email",
                     prefixIcon: Icon(Icons.mail_outline_rounded),
@@ -38,7 +38,7 @@ class ForgetPasswordMailScreen extends StatelessWidget {
                 const SizedBox(
                   height: 20.0,
                 ),
-                ElevatedButton(onPressed: () {}, child: Text("Next")),
+                ElevatedButton(onPressed: () {}, child: const Text("Next")),
               ],
             ))
           ],
