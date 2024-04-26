@@ -17,11 +17,12 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SETTINGS"),
+        title: const Text("SETTINGS"),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: Column(
-          children: [TextButton(onPressed: _logOut, child: Text("LOG OUT"))]),
+      body: Column(children: [
+        TextButton(onPressed: _logOut, child: const Text("LOG OUT"))
+      ]),
     );
   }
 

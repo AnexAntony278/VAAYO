@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/features/app_management/home_page.dart';
@@ -19,9 +20,15 @@ final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  debugPrint("\nFCM :\n$fcmToken");
+
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
   debugPrint("\nMainPage  uid:$uid");
+
   Widget startScreen =
       (uid == null || uid == "null") ? const WelcomeScreen() : const HomePage();
 

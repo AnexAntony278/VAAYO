@@ -17,58 +17,61 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text("VAAYO"),
-            toolbarHeight: 80,
-            foregroundColor: Colors.white,
-            backgroundColor: Theme.of(context).primaryColorDark,
-            actions: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: GestureDetector(
-                    onTap: () {
-                      navKey.currentState?.pushNamed("ProfilePage");
-                    },
-                    child: const CircleAvatar(
-                      radius: 30,
-                      child: Icon(Icons.supervised_user_circle_sharp),
-                    ),
-                  ))
-            ],
-          ),
-          body: _selectedPage,
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _navBarIndex,
-            items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.emoji_transportation), label: "My Rides"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.time_to_leave), label: "My Trips"),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), label: "Settings")
-            ],
-            elevation: 50,
-            onTap: (value) {
-              setState(() {
-                _navBarIndex = value;
-                switch (value) {
-                  case 0:
-                    _selectedPage = const RidesPage();
-                    break;
-                  case 1:
-                    _selectedPage = const TripsPage();
-                    break;
-                  case 2:
-                    _selectedPage = SettingsPage();
-                    break;
-                  default:
-                    _selectedPage = const RidesPage();
-                    break;
-                }
-              });
-            },
-          )),
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text("VAAYO"),
+              toolbarHeight: 80,
+              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(context).primaryColorDark,
+              actions: [
+                Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: GestureDetector(
+                      onTap: () {
+                        navKey.currentState?.pushNamed("ProfilePage");
+                      },
+                      child: const CircleAvatar(
+                        radius: 30,
+                        child: Icon(Icons.supervised_user_circle_sharp),
+                      ),
+                    ))
+              ],
+            ),
+            body: _selectedPage,
+            bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _navBarIndex,
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.emoji_transportation), label: "My Rides"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.time_to_leave), label: "My Trips"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.settings), label: "Settings")
+              ],
+              elevation: 50,
+              onTap: (value) {
+                setState(() {
+                  _navBarIndex = value;
+                  switch (value) {
+                    case 0:
+                      _selectedPage = const RidesPage();
+                      break;
+                    case 1:
+                      _selectedPage = const TripsPage();
+                      break;
+                    case 2:
+                      _selectedPage = SettingsPage();
+                      break;
+                    default:
+                      _selectedPage = const RidesPage();
+                      break;
+                  }
+                });
+              },
+            )),
+      ),
     );
   }
 }
