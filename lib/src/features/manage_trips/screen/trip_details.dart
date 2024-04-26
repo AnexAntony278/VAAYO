@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -21,7 +23,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     'total_seats': 3,
     'id': 'CkwnJWIrDttowxMhyvsz',
     'departure': 'Sample Data:PLeasae remove',
-    'destination': ' Sample dataaaaaaaaa',
+    'destination': ' Sample data ahn mwoone',
     'available_seats': 3,
     'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
     'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
@@ -42,6 +44,15 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     }
   ];
   LatLng currentLocation = const LatLng(0, 0);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _getCurrentLocation().then((pos) {
+      currentLocation = LatLng(pos.latitude, pos.longitude);
+    });
+  }
 
   @override
   void didChangeDependencies() {
@@ -87,16 +98,10 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                                 height: 300,
                                 child: Builder(
                                   builder: (context) {
-                                    _getCurrentLocation().then((value) {
-                                      setState(() {
-                                        currentLocation = LatLng(
-                                            value.latitude, value.longitude);
-                                        debugPrint(currentLocation.toString());
-                                      });
-                                    });
                                     return GoogleMap(
-                                        initialCameraPosition: CameraPosition(
-                                            target: currentLocation, zoom: 13));
+                                      initialCameraPosition: CameraPosition(
+                                          target: currentLocation, zoom: 5),
+                                    );
                                   },
                                 )),
                           )

@@ -4,8 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'dart:convert';
-import 'package:google_place/google_place.dart';
-import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 import 'package:vaayo/src/constants/keys.dart';
 
@@ -26,9 +24,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
   Map<String, dynamic>? _selectedCar;
 
   //AUTOCOMPLETE
-  GooglePlace googlePlace = GooglePlace(vaayoMapsAPIKey);
-  var uuid = const Uuid();
-  String sessionToken = "1234456";
   List<String> predictions = [];
   String? _departure, _destination;
   final TextEditingController _dateFieldController = TextEditingController();

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_place/google_place.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
@@ -17,7 +16,6 @@ class SearchRidesPage extends StatefulWidget {
 }
 
 class _SearchRidesPageState extends State<SearchRidesPage> {
-  GooglePlace googlePlace = GooglePlace(vaayoMapsAPIKey);
   List<String> predictions = [];
   String? depature, destination;
   List<Map<String, dynamic>> _rides = [];
