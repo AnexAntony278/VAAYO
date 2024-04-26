@@ -6,6 +6,7 @@ import 'package:vaayo/src/common_widgets/custom_extensions.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:vaayo/src/constants/keys.dart';
+import 'package:vaayo/src/constants/theme.dart';
 
 class CreateTripPage extends StatefulWidget {
   const CreateTripPage({Key? key}) : super(key: key);
@@ -43,7 +44,11 @@ class _CreateTripPageState extends State<CreateTripPage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blueAccent,
-          title: const Text("CREATE TRIPS"),
+          title: const Text(
+            "CREATE TRIPS",
+            style: VaayoTheme.mediumBold,
+          ),
+          foregroundColor: Colors.white,
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),

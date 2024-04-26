@@ -28,7 +28,7 @@ class _RidesPageState extends State<RidesPage> {
         backgroundColor: Colors.blueGrey[100],
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: const Text("My Rides"),
+          title: const Text("My Rides",style: VaayoTheme.mediumBold,),
         ),
         body: ListView.builder(
           itemCount: _rides.length + 1,

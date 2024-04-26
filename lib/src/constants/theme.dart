@@ -6,7 +6,7 @@ class VaayoTheme {
       fontFamily: 'Montserrat',
       fontSize: 17,
       height: 1,
-      fontWeight: FontWeight.w500);
+      fontWeight: FontWeight.w600);
   static const TextStyle largeBold = TextStyle(
       letterSpacing: 1,
       fontFamily: 'Montserrat',

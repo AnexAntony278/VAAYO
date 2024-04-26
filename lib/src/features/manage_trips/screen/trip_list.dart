@@ -29,7 +29,10 @@ class _TripsPageState extends State<TripsPage> {
         backgroundColor: Colors.blueGrey[100],
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: const Text("MY TRIPS"),
+          title: const Text(
+            "MY TRIPS",
+            style: VaayoTheme.mediumBold,
+          ),
         ),
         body: ListView.builder(
           itemCount: _noOfTrips + 1,

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
+import 'package:vaayo/src/constants/theme.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({super.key});
@@ -16,7 +17,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SETTINGS"),
+        title: const Text("SETTINGS",style: VaayoTheme.mediumBold,),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Column(children: [

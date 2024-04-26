@@ -24,7 +24,10 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("SEARCH RIDES"),
+          title: const Text(
+            "SEARCH RIDES",
+            style: VaayoTheme.mediumBold,
+          ),
           foregroundColor: Colors.white,
           backgroundColor: Colors.blue,
         ),

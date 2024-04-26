@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vaayo/main.dart';
+import 'package:vaayo/src/constants/theme.dart';
 import 'package:vaayo/src/features/app_management/settings_page.dart';
 import 'package:vaayo/src/features/manage_rides/screens/ride_list.dart';
 import 'package:vaayo/src/features/manage_trips/screen/trip_list.dart';
@@ -21,7 +22,10 @@ class _HomePageState extends State<HomePage> {
         canPop: false,
         child: Scaffold(
             appBar: AppBar(
-              title: const Text("VAAYO"),
+              title: const Text(
+                "VAAYO",
+                style: VaayoTheme.largeBold,
+              ),
               toolbarHeight: 80,
               foregroundColor: Colors.white,
               backgroundColor: Theme.of(context).primaryColorDark,
