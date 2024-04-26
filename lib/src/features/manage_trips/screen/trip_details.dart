@@ -1,12 +1,14 @@
-import 'dart:developer';
+import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
+import 'package:vaayo/src/constants/keys.dart';
 import 'package:vaayo/src/constants/theme.dart';
 
 class TripDetailsPage extends StatefulWidget {
@@ -43,15 +45,16 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       'email': 'anandudina2003@gmail.com'
     }
   ];
-  LatLng currentLocation = const LatLng(0, 0);
+  LatLng userLocation = const LatLng(10.229603640422912, 76.254470775737275),
+      sourceLocation = const LatLng(10.229365903244155, 76.25603913094582),
+      destinationLocation = const LatLng(10.239955611156317, 76.26382326118028);
 
+  final List<LatLng> _polyLinePoints = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _getCurrentLocation().then((pos) {
-      currentLocation = LatLng(pos.latitude, pos.longitude);
-    });
+    _updateCurrentLocation();
+    _getRoutePolyLine(start: userLocation, end: sourceLocation);
   }
 
   @override
@@ -88,25 +91,39 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              Row(
-                  //MAP
-                  children: [
-                    (trip['status'] != "CREATED")
-                        ? Card(
-                            child: SizedBox(
-                                width: MediaQuery.of(context).size.width - 30,
-                                height: 300,
-                                child: Builder(
-                                  builder: (context) {
-                                    return GoogleMap(
-                                      initialCameraPosition: CameraPosition(
-                                          target: currentLocation, zoom: 5),
-                                    );
+              (trip['status'] != "CREATED")
+                  ? Card(
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 30,
+                          height: 300,
+                          child: Builder(
+                            builder: (context) {
+                              return GoogleMap(
+                                  initialCameraPosition: CameraPosition(
+                                      target: userLocation, zoom: 13),
+                                  markers: {
+                                    Marker(
+                                        markerId: const MarkerId('source'),
+                                        position: sourceLocation),
+                                    Marker(
+                                        markerId: const MarkerId('destination'),
+                                        position: destinationLocation),
+                                    Marker(
+                                        markerId: const MarkerId('user'),
+                                        position: userLocation),
                                   },
-                                )),
-                          )
-                        : const Text("")
-                  ]),
+                                  polylines: {
+                                    Polyline(
+                                      polylineId: const PolylineId('route'),
+                                      points: _polyLinePoints,
+                                      color: Colors.purple,
+                                      width: 5,
+                                    ),
+                                  });
+                            },
+                          )),
+                    )
+                  : const Text(""),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -282,6 +299,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                           );
                         },
                         child: const Text("CANCEL RIDE")),
+                    // Text(userLocation.toString())
                   ],
                 ),
               )
@@ -325,7 +343,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     }
   }
 
-  Future<Position> _getCurrentLocation() async {
+  Future<void> _updateCurrentLocation() async {
     LocationPermission locationPermission = await Geolocator.checkPermission();
     if (locationPermission == LocationPermission.denied) {
       locationPermission = await Geolocator.requestPermission();
@@ -337,6 +355,24 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       return Future.error(
           'Trip Details Page: Location permissions denied Permanantly');
     }
-    return await Geolocator.getCurrentPosition();
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((value) => {
+              setState(
+                  () => userLocation = LatLng(value.latitude, value.longitude))
+            });
+  }
+
+  void _getRoutePolyLine({required LatLng start, required LatLng end}) async {
+    PolylinePoints polyLinePoints = PolylinePoints();
+    PolylineResult result = await polyLinePoints.getRouteBetweenCoordinates(
+        vaayoMapsAPIKey,
+        PointLatLng(start.latitude, start.longitude),
+        PointLatLng(end.latitude, end.longitude));
+    if (result.points.isNotEmpty) {
+      for (PointLatLng point in result.points) {
+        _polyLinePoints.add(LatLng(point.latitude, point.longitude));
+      }
+    }
+    setState(() {});
   }
 }
