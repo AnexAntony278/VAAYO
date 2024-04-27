@@ -1,10 +1,11 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
@@ -24,8 +25,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     'status': 'WAITING',
     'total_seats': 3,
     'id': 'CkwnJWIrDttowxMhyvsz',
-    'departure': 'Sample Data:PLeasae remove',
-    'destination': ' Sample data ahn mwoone',
+    'departure': 'Painavu',
+    'destination': 'Cheruthoni',
     'available_seats': 3,
     'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
     'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
@@ -45,7 +46,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       'email': 'anandudina2003@gmail.com'
     }
   ];
-  LatLng userLocation = const LatLng(10.229603640422912, 76.254470775737275),
+  LocationData? userLocationData;
+  LatLng userLocation = const LatLng(10.2298, 76.2298),
       sourceLocation = const LatLng(10.229365903244155, 76.25603913094582),
       destinationLocation = const LatLng(10.239955611156317, 76.26382326118028);
 
@@ -53,8 +55,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _updateCurrentLocation();
-    _getRoutePolyLine(start: userLocation, end: sourceLocation);
+    _getLocations();
+    _getPolyLineRoute();
   }
 
   @override
@@ -299,7 +301,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                           );
                         },
                         child: const Text("CANCEL RIDE")),
-                    // Text(userLocation.toString())
                   ],
                 ),
               )
@@ -343,31 +344,43 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     }
   }
 
-  Future<void> _updateCurrentLocation() async {
-    LocationPermission locationPermission = await Geolocator.checkPermission();
-    if (locationPermission == LocationPermission.denied) {
-      locationPermission = await Geolocator.requestPermission();
-      if (locationPermission == LocationPermission.denied) {
-        return Future.error('Trip Details Page: Location permissions denied');
-      }
-    }
-    if (locationPermission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Trip Details Page: Location permissions denied Permanantly');
-    }
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
-        .then((value) => {
-              setState(
-                  () => userLocation = LatLng(value.latitude, value.longitude))
-            });
+  Future<void> _getLocations() async {
+    userLocation = await _getuserLocation();
+    sourceLocation = await _getLocationCoordinates(address: trip['departure']);
+    destinationLocation =
+        await _getLocationCoordinates(address: trip['destination']);
+    setState(() {});
   }
 
-  void _getRoutePolyLine({required LatLng start, required LatLng end}) async {
+  Future<LatLng> _getuserLocation() async {
+    Location location = Location();
+    await location.getLocation().then((value) => userLocationData = value);
+    LatLng loc = LatLng(
+        userLocationData!.latitude ?? 0, userLocationData!.longitude ?? 0);
+    return loc;
+  }
+
+  Future<LatLng> _getLocationCoordinates({required String address}) async {
+    final Uri request = Uri.parse(
+        "https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$vaayoMapsAPIKey");
+
+    var response = await http.get(request);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+      var loc = decodedResponse['results'][0]['geometry']['location']
+          as Map<String, dynamic>;
+      return LatLng(loc['lat'], loc['lng']);
+    }
+    return Future.error(response);
+  }
+
+  void _getPolyLineRoute() async {
     PolylinePoints polyLinePoints = PolylinePoints();
     PolylineResult result = await polyLinePoints.getRouteBetweenCoordinates(
         vaayoMapsAPIKey,
-        PointLatLng(start.latitude, start.longitude),
-        PointLatLng(end.latitude, end.longitude));
+        PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+        PointLatLng(
+            destinationLocation.latitude, destinationLocation.longitude));
     if (result.points.isNotEmpty) {
       for (PointLatLng point in result.points) {
         _polyLinePoints.add(LatLng(point.latitude, point.longitude));
