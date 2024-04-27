@@ -46,17 +46,15 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       'email': 'anandudina2003@gmail.com'
     }
   ];
-  LocationData? userLocationData;
-  LatLng userLocation = const LatLng(10.2298, 76.2298),
-      sourceLocation = const LatLng(10.229365903244155, 76.25603913094582),
-      destinationLocation = const LatLng(10.239955611156317, 76.26382326118028);
+  bool _isLoading = true;
+
+  late LatLng? userLocation, sourceLocation, destinationLocation;
 
   final List<LatLng> _polyLinePoints = [];
   @override
   void initState() {
     super.initState();
     _getLocations();
-    _getPolyLineRoute();
   }
 
   @override
@@ -100,28 +98,34 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                           height: 300,
                           child: Builder(
                             builder: (context) {
-                              return GoogleMap(
-                                  initialCameraPosition: CameraPosition(
-                                      target: userLocation, zoom: 13),
-                                  markers: {
-                                    Marker(
-                                        markerId: const MarkerId('source'),
-                                        position: sourceLocation),
-                                    Marker(
-                                        markerId: const MarkerId('destination'),
-                                        position: destinationLocation),
-                                    Marker(
-                                        markerId: const MarkerId('user'),
-                                        position: userLocation),
-                                  },
-                                  polylines: {
-                                    Polyline(
-                                      polylineId: const PolylineId('route'),
-                                      points: _polyLinePoints,
-                                      color: Colors.purple,
-                                      width: 5,
-                                    ),
-                                  });
+                              if (_isLoading) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return GoogleMap(
+                                    initialCameraPosition: CameraPosition(
+                                        target: userLocation!, zoom: 13),
+                                    markers: {
+                                      Marker(
+                                          markerId: const MarkerId('source'),
+                                          position: sourceLocation!),
+                                      Marker(
+                                          markerId:
+                                              const MarkerId('destination'),
+                                          position: destinationLocation!),
+                                      Marker(
+                                          markerId: const MarkerId('user'),
+                                          position: userLocation!),
+                                    },
+                                    polylines: {
+                                      Polyline(
+                                        polylineId: const PolylineId('route'),
+                                        points: _polyLinePoints,
+                                        color: Colors.purple,
+                                        width: 5,
+                                      ),
+                                    });
+                              }
                             },
                           )),
                     )
@@ -349,10 +353,12 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     sourceLocation = await _getLocationCoordinates(address: trip['departure']);
     destinationLocation =
         await _getLocationCoordinates(address: trip['destination']);
-    setState(() {});
+    _getPolyLineRoute();
+    setState(() => _isLoading = false);
   }
 
   Future<LatLng> _getuserLocation() async {
+    LocationData? userLocationData;
     Location location = Location();
     await location.getLocation().then((value) => userLocationData = value);
     LatLng loc = LatLng(
@@ -363,7 +369,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   Future<LatLng> _getLocationCoordinates({required String address}) async {
     final Uri request = Uri.parse(
         "https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$vaayoMapsAPIKey");
-
     var response = await http.get(request);
     if (response.statusCode == 200) {
       Map<String, dynamic> decodedResponse = jsonDecode(response.body);
@@ -378,9 +383,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     PolylinePoints polyLinePoints = PolylinePoints();
     PolylineResult result = await polyLinePoints.getRouteBetweenCoordinates(
         vaayoMapsAPIKey,
-        PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+        PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
         PointLatLng(
-            destinationLocation.latitude, destinationLocation.longitude));
+            destinationLocation!.latitude, destinationLocation!.longitude));
     if (result.points.isNotEmpty) {
       for (PointLatLng point in result.points) {
         _polyLinePoints.add(LatLng(point.latitude, point.longitude));
