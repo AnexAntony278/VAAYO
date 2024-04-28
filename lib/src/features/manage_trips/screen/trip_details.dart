@@ -354,8 +354,8 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     destinationLocation =
         await _getLocationCoordinates(address: trip['destination']);
     if (trip['status'] == 'WAITING') {
-      _routePolyLinePoints = await _getPolyLineRoute(
-          start: userLocation, end: destinationLocation);
+      _routePolyLinePoints =
+          await _getPolyLineRoute(start: userLocation, end: sourceLocation);
     } else if (trip['status'] == 'STARTED') {
       _routePolyLinePoints = await _getPolyLineRoute(
           start: sourceLocation, end: destinationLocation);

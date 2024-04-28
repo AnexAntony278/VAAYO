@@ -76,7 +76,18 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                  onPressed: userLogin, child: const Text(" LOGIN")),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      userLogin();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Please enter Valid Credentials'),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text(" LOGIN")),
             ),
           ],
         ),
