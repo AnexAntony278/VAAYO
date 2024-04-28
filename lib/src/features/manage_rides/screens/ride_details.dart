@@ -14,7 +14,7 @@ class RideDetailsPage extends StatefulWidget {
 }
 
 class _RideDetailsPageState extends State<RideDetailsPage> {
-  Map<String, dynamic> ride = {
+  Map<String, dynamic> trip = {
         // SAMPLE DATA FOR DEBUGGING PURPOSE
         // 'id': "hUxdjdFTzJtTNb6yj1s2",
         // "available_seats": 3,
@@ -56,8 +56,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   @override
   void initState() {
     super.initState();
-    if ((ride['passengers'] as List).isNotEmpty &&
-        ride['passengers'].length != passengers.length) {
+    if ((trip['passengers'] as List).isNotEmpty &&
+        trip['passengers'].length != passengers.length) {
       _getPassengerDetails();
     }
   }
@@ -65,7 +65,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    ride = (ModalRoute.of(context)?.settings.arguments
+    trip = (ModalRoute.of(context)?.settings.arguments
         as List<Map<String, dynamic>>)[0];
     driver = (ModalRoute.of(context)?.settings.arguments
         as List<Map<String, dynamic>>)[1];
@@ -73,8 +73,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("$ride\n$passengers\n$driver\n");
-    DateTime date = (ride['departure_time'] as Timestamp).toDate();
+    debugPrint("$trip\n$passengers\n$driver\n");
+    DateTime date = (trip['departure_time'] as Timestamp).toDate();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Ride Details"),
@@ -98,7 +98,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             children: [
               Builder(
                 builder: (context) {
-                  return (ride['status'] == 'CREATED')
+                  return (trip['status'] == 'CREATED')
                       ? const SizedBox(
                           height: 10,
                         )
@@ -120,7 +120,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                         children: [
                           Expanded(
                             child: Text(
-                              " ${ride['departure']}",
+                              " ${trip['departure']}",
                               maxLines: 2,
                               textAlign: TextAlign.left,
                               style: const TextStyle(fontSize: 25),
@@ -136,7 +136,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           ),
                           Expanded(
                             child: Text(
-                              "${ride['destination']}",
+                              "${trip['destination']}",
                               maxLines: 2,
                               textAlign: TextAlign.right,
                               style: const TextStyle(fontSize: 25),
@@ -161,11 +161,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                             color: Colors.black,
                             thickness: .5,
                           ),
-                          Text(ride['status'],
+                          Text(trip['status'],
                               style: const TextStyle(
                                   fontSize: 20, color: Colors.green)),
                           Text(
-                              "${List.from(ride['passengers']).length}/${ride['available_seats']}",
+                              "${List.from(trip['passengers']).length}/${trip['available_seats']}",
                               style: VaayoTheme.mediumBold),
 
                           const Icon(Icons.person)
@@ -188,10 +188,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${ride['car_no']}",
+                          Text("${trip['car_no']}",
                               style: VaayoTheme.largeBold),
                           Text(
-                            "${(driver['cars'] as List).where((car) => car['no'] == ride['car_no']).first['model']}",
+                            "${(driver['cars'] as List).where((car) => car['no'] == trip['car_no']).first['model']}",
                             style: VaayoTheme.mediumBold,
                           ),
                           const SizedBox(
@@ -251,85 +251,15 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                                ((List.from(ride['passengers']))
-                                                        .isEmpty)
-                                                    ? ""
-                                                    : "   Passengers"),
-                                            Column(
-                                              children: [
-                                                Text(
-                                                    "${List.from(ride['passengers']).length}/${ride['available_seats']}",
-                                                    style:
-                                                        VaayoTheme.mediumBold),
-                                                const Icon(Icons.person),
-                                              ],
-                                            ),
+                                                '${passengers[index]['name']},\t\t\t${passengers[index]['age']}'),
+                                            (passengers[index]['gender'] == 'M')
+                                                ? const Icon(
+                                                    Icons.male,
+                                                    color: Colors.blue,
+                                                  )
+                                                : const Icon(Icons.female,
+                                                    color: Colors.pink)
                                           ],
-                                        ),
-                                        SingleChildScrollView(
-                                          physics: const ScrollPhysics(),
-                                          child: Column(
-                                            children: <Widget>[
-                                              ListView.builder(
-                                                  physics:
-                                                      const NeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: passengers.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return InkWell(
-                                                        onTap: null,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                                  horizontal: 5,
-                                                                  vertical: 3),
-                                                          child: Card(
-                                                            elevation: 50,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(
-                                                                      15.0),
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      Text(
-                                                                          '${passengers[index]['name']},\t\t\t${passengers[index]['age']}'),
-                                                                      (passengers[index]['gender'] ==
-                                                                              'M')
-                                                                          ? const Icon(
-                                                                              Icons.male,
-                                                                              color: Colors.blue,
-                                                                            )
-                                                                          : const Icon(
-                                                                              Icons.female,
-                                                                              color: Colors.pink)
-                                                                    ],
-                                                                  ),
-                                                                  ElevatedButton(
-                                                                      onPressed: () =>
-                                                                          _callPhone(passengers[index]
-                                                                              [
-                                                                              'phone']),
-                                                                      child: const Text(
-                                                                          'CALL'))
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ));
-                                                  })
-                                            ],
-                                          ),
                                         ),
                                       ],
                                     ),
@@ -389,13 +319,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   void _cancelRide() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uid = prefs.getString('uid');
-    (ride['passengers'] as List)
-        .removeWhere((passengerId) => (passengerId == uid));
+    (trip['passengers'] as List).removeWhere((element) => (element == uid));
     try {
       await FirebaseFirestore.instance
           .collection('trips')
-          .doc(ride['id'])
-          .update(ride);
+          .doc(trip['id'])
+          .update(trip);
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
@@ -403,7 +332,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   void _getPassengerDetails() async {
     try {
-      for (String passengerId in ride['passengers']) {
+      for (String passengerId in trip['passengers']) {
         DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(passengerId)
