@@ -14,63 +14,67 @@ class RideDetailsPage extends StatefulWidget {
 }
 
 class _RideDetailsPageState extends State<RideDetailsPage> {
-  Map<String, dynamic> trip = {
+  Map<String, dynamic> ride = {
         // SAMPLE DATA FOR DEBUGGING PURPOSE
-        'id': "hUxdjdFTzJtTNb6yj1s2",
-        "available_seats": 3,
-        "passengers": [],
-        "total_seats": 3,
-        'departure_time': Timestamp.now(),
-        'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-        'destination': 'Cheruthoni, Kerala, India',
-        'departure': 'Cheruthoni, Kerala, India',
-        'car_no': 'KL47C7993',
-        'status': 'CREATED'
+        // 'id': "hUxdjdFTzJtTNb6yj1s2",
+        // "available_seats": 3,
+        // "passengers": [],
+        // "total_seats": 3,
+        // 'departure_time': Timestamp.now(),
+        // 'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
+        // 'destination': 'Cheruthoni, Kerala, India',
+        // 'departure': 'Cheruthoni, Kerala, India',
+        // 'car_no': 'KL47C7993',
+        // 'status': 'CREATED'
       },
       driver = {
-        'age': 21,
-        'cars': [
-          {'no': 'KL47C7993', 'model': 'Celerio'}
-        ],
-        'bio': ' Btech student',
-        'phone': "7736110274",
-        'tags': [],
-        'name': 'Anandu',
-        'gender': 'M',
-        'email': 'anandudina2003@gmail.com'
+        // 'age': 21,
+        // 'cars': [
+        //   {'no': 'KL47C7993', 'model': 'Celerio'}
+        // ],
+        // 'bio': ' Btech student',
+        // 'phone': "7736110274",
+        // 'tags': [],
+        // 'name': 'Anandu',
+        // 'gender': 'M',
+        // 'email': 'anandudina2003@gmail.com'
       };
   final List<Map<String, dynamic>> passengers = [
     {
-      'age': 21,
-      'cars': [
-        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-      ],
-      'bio': ' Btech student',
-      'phone': "7736110274",
-      'tags': [],
-      'name': 'Anandu',
-      'gender': 'M',
-      'email': 'anandudina2003@gmail.com'
+      // 'age': 21,
+      // 'cars': [
+      //   {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+      // ],
+      // 'bio': ' Btech student',
+      // 'phone': "7736110274",
+      // 'tags': [],
+      // 'name': 'Anandu',
+      // 'gender': 'M',
+      // 'email': 'anandudina2003@gmail.com'
     }
   ];
   @override
   void initState() {
     super.initState();
-    _getPassengerDetails();
+    if ((ride['passengers'] as List).isNotEmpty &&
+        ride['passengers'].length != passengers.length) {
+      _getPassengerDetails();
+    }
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   trip = (ModalRoute.of(context)?.settings.arguments
-  //       as List<Map<String, dynamic>>)[0];
-  //   driver = (ModalRoute.of(context)?.settings.arguments
-  //       as List<Map<String, dynamic>>)[1];
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ride = (ModalRoute.of(context)?.settings.arguments
+        as List<Map<String, dynamic>>)[0];
+    driver = (ModalRoute.of(context)?.settings.arguments
+        as List<Map<String, dynamic>>)[1];
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime date = (trip['departure_time'] as Timestamp).toDate();
+    debugPrint("$ride\n$passengers\n$driver\n");
+    DateTime date = (ride['departure_time'] as Timestamp).toDate();
     return Scaffold(
         appBar: AppBar(
           title: const Text("Ride Details"),
@@ -94,7 +98,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
             children: [
               Builder(
                 builder: (context) {
-                  return (trip['status'] == 'CREATED')
+                  return (ride['status'] == 'CREATED')
                       ? const SizedBox(
                           height: 10,
                         )
@@ -116,7 +120,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                         children: [
                           Expanded(
                             child: Text(
-                              " ${trip['departure']}",
+                              " ${ride['departure']}",
                               maxLines: 2,
                               textAlign: TextAlign.left,
                               style: const TextStyle(fontSize: 25),
@@ -132,7 +136,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           ),
                           Expanded(
                             child: Text(
-                              "${trip['destination']}",
+                              "${ride['destination']}",
                               maxLines: 2,
                               textAlign: TextAlign.right,
                               style: const TextStyle(fontSize: 25),
@@ -157,11 +161,11 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                             color: Colors.black,
                             thickness: .5,
                           ),
-                          Text(trip['status'],
+                          Text(ride['status'],
                               style: const TextStyle(
                                   fontSize: 20, color: Colors.green)),
                           Text(
-                              "${List.from(trip['passengers']).length}/${trip['available_seats']}",
+                              "${List.from(ride['passengers']).length}/${ride['available_seats']}",
                               style: VaayoTheme.mediumBold),
 
                           const Icon(Icons.person)
@@ -184,10 +188,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${trip['car_no']}",
+                          Text("${ride['car_no']}",
                               style: VaayoTheme.largeBold),
                           Text(
-                            "${(driver['cars'] as List).where((car) => car['no'] == trip['car_no']).first['model']}",
+                            "${(driver['cars'] as List).where((car) => car['no'] == ride['car_no']).first['model']}",
                             style: VaayoTheme.mediumBold,
                           ),
                           const SizedBox(
@@ -247,15 +251,85 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                                '${passengers[index]['name']},\t\t\t${passengers[index]['age']}'),
-                                            (passengers[index]['gender'] == 'M')
-                                                ? const Icon(
-                                                    Icons.male,
-                                                    color: Colors.blue,
-                                                  )
-                                                : const Icon(Icons.female,
-                                                    color: Colors.pink)
+                                                ((List.from(ride['passengers']))
+                                                        .isEmpty)
+                                                    ? ""
+                                                    : "   Passengers"),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                    "${List.from(ride['passengers']).length}/${ride['available_seats']}",
+                                                    style:
+                                                        VaayoTheme.mediumBold),
+                                                const Icon(Icons.person),
+                                              ],
+                                            ),
                                           ],
+                                        ),
+                                        SingleChildScrollView(
+                                          physics: const ScrollPhysics(),
+                                          child: Column(
+                                            children: <Widget>[
+                                              ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: passengers.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return InkWell(
+                                                        onTap: null,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal: 5,
+                                                                  vertical: 3),
+                                                          child: Card(
+                                                            elevation: 50,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(
+                                                                      15.0),
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Text(
+                                                                          '${passengers[index]['name']},\t\t\t${passengers[index]['age']}'),
+                                                                      (passengers[index]['gender'] ==
+                                                                              'M')
+                                                                          ? const Icon(
+                                                                              Icons.male,
+                                                                              color: Colors.blue,
+                                                                            )
+                                                                          : const Icon(
+                                                                              Icons.female,
+                                                                              color: Colors.pink)
+                                                                    ],
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                      onPressed: () =>
+                                                                          _callPhone(passengers[index]
+                                                                              [
+                                                                              'phone']),
+                                                                      child: const Text(
+                                                                          'CALL'))
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ));
+                                                  })
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -315,12 +389,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   void _cancelRide() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uid = prefs.getString('uid');
-    (trip['passengers'] as List).removeWhere((element) => (element == uid));
+    (ride['passengers'] as List)
+        .removeWhere((passengerId) => (passengerId == uid));
     try {
       await FirebaseFirestore.instance
           .collection('trips')
-          .doc(trip['id'])
-          .update(trip);
+          .doc(ride['id'])
+          .update(ride);
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
@@ -328,7 +403,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   void _getPassengerDetails() async {
     try {
-      for (String passengerId in trip['passengers']) {
+      for (String passengerId in ride['passengers']) {
         DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(passengerId)
