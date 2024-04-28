@@ -62,7 +62,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   late LatLng? userLocation, sourceLocation, destinationLocation;
 
-  final List<LatLng> _polyLinePoints = [];
+  List<LatLng> _routePolyLinePoints = [];
   @override
   void initState() {
     super.initState();
@@ -140,7 +140,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                     polylines: {
                                       Polyline(
                                         polylineId: const PolylineId('route'),
-                                        points: _polyLinePoints,
+                                        points: _routePolyLinePoints,
                                         color: Colors.purple,
                                         width: 5,
                                       ),
@@ -433,7 +433,13 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     sourceLocation = await _getLocationCoordinates(address: trip['departure']);
     destinationLocation =
         await _getLocationCoordinates(address: trip['destination']);
-    _getPolyLineRoute();
+    if (trip['status'] == 'WAITING') {
+      _routePolyLinePoints =
+          await _getPolyLineRoute(start: userLocation, end: sourceLocation);
+    } else if (trip['status'] == 'STARTED') {
+      _routePolyLinePoints = await _getPolyLineRoute(
+          start: sourceLocation, end: destinationLocation);
+    }
     setState(() => _isLoading = false);
   }
 
@@ -443,6 +449,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     await location.getLocation().then((value) => userLocationData = value);
     LatLng loc = LatLng(
         userLocationData!.latitude ?? 0, userLocationData!.longitude ?? 0);
+    location.onLocationChanged.listen((newLocData) {
+      userLocation =
+          LatLng(newLocData.latitude ?? 0, newLocData.longitude ?? 0);
+    });
     return loc;
   }
 
@@ -459,18 +469,19 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     return Future.error(response);
   }
 
-  void _getPolyLineRoute() async {
+  Future<List<LatLng>> _getPolyLineRoute(
+      {required LatLng? start, required LatLng? end}) async {
+    final List<LatLng> pointList = [];
     PolylinePoints polyLinePoints = PolylinePoints();
     PolylineResult result = await polyLinePoints.getRouteBetweenCoordinates(
         vaayoMapsAPIKey,
-        PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
-        PointLatLng(
-            destinationLocation!.latitude, destinationLocation!.longitude));
+        PointLatLng(start!.latitude, start.longitude),
+        PointLatLng(end!.latitude, end.longitude));
     if (result.points.isNotEmpty) {
       for (PointLatLng point in result.points) {
-        _polyLinePoints.add(LatLng(point.latitude, point.longitude));
+        pointList.add(LatLng(point.latitude, point.longitude));
       }
     }
-    setState(() {});
+    return pointList;
   }
 }

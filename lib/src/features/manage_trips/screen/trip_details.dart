@@ -21,36 +21,36 @@ class TripDetailsPage extends StatefulWidget {
 
 class _TripDetailsPageState extends State<TripDetailsPage> {
   Map<String, dynamic> trip = {
-    'departure_time': Timestamp.now(),
-    'status': 'WAITING',
-    'total_seats': 3,
-    'id': 'CkwnJWIrDttowxMhyvsz',
-    'departure': 'Painavu',
-    'destination': 'Cheruthoni',
-    'available_seats': 3,
-    'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
-    'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
-    'car_no': 'KL21K2222'
+    // 'departure_time': Timestamp.now(),
+    // 'status': 'WAITING',
+    // 'total_seats': 3,
+    // 'id': 'CkwnJWIrDttowxMhyvsz',
+    // 'departure': 'Painavu',
+    // 'destination': 'Cheruthoni',
+    // 'available_seats': 3,
+    // 'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
+    // 'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
+    // 'car_no': 'KL21K2222'
   };
   List<Map<String, dynamic>> passengers = [
-    {
-      'age': 21,
-      ' cars': [
-        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-      ],
-      'bio': ' Btech student',
-      'phone': "7736110274",
-      'tags': [],
-      'name': 'Anandu',
-      'gender': 'M',
-      'email': 'anandudina2003@gmail.com'
-    }
+    // {
+    //   'age': 21,
+    //   ' cars': [
+    //     {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+    //   ],
+    //   'bio': ' Btech student',
+    //   'phone': "7736110274",
+    //   'tags': [],
+    //   'name': 'Anandu',
+    //   'gender': 'M',
+    //   'email': 'anandudina2003@gmail.com'
+    // }
   ];
   bool _isLoading = true;
 
   late LatLng? userLocation, sourceLocation, destinationLocation;
 
-  final List<LatLng> _polyLinePoints = [];
+  List<LatLng> _routePolyLinePoints = [];
   @override
   void initState() {
     super.initState();
@@ -60,9 +60,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies( ) {
     super.didChangeDependencies();
-    // trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     if ((trip['passengers'] as List).isNotEmpty &&
         trip['passengers'].length != passengers.length) {
       _getPassengerDetails();
@@ -93,45 +93,45 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              (trip['status'] != "CREATED")
-                  ? Card(
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width - 30,
-                          height: 300,
-                          child: Builder(
-                            builder: (context) {
-                              if (_isLoading) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              } else {
-                                return GoogleMap(
-                                    initialCameraPosition: CameraPosition(
-                                        target: userLocation!, zoom: 13),
-                                    markers: {
-                                      Marker(
-                                          markerId: const MarkerId('source'),
-                                          position: sourceLocation!),
-                                      Marker(
-                                          markerId:
-                                              const MarkerId('destination'),
-                                          position: destinationLocation!),
-                                      Marker(
-                                          markerId: const MarkerId('user'),
-                                          position: userLocation!),
-                                    },
-                                    polylines: {
-                                      Polyline(
-                                        polylineId: const PolylineId('route'),
-                                        points: _polyLinePoints,
-                                        color: Colors.purple,
-                                        width: 5,
-                                      ),
-                                    });
-                              }
-                            },
-                          )),
-                    )
-                  : const Text(""),
+              if (trip['status'] != "CREATED")
+                Card(
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width - 30,
+                      height: 300,
+                      child: Builder(
+                        builder: (context) {
+                          if (_isLoading) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else {
+                            return GoogleMap(
+                                initialCameraPosition: CameraPosition(
+                                    target: userLocation!, zoom: 13),
+                                markers: {
+                                  Marker(
+                                      markerId: const MarkerId('source'),
+                                      position: sourceLocation!),
+                                  Marker(
+                                      markerId: const MarkerId('destination'),
+                                      position: destinationLocation!),
+                                  Marker(
+                                      markerId: const MarkerId('user'),
+                                      position: userLocation!),
+                                },
+                                polylines: {
+                                  Polyline(
+                                    polylineId: const PolylineId('route'),
+                                    points: _routePolyLinePoints,
+                                    color: Colors.purple,
+                                    width: 5,
+                                  ),
+                                });
+                          }
+                        },
+                      )),
+                )
+              else
+                const Text(""),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
@@ -355,7 +355,13 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     sourceLocation = await _getLocationCoordinates(address: trip['departure']);
     destinationLocation =
         await _getLocationCoordinates(address: trip['destination']);
-    _getPolyLineRoute();
+    if (trip['status'] == 'WAITING') {
+      _routePolyLinePoints = await _getPolyLineRoute(
+          start: userLocation, end: destinationLocation);
+    } else if (trip['status'] == 'STARTED') {
+      _routePolyLinePoints = await _getPolyLineRoute(
+          start: sourceLocation, end: destinationLocation);
+    }
     setState(() => _isLoading = false);
   }
 
@@ -365,6 +371,10 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     await location.getLocation().then((value) => userLocationData = value);
     LatLng loc = LatLng(
         userLocationData!.latitude ?? 0, userLocationData!.longitude ?? 0);
+    location.onLocationChanged.listen((newLocData) {
+      userLocation =
+          LatLng(newLocData.latitude ?? 0, newLocData.longitude ?? 0);
+    });
     return loc;
   }
 
@@ -381,18 +391,19 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     return Future.error(response);
   }
 
-  void _getPolyLineRoute() async {
+  Future<List<LatLng>> _getPolyLineRoute(
+      {required LatLng? start, required LatLng? end}) async {
+    final List<LatLng> pointList = [];
     PolylinePoints polyLinePoints = PolylinePoints();
     PolylineResult result = await polyLinePoints.getRouteBetweenCoordinates(
         vaayoMapsAPIKey,
-        PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
-        PointLatLng(
-            destinationLocation!.latitude, destinationLocation!.longitude));
+        PointLatLng(start!.latitude, start.longitude),
+        PointLatLng(end!.latitude, end.longitude));
     if (result.points.isNotEmpty) {
       for (PointLatLng point in result.points) {
-        _polyLinePoints.add(LatLng(point.latitude, point.longitude));
+        pointList.add(LatLng(point.latitude, point.longitude));
       }
     }
-    setState(() {});
+    return pointList;
   }
 }
