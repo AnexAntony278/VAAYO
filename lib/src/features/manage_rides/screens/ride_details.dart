@@ -29,8 +29,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       },
       driver = {
         'age': 21,
-        ' cars': [
-          {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+        'cars': [
+          {'no': 'KL47C7993', 'model': 'Celerio'}
         ],
         'bio': ' Btech student',
         'phone': "7736110274",
@@ -42,7 +42,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   final List<Map<String, dynamic>> passengers = [
     {
       'age': 21,
-      ' cars': [
+      'cars': [
         {'no': ' KL 17 N 6665', 'model': 'Celerio'}
       ],
       'bio': ' Btech student',
@@ -59,14 +59,14 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     _getPassengerDetails();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    trip = (ModalRoute.of(context)?.settings.arguments
-        as List<Map<String, dynamic>>)[0];
-    driver = (ModalRoute.of(context)?.settings.arguments
-        as List<Map<String, dynamic>>)[1];
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   trip = (ModalRoute.of(context)?.settings.arguments
+  //       as List<Map<String, dynamic>>)[0];
+  //   driver = (ModalRoute.of(context)?.settings.arguments
+  //       as List<Map<String, dynamic>>)[1];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +187,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           Text("${trip['car_no']}",
                               style: VaayoTheme.largeBold),
                           Text(
-                            "${trip['car_model']}",
+                            "${(driver['cars'] as List).where((car) => car['no'] == trip['car_no']).first['model']}",
                             style: VaayoTheme.mediumBold,
                           ),
                           const SizedBox(
