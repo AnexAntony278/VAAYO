@@ -54,7 +54,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _getLocations();
+    if (trip['status'] == 'WAITING' || trip['status'] == 'STARTED') {
+      _getLocations();
+    }
   }
 
   @override

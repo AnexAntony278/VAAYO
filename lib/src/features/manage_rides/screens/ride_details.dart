@@ -23,43 +23,42 @@ class RideDetailsPage extends StatefulWidget {
 class _RideDetailsPageState extends State<RideDetailsPage> {
   Map<String, dynamic> trip = {
         // SAMPLE DATA FOR DEBUGGING PURPOSE
-        // 'id': "hUxdjdFTzJtTNb6yj1s2",
-        // "available_seats": 3,
-        // "passengers": [],
-        // "total_seats": 3,
-        // 'departure_time': Timestamp.now(),
-        // 'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-        // 'destination': 'Cheruthoni, Kerala, India',
-        // 'departure': 'Cheruthoni, Kerala, India',
-        // 'car_no': 'KL47C7993',
-        // 'car_model': 'Toyota Supra',
-        // 'status': 'CREATED'
+        'id': "hUxdjdFTzJtTNb6yj1s2",
+        "available_seats": 3,
+        "passengers": [],
+        "total_seats": 3,
+        'departure_time': Timestamp.now(),
+        'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
+        'destination': 'Cheruthoni, Kerala, India',
+        'departure': 'Cheruthoni, Kerala, India',
+        'car_no': 'KL47C7993',
+        'status': 'CREATED'
       },
       driver = {
-        // 'age': 21,
-        // ' cars': [
-        //   {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-        // ],
-        // 'bio': ' Btech student',
-        // 'phone': "7736110274",
-        // 'tags': [],
-        // 'name': 'Anandu',
-        // 'gender': 'M',
-        // 'email': 'anandudina2003@gmail.com'
+        'age': 21,
+        ' cars': [
+          {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+        ],
+        'bio': ' Btech student',
+        'phone': "7736110274",
+        'tags': [],
+        'name': 'Anandu',
+        'gender': 'M',
+        'email': 'anandudina2003@gmail.com'
       };
   final List<Map<String, dynamic>> passengers = [
-    // {
-    //   'age': 21,
-    //   ' cars': [
-    //     {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-    //   ],
-    //   'bio': ' Btech student',
-    //   'phone': "7736110274",
-    //   'tags': [],
-    //   'name': 'Anandu',
-    //   'gender': 'M',
-    //   'email': 'anandudina2003@gmail.com'
-    // }
+    {
+      'age': 21,
+      ' cars': [
+        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+      ],
+      'bio': ' Btech student',
+      'phone': "7736110274",
+      'tags': [],
+      'name': 'Anandu',
+      'gender': 'M',
+      'email': 'anandudina2003@gmail.com'
+    }
   ];
   late LatLng? userLocation, sourceLocation, destinationLocation;
   List<LatLng> _routePolyLinePoints = [];
@@ -74,11 +73,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    trip = (ModalRoute.of(context)?.settings.arguments
-        as List<Map<String, dynamic>>)[0];
-    driver = (ModalRoute.of(context)?.settings.arguments
-        as List<Map<String, dynamic>>)[1];
-    debugPrint("trip\n$trip\ndriver\n$driver");
+    // trip = (ModalRoute.of(context)?.settings.arguments
+    //     as List<Map<String, dynamic>>)[0];
+    // driver = (ModalRoute.of(context)?.settings.arguments
+    //     as List<Map<String, dynamic>>)[1];
   }
 
   @override
