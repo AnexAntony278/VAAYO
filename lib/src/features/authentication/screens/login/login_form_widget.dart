@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_model_button_sheet.dart';
 
-final _formKey = GlobalKey<FormState>();
+final formKey = GlobalKey<FormState>();
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -16,6 +16,7 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  bool passwordCovered = true;
   String errorMessage = "";
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
@@ -26,7 +27,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Container(
       padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Form(
-        key: _formKey,
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -43,14 +44,18 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 10.0),
             TextFormField(
               controller: _passwordTextController,
-              obscureText: true,
+              obscureText: passwordCovered,
               decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.key),
                   labelText: "Password",
                   border: const OutlineInputBorder(),
                   hintText: "Passsword",
                   suffixIcon: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          passwordCovered= (passwordCovered == true) ? false : true;
+                        });
+                      },
                       icon: const Icon(Icons.remove_red_eye_sharp))),
               validator: validatePassword,
               autovalidateMode: AutovalidateMode.onUserInteraction,
