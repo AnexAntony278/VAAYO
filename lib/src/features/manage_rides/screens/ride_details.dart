@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
@@ -21,42 +22,42 @@ class RideDetailsPage extends StatefulWidget {
 
 class _RideDetailsPageState extends State<RideDetailsPage> {
   Map<String, dynamic> trip = {
-        // 'departure_time': Timestamp.now(),
-        // 'status': 'WAITING',
-        // 'total_seats': 3,
-        // 'id': 'CkwnJWIrDttowxMhyvsz',
-        // 'departure': 'Painavu',
-        // 'destination': 'Cheruthoni',
-        // 'available_seats': 3,
-        // 'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
-        // 'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
-        // 'car_no': 'KL21K2222'
+        'departure_time': Timestamp.now(),
+        'status': 'WAITING',
+        'total_seats': 3,
+        'id': 'CkwnJWIrDttowxMhyvsz',
+        'departure': 'Painavu',
+        'destination': 'Cheruthoni',
+        'available_seats': 3,
+        'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
+        'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
+        'car_no': 'KL21K2222'
       },
       driver = {
-        // 'age': 21,
-        // 'cars': [
-        //   {'no': 'KL21K2222', 'model': 'Celerio'}
-        // ],
-        // 'bio': ' Btech student',
-        // 'phone': "7736110274",
-        // 'tags': [],
-        // 'name': 'Anandu',
-        // 'gender': 'M',
-        // 'email': 'anandudina2003@gmail.com'
+        'age': 21,
+        'cars': [
+          {'no': 'KL21K2222', 'model': 'Celerio'}
+        ],
+        'bio': ' Btech student',
+        'phone': "7736110274",
+        'tags': [],
+        'name': 'Anandu',
+        'gender': 'M',
+        'email': 'anandudina2003@gmail.com'
       };
   List<Map<String, dynamic>> passengers = [
-    // {
-    // 'age': 21,
-    // 'cars': [
-    //   {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-    // ],
-    // 'bio': ' Btech student',
-    // 'phone': "7736110274",
-    // 'tags': [],
-    // 'name': 'Anandu',
-    // 'gender': 'M',
-    // 'email': 'anandudina2003@gmail.com'
-    // }
+    {
+      'age': 21,
+      'cars': [
+        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+      ],
+      'bio': ' Btech student',
+      'phone': "7736110274",
+      'tags': [],
+      'name': 'Anandu',
+      'gender': 'M',
+      'email': 'anandudina2003@gmail.com'
+    }
   ];
   bool _isLoading = true;
 
@@ -92,7 +93,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     DateTime date = (trip['departure_time'] as Timestamp).toDate();
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Trip Details"),
+          title: const Text("Ride Details"),
           actions: const [
             Icon(
               (Icons.time_to_leave),
@@ -206,7 +207,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
                           const Row(
                             children: [
-                              Text("   Driver details"),
+                              Text("\tDriver details"),
                             ],
                           ),
                           Card(
@@ -225,7 +226,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text("${trip['car_no']}",
+                                      Text("${driver['name']}",
                                           style: VaayoTheme.largeBold),
                                       Text(
                                         "${List.from(driver['cars']).where((car) => car['no'] == trip['car_no']).first['model']}",
@@ -254,7 +255,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                     children: [
                                       const CircleAvatar(
                                           radius: 40, child: Placeholder()),
-                                      Text("${driver['name']}",
+                                      Text("${trip['car_no']}",
                                           style: VaayoTheme.mediumBold),
                                     ],
                                   )
@@ -262,7 +263,6 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                               ),
                             ),
                           ),
-////////////////
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -361,7 +361,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                               return AlertDialog(
                                 title: const Text("Cancel Booking"),
                                 content: const Text(
-                                    "Are you sure you want to delete this trip?"),
+                                    "Are you sure you want to Cancel this Ride?"),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
@@ -372,7 +372,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                   TextButton(
                                     onPressed: () {
                                       //DELETE TRIP CODE
-                                      _deleteTrip();
+                                      _cancelRide();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                       navKey.currentState?.pushNamed("Home");
@@ -393,12 +393,15 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         ));
   }
 
-  void _deleteTrip() async {
+  void _cancelRide() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('uid');
+    (trip['passengers'] as List).removeWhere((element) => (element == uid));
     try {
       await FirebaseFirestore.instance
           .collection('trips')
           .doc(trip['id'])
-          .delete();
+          .update(trip);
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
