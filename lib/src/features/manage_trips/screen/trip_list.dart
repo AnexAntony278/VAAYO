@@ -162,6 +162,7 @@ class _TripsPageState extends State<TripsPage> {
     await FirebaseFirestore.instance
         .collection('trips')
         .where('driver_uid', isEqualTo: prefs.getString('uid'))
+        .where('status', isEqualTo: 'CREATED')
         .get()
         .then((QuerySnapshot querySnapshot) {
       setState(() {

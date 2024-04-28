@@ -1,15 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
-import 'package:vaayo/src/constants/keys.dart';
 import 'package:vaayo/src/constants/theme.dart';
 
 class RideDetailsPage extends StatefulWidget {
@@ -22,69 +16,57 @@ class RideDetailsPage extends StatefulWidget {
 class _RideDetailsPageState extends State<RideDetailsPage> {
   Map<String, dynamic> trip = {
         // SAMPLE DATA FOR DEBUGGING PURPOSE
-        // 'id': "hUxdjdFTzJtTNb6yj1s2",
-        // "available_seats": 3,
-        // "passengers": [],
-        // "total_seats": 3,
-        // 'departure_time': Timestamp.now(),
-        // 'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
-        // 'destination': 'Painavu, Kerala, India',
-        // 'departure': 'Cheruthoni, Kerala ,India',
-        // 'car_no': 'KL47C7993',
-        // 'status': 'WAITING'
+        'id': "hUxdjdFTzJtTNb6yj1s2",
+        "available_seats": 3,
+        "passengers": [],
+        "total_seats": 3,
+        'departure_time': Timestamp.now(),
+        'driver_uid': 'fURKV6hSATR1RiXdIfKZqSTv8wA2',
+        'destination': 'Cheruthoni, Kerala, India',
+        'departure': 'Cheruthoni, Kerala, India',
+        'car_no': 'KL47C7993',
+        'status': 'CREATED'
       },
       driver = {
-        // 'age': 21,
-        // 'cars': [
-        //   {'no': 'KL47C7993', 'model': 'Celerio'}
-        // ],
-        // 'bio': ' Btech student',
-        // 'phone': "7736110274",
-        // 'tags': [],
-        // 'name': 'Anandu',
-        // 'gender': 'M',
-        // 'email': 'anandudina2003@gmail.com'
+        'age': 21,
+        'cars': [
+          {'no': 'KL47C7993', 'model': 'Celerio'}
+        ],
+        'bio': ' Btech student',
+        'phone': "7736110274",
+        'tags': [],
+        'name': 'Anandu',
+        'gender': 'M',
+        'email': 'anandudina2003@gmail.com'
       };
   final List<Map<String, dynamic>> passengers = [
-    // {
-    //   'age': 21,
-    //   'cars': [
-    //     {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-    //   ],
-    //   'bio': ' Btech student',
-    //   'phone': "7736110274",
-    //   'tags': [],
-    //   'name': 'Anandu',
-    //   'gender': 'M',
-    //   'email': 'anandudina2003@gmail.com'
-    // }
+    {
+      'age': 21,
+      'cars': [
+        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+      ],
+      'bio': ' Btech student',
+      'phone': "7736110274",
+      'tags': [],
+      'name': 'Anandu',
+      'gender': 'M',
+      'email': 'anandudina2003@gmail.com'
+    }
   ];
-
-  bool _isLoading = true;
-  late LatLng? userLocation, sourceLocation, destinationLocation;
-  List<LatLng> _routePolyLinePoints = [];
-
   @override
   void initState() {
     super.initState();
-    if (trip['status'] == 'WAITING' || trip['status'] == 'STARTED') {
-      _getLocations();
-    }
+    _getPassengerDetails();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    trip = (ModalRoute.of(context)?.settings.arguments
-        as List<Map<String, dynamic>>)[0];
-    driver = (ModalRoute.of(context)?.settings.arguments
-        as List<Map<String, dynamic>>)[1];
-
-    if ((trip['passengers'] as List).isNotEmpty &&
-        trip['passengers'].length != passengers.length) {
-      _getPassengerDetails();
-    }
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   trip = (ModalRoute.of(context)?.settings.arguments
+  //       as List<Map<String, dynamic>>)[0];
+  //   driver = (ModalRoute.of(context)?.settings.arguments
+  //       as List<Map<String, dynamic>>)[1];
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,45 +92,19 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              (trip['status'] != "CREATED")
-                  ? Card(
-                      child: SizedBox(
-                          width: MediaQuery.of(context).size.width - 30,
-                          height: 300,
-                          child: Builder(
-                            builder: (context) {
-                              if (_isLoading) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              } else {
-                                return GoogleMap(
-                                    initialCameraPosition: CameraPosition(
-                                        target: userLocation!, zoom: 13),
-                                    markers: {
-                                      Marker(
-                                          markerId: const MarkerId('source'),
-                                          position: sourceLocation!),
-                                      Marker(
-                                          markerId:
-                                              const MarkerId('destination'),
-                                          position: destinationLocation!),
-                                      Marker(
-                                          markerId: const MarkerId('user'),
-                                          position: userLocation!),
-                                    },
-                                    polylines: {
-                                      Polyline(
-                                        polylineId: const PolylineId('route'),
-                                        points: _routePolyLinePoints,
-                                        color: Colors.purple,
-                                        width: 5,
-                                      ),
-                                    });
-                              }
-                            },
-                          )),
-                    )
-                  : const Text(""),
+              Builder(
+                builder: (context) {
+                  return (trip['status'] == 'CREATED')
+                      ? const SizedBox(
+                          height: 10,
+                        )
+                      : const Card(
+                          child: SizedBox(
+                            height: 400,
+                          ),
+                        );
+                },
+              ),
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
@@ -391,63 +347,5 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }
-  }
-
-  Future<void> _getLocations() async {
-    userLocation = await _getuserLocation();
-    sourceLocation = await _getLocationCoordinates(address: trip['departure']);
-    destinationLocation =
-        await _getLocationCoordinates(address: trip['destination']);
-    if (trip['status'] == 'WAITING') {
-      _routePolyLinePoints =
-          await _getPolyLineRoute(start: userLocation, end: sourceLocation);
-    } else if (trip['status'] == 'STARTED') {
-      _routePolyLinePoints = await _getPolyLineRoute(
-          start: sourceLocation, end: destinationLocation);
-    }
-    setState(() => _isLoading = false);
-  }
-
-  Future<LatLng> _getuserLocation() async {
-    LocationData? userLocationData;
-    Location location = Location();
-    await location.getLocation().then((value) => userLocationData = value);
-    LatLng loc = LatLng(
-        userLocationData!.latitude ?? 0, userLocationData!.longitude ?? 0);
-    location.onLocationChanged.listen((newLocData) {
-      userLocation =
-          LatLng(newLocData.latitude ?? 0, newLocData.longitude ?? 0);
-    });
-    return loc;
-  }
-
-  Future<LatLng> _getLocationCoordinates({required String address}) async {
-    //GEOCODING
-    final Uri request = Uri.parse(
-        "https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$vaayoMapsAPIKey");
-    var response = await http.get(request);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> decodedResponse = jsonDecode(response.body);
-      var loc = decodedResponse['results'][0]['geometry']['location']
-          as Map<String, dynamic>;
-      return LatLng(loc['lat'], loc['lng']);
-    }
-    return Future.error(response);
-  }
-
-  Future<List<LatLng>> _getPolyLineRoute(
-      {required LatLng? start, required LatLng? end}) async {
-    final List<LatLng> pointList = [];
-    PolylinePoints polyLinePoints = PolylinePoints();
-    PolylineResult result = await polyLinePoints.getRouteBetweenCoordinates(
-        vaayoMapsAPIKey,
-        PointLatLng(start!.latitude, start.longitude),
-        PointLatLng(end!.latitude, end.longitude));
-    if (result.points.isNotEmpty) {
-      for (PointLatLng point in result.points) {
-        pointList.add(LatLng(point.latitude, point.longitude));
-      }
-    }
-    return pointList;
   }
 }
