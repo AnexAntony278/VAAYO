@@ -54,9 +54,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   @override
   void initState() {
     super.initState();
-    if (trip['status'] == 'WAITING' || trip['status'] == 'STARTED') {
-      _getLocations();
-    }
   }
 
   @override
@@ -340,6 +337,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       setState(() {});
     } on FirebaseException catch (e) {
       debugPrint(e.message);
+    }
+    if (trip['status'] == 'WAITING' || trip['status'] == 'STARTED') {
+      _getLocations();
     }
   }
 
