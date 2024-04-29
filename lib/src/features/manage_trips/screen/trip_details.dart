@@ -21,30 +21,30 @@ class TripDetailsPage extends StatefulWidget {
 
 class _TripDetailsPageState extends State<TripDetailsPage> {
   Map<String, dynamic> trip = {
-    'departure_time': Timestamp.now(),
-    'status': 'WAITING',
-    'total_seats': 3,
-    'id': 'CkwnJWIrDttowxMhyvsz',
-    'departure': 'Painavu',
-    'destination': 'Cheruthoni',
-    'available_seats': 3,
-    'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
-    'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
-    'car_no': 'KL21K2222'
+    // 'departure_time': Timestamp.now(),
+    // 'status': 'WAITING',
+    // 'total_seats': 3,
+    // 'id': 'CkwnJWIrDttowxMhyvsz',
+    // 'departure': 'Painavu',
+    // 'destination': 'Cheruthoni',
+    // 'available_seats': 3,
+    // 'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
+    // 'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
+    // 'car_no': 'KL21K2222'
   };
   List<Map<String, dynamic>> passengers = [
-    {
-      'age': 21,
-      ' cars': [
-        {'no': ' KL 17 N 6665', 'model': 'Celerio'}
-      ],
-      'bio': ' Btech student',
-      'phone': "7736110274",
-      'tags': [],
-      'name': 'Anandu',
-      'gender': 'M',
-      'email': 'anandudina2003@gmail.com'
-    }
+    // {
+    //   'age': 21,
+    //   ' cars': [
+    //     {'no': ' KL 17 N 6665', 'model': 'Celerio'}
+    //   ],
+    //   'bio': ' Btech student',
+    //   'phone': "7736110274",
+    //   'tags': [],
+    //   'name': 'Anandu',
+    //   'gender': 'M',
+    //   'email': 'anandudina2003@gmail.com'
+    // }
   ];
   bool _isLoading = true;
 
@@ -64,7 +64,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     super.didChangeDependencies();
     trip = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     if ((trip['passengers'] as List).isNotEmpty &&
-        trip['passengers'].length != passengers.length) {}
+        trip['passengers'].length != passengers.length) {
+      _getPassengerDetails();
+    }
   }
 
   @override

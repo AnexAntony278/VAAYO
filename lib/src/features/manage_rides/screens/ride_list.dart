@@ -78,7 +78,7 @@ class _RidesPageState extends State<RidesPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    "${_rides[index]['departure']}-> ${_rides[index]['destination']}"),
+                                    "${_rides[index]['departure']}->\n${_rides[index]['destination']}"),
                                 Text(
                                   "${date.day} ${date.toMonth()} ${date.year}  ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                   textAlign: TextAlign.center,
@@ -165,8 +165,9 @@ class _RidesPageState extends State<RidesPage> {
           _drivers.add(value.data() as Map<String, dynamic>);
         });
       }
-
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     } on FirebaseException catch (e) {
       debugPrint(e.code);
     }

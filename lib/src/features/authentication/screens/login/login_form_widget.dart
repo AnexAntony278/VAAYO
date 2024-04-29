@@ -19,7 +19,7 @@ class _LoginFormState extends State<LoginForm> {
   String errorMessage = "";
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
-
+  bool isVisible = false;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -50,7 +50,8 @@ class _LoginFormState extends State<LoginForm> {
                   border: const OutlineInputBorder(),
                   hintText: "Passsword",
                   suffixIcon: IconButton(
-                      onPressed: () {},
+                      onPressed: () => setState(
+                          () => isVisible = (isVisible == true) ? false : true),
                       icon: const Icon(Icons.remove_red_eye_sharp))),
               validator: validatePassword,
               autovalidateMode: AutovalidateMode.onUserInteraction,

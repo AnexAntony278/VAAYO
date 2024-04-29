@@ -119,8 +119,11 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(// LOCATION
-                                                "${_rides[index]['departure']} ->\n${_rides[index]['destination']}"),
+                                            Text(
+                                              // LOCATION
+                                              "${_rides[index]['departure']} ->\n${_rides[index]['destination']}",
+                                              softWrap: true,
+                                            ),
                                             Text(
                                               "${date.day} ${date.toMonth()} ${date.year}    ${date.hour % 12}: ${(date.minute == 0) ? '00' : date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                               textAlign: TextAlign.center,
@@ -153,7 +156,6 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                                               const CircleAvatar(
                                                   radius: 35,
                                                   child: Placeholder()),
-                                              Text("DriverName$index")
                                             ],
                                           ),
                                         )
@@ -202,7 +204,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
     predictions = [];
     var url = Uri.parse(
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input="$input"&key=$vaayoMapsAPIKey');
-    var response = await http.get(url); 
+    var response = await http.get(url);
     if (response.statusCode == 200) {
       Map<String, dynamic> decodedResponse = jsonDecode(response.body);
       for (int i = 0; i < decodedResponse['predictions'].length; i++) {
