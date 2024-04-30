@@ -16,20 +16,20 @@ import 'package:vaayo/src/features/profile_management/screens/user_profile.dart'
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
-String? fcmToken = '';
+// String? fcmToken = '';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  _fcmInit();
+  // _fcmInit();
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
   debugPrint("\nMainPage  uid:$uid");
 
+  
   Widget startScreen =
       (uid == null || uid == "null") ? const WelcomeScreen() : const HomePage();
-
   runApp(MaterialApp(
     home: startScreen,
     debugShowCheckedModeBanner: false,
@@ -53,27 +53,26 @@ main() async {
   ));
 }
 
-void _fcmInit() async {
-  try {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-    // debugPrint('User granted permission: ${settings.authorizationStatus}');
-    await messaging.getToken().then((value) => fcmToken = value);
-  } on FirebaseException catch (e) {
-    debugPrint(e.message);
-  }
-}
-
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint("Handling a background message: ${message.messageId}");
-}
+// void _fcmInit() async {
+//   try {
+//     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+//     FirebaseMessaging messaging = FirebaseMessaging.instance;
+//     NotificationSettings settings = await messaging.requestPermission(
+//       alert: true,
+//       announcement: false,
+//       badge: true,
+//       carPlay: false,
+//       criticalAlert: false,
+//       provisional: false,
+//       sound: true,
+//     );
+//     debugPrint('User granted permission: ${settings.authorizationStatus}');
+//     await messaging.getToken().then((value) => fcmToken = value);
+//   } on FirebaseException catch (e) {
+//     debugPrint(e.message);
+//   }
+// }
+// @pragma('vm:entry-point')
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   debugPrint("Handling a background message: ${message.messageId}");
+// }

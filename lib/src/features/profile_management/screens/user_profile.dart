@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/common_widgets/widgets.dart';
 
@@ -51,12 +53,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Hi There,\n${user?["name"] ?? ''},\n",
-                          style: const TextStyle(fontSize: 30),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: Text(
+                            "Hi There,\n${user?["name"] ?? ''},",
+                            style: const TextStyle(fontSize: 30),
+                            softWrap: true,
+                          ),
                         ),
-                        CircleAvatar(
-                          radius: MediaQuery.of(context).size.width / 6,
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            CircleAvatar(
+                              radius: MediaQuery.of(context).size.width / 6,
+                            ),
+                            const Text("Icon HEREE"),
+                          ],
                         ),
                       ],
                     ),
