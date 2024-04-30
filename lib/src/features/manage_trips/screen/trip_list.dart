@@ -14,7 +14,6 @@ class TripsPage extends StatefulWidget {
 
 class _TripsPageState extends State<TripsPage> {
   List<Map<String, dynamic>> _trips = [];
-  int _noOfTrips = 0;
 
   @override
   void initState() {
@@ -35,9 +34,9 @@ class _TripsPageState extends State<TripsPage> {
           ),
         ),
         body: ListView.builder(
-          itemCount: _noOfTrips + 1,
+          itemCount: _trips.length + 1,
           itemBuilder: (context, index) {
-            if (index == _noOfTrips) {
+            if (index == _trips.length) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: InkWell(
@@ -167,7 +166,6 @@ class _TripsPageState extends State<TripsPage> {
       setState(() {
         _trips = List<Map<String, dynamic>>.from(
             querySnapshot.docs.map((doc) => doc.data()).toList());
-        _noOfTrips = _trips.length;
       });
     });
   }
