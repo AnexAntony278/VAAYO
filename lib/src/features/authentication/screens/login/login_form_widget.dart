@@ -19,7 +19,7 @@ class _LoginFormState extends State<LoginForm> {
   String errorMessage = "";
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
-  bool isVisible = false;
+  bool _isVisible = true;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -43,15 +43,17 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: 10.0),
             TextFormField(
               controller: _passwordTextController,
-              obscureText: true,
+              obscureText: _isVisible,
               decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.key),
                   labelText: "Password",
                   border: const OutlineInputBorder(),
                   hintText: "Passsword",
                   suffixIcon: IconButton(
-                      onPressed: () => setState(
-                          () => isVisible = (isVisible == true) ? false : true),
+                      onPressed: () {
+                        setState(() =>
+                            _isVisible = (_isVisible == true) ? false : true);
+                      },
                       icon: const Icon(Icons.remove_red_eye_sharp))),
               validator: validatePassword,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -111,7 +113,6 @@ class _LoginFormState extends State<LoginForm> {
       setState(() {
         errorMessage = e.code;
       });
-      //TODO- EXCEPTION HANDLING
     }
   }
 
