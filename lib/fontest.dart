@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vaayo/src/features/app_management/notification_manager.dart';
 
 class FontTest extends StatelessWidget {
   const FontTest({super.key});
