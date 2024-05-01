@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/features/app_management/home_page.dart';
@@ -16,20 +15,16 @@ import 'package:vaayo/src/features/profile_management/screens/user_profile.dart'
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
-// String? fcmToken = '';
-
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // _fcmInit();
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
   debugPrint("\nMainPage  uid:$uid");
 
-  
-  Widget startScreen =
-      (uid == null || uid == "null") ? const WelcomeScreen() : const HomePage();
+  Widget startScreen = const WelcomeScreen();
+  (uid == null || uid == "null") ? const WelcomeScreen() : const HomePage();
   runApp(MaterialApp(
     home: startScreen,
     debugShowCheckedModeBanner: false,
