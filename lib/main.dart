@@ -21,7 +21,7 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // _fcmInit();
+  _fcmInit();
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
   debugPrint("\nMainPage  uid:$uid");
@@ -65,13 +65,12 @@ main() async {
 //       provisional: false,
 //       sound: true,
 //     );
-//     // debugPrint('User granted permission: ${settings.authorizationStatus}');
+//     debugPrint('User granted permission: ${settings.authorizationStatus}');
 //     await messaging.getToken().then((value) => fcmToken = value);
 //   } on FirebaseException catch (e) {
 //     debugPrint(e.message);
 //   }
 // }
-
 // @pragma('vm:entry-point')
 // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 //   debugPrint("Handling a background message: ${message.messageId}");
