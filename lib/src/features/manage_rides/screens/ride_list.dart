@@ -80,7 +80,7 @@ class _RidesPageState extends State<RidesPage> {
                                 Text(
                                     "${_rides[index]['departure']}->\n${_rides[index]['destination']}"),
                                 Text(
-                                  "${date.day} ${date.toMonth()} ${date.year}  ${date.hour % 12} :${date.minute} ${(date.hour > 12) ? (date.hour == 24) ? 'AM' : 'PM' : "AM"}",
+                                  "${date.day} ${date.toMonth()} ${date.year}  ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600),
@@ -165,26 +165,11 @@ class _RidesPageState extends State<RidesPage> {
           _drivers.add(value.data() as Map<String, dynamic>);
         });
       }
-      for (var trip in _rides) {
-        if ((DateTime.now()
-            .add(const Duration(hours: 2))
-            .isAfter((trip['departure_time'] as Timestamp).toDate()))) {
-          trip['status'] = 'WAITING';
-          updateTripStatus(trip: trip);
-        }
-      }
       if (mounted) {
         setState(() {});
       }
     } on FirebaseException catch (e) {
       debugPrint(e.code);
     }
-  }
-
-  void updateTripStatus({required Map<String, dynamic> trip}) async {
-    await FirebaseFirestore.instance
-        .collection('trips')
-        .doc(trip['id'])
-        .update(trip);
   }
 }

@@ -110,7 +110,7 @@ class _TripsPageState extends State<TripsPage> {
                                   ),
                                   Text(
                                     // TIME
-                                    "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour % 12} :${date.minute} ${(date.hour > 12) ? (date.hour == 24) ? 'AM' : 'PM' : "AM"}",
+                                    "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600),
@@ -163,24 +163,10 @@ class _TripsPageState extends State<TripsPage> {
         .where('driver_uid', isEqualTo: prefs.getString('uid'))
         .get()
         .then((QuerySnapshot querySnapshot) {
-      _trips = List<Map<String, dynamic>>.from(
-          querySnapshot.docs.map((doc) => doc.data()).toList());
-      for (var trip in _trips) {
-        if ((DateTime.now()
-            .add(const Duration(hours: 2))
-            .isAfter((trip['departure_time'] as Timestamp).toDate()))) {
-          trip['status'] = 'WAITING';
-          updateTripStatus(trip: trip);
-        }
-      }
-      setState(() {});
+      setState(() {
+        _trips = List<Map<String, dynamic>>.from(
+            querySnapshot.docs.map((doc) => doc.data()).toList());
+      });
     });
-  }
-
-  void updateTripStatus({required Map<String, dynamic> trip}) async {
-    await FirebaseFirestore.instance
-        .collection('trips')
-        .doc(trip['id'])
-        .update(trip);
   }
 }
