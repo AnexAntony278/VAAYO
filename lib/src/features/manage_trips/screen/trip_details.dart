@@ -334,7 +334,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           passengers.add(documentSnapshot.data() as Map<String, dynamic>);
         }
       }
-      (mounted) ? setState(() {}) : null;
+      setState(() {});
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
@@ -362,7 +362,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       _routePolyLinePoints = await _getPolyLineRoute(
           start: sourceLocation, end: destinationLocation);
     }
-    (mounted) ? setState(() => _isLoading = false) : null;
+    setState(() => _isLoading = false);
   }
 
   Future<LatLng> _getuserLocation() async {
