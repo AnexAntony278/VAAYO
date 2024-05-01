@@ -23,8 +23,6 @@ main() async {
 
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
-  debugPrint("\nMainPage  uid:$uid");
-
   Widget startScreen =
       (uid == null || uid == "null") ? const WelcomeScreen() : const HomePage();
 
