@@ -28,6 +28,7 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -42,6 +43,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        multiDexEnabled true
         applicationId "com.example.vaayo"
         minSdkVersion 21
         targetSdkVersion 34
@@ -60,8 +62,4 @@ android {
 
 flutter {
     source '../..'
-}
-
-dependencies {
-    classpath 'com.android.tools.build:gradle:7.3.0'
 }

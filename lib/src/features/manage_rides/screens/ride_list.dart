@@ -80,7 +80,7 @@ class _RidesPageState extends State<RidesPage> {
                                 Text(
                                     "${_rides[index]['departure']}->\n${_rides[index]['destination']}"),
                                 Text(
-                                  "${date.day} ${date.toMonth()} ${date.year}  ${date.hour} :${date.minute} ${date.toAMPM()}",
+                                  "${date.day} ${date.toMonth()} ${date.year}  ${date.hour} :${date.minute} ${date.hour > 12 ? "AM" : "PM"}",
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600),

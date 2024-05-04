@@ -53,6 +53,6 @@ extension DateTimeExtension on DateTime {
   }
 
   String toAMPM() {
-    return (hour < 12 || hour == 24) ? "AM" : "PM";
+    return (hour < 12) ? "AM" : "PM";
   }
 }

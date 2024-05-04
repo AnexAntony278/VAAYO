@@ -27,6 +27,12 @@ class FontTest extends StatelessWidget {
               "BODY MEDIUM",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
+            ElevatedButton(
+                onPressed: () {
+                  NotificationService().showNotification(
+                      id: 1, title: 'title', body: 'hiiiiiiiiiiiibodyyy');
+                },
+                child: const Text('NOTIFY'))
           ],
         ),
       ),
