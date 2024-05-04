@@ -196,6 +196,22 @@ class _CreateTripPageState extends State<CreateTripPage> {
     }
   }
 
+  void _getPredictions(String? input) async {
+    //GET PREDICTIONS
+    predictions = [];
+    var url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input="$input"&key=$vaayoMapsAPIKey');
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+      for (int i = 0; i < decodedResponse['predictions'].length; i++) {
+        predictions
+            .add(decodedResponse['predictions'][i]['description'].toString());
+      }
+      setState(() {});
+    }
+  }
+
   Future<void> _showDatePicker(context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -266,21 +282,10 @@ class _CreateTripPageState extends State<CreateTripPage> {
         );
       },
     );
-  }
-
-  void _getPredictions(String? input) async {
-    //GET PREDICTIONS
-    predictions = [];
-    var url = Uri.parse(
-        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input="$input"&key=$vaayoMapsAPIKey');
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> decodedResponse = jsonDecode(response.body);
-      for (int i = 0; i < decodedResponse['predictions'].length; i++) {
-        predictions
-            .add(decodedResponse['predictions'][i]['description'].toString());
-      }
-      setState(() {});
-    }
+    vaayoLocalNotificationServices.scheduleNotification(
+        time: tripDateTime.add(const Duration(hours: -1)),
+        id: 1,
+        title: 'CONFIRM TRIP',
+        body: 'Confirm your trip Departure from $_departure to $_destination');
   }
 }

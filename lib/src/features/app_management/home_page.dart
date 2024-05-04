@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                     icon: Icon(Icons.settings), label: "Settings")
               ],
               elevation: 50,
-              onTap: (value) {
+              onTap: (value) async {
                 setState(() {
                   _navBarIndex = value;
                   switch (value) {

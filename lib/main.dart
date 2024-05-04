@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/src/features/app_management/home_page.dart';
+import 'package:vaayo/src/features/app_management/notification_services.dart';
 import 'package:vaayo/src/features/authentication/screens/forget-password/forget_password_mail.dart';
 import 'package:vaayo/src/features/authentication/screens/login/login_screen.dart';
 import 'package:vaayo/src/features/authentication/screens/login/welcome.dart';
@@ -15,6 +16,8 @@ import 'package:vaayo/src/features/profile_management/screens/user_profile.dart'
 import 'firebase_options.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+final LocalNotificationServices vaayoLocalNotificationServices =
+    LocalNotificationServices();
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +26,8 @@ main() async {
   final prefs = await SharedPreferences.getInstance();
   String? uid = prefs.getString('uid');
   debugPrint("\nMainPage  uid:$uid");
+
+  await vaayoLocalNotificationServices.init();
 
   Widget startScreen =
       (uid == null || uid == "null") ? const WelcomeScreen() : const HomePage();

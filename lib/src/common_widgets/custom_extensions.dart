@@ -1,3 +1,5 @@
+import 'package:timezone/timezone.dart' as tz;
+
 //DateTime Extensions
 extension DateTimeExtension on DateTime {
   String toMonth() {
@@ -54,5 +56,20 @@ extension DateTimeExtension on DateTime {
 
   String toAMPM() {
     return (hour < 12) ? "AM" : "PM";
+  }
+}
+
+extension TZExtension on tz.TZDateTime {
+  tz.TZDateTime fromDateTime(DateTime time) {
+    return tz.TZDateTime(
+        tz.getLocation('Asia/Calcutta'),
+        time.year,
+        time.month,
+        time.day,
+        time.hour,
+        time.minute,
+        time.second,
+        time.millisecond,
+        time.microsecond);
   }
 }
