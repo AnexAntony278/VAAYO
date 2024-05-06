@@ -62,6 +62,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   bool _isLoading = true;
   late LatLng? userLocation, sourceLocation, destinationLocation;
   List<LatLng> _routePolyLinePoints = [];
+  String? uid;
 
   @override
   void didChangeDependencies() {
@@ -74,6 +75,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
       driver = arguments[1];
       _getPassengerDetails();
     }
+    _getUID();
   }
 
   @override
@@ -320,7 +322,24 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                                       ],
                                                     ),
                                                     Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
+                                                        if ((uid ==
+                                                                trip['passengers']
+                                                                        [index]
+                                                                    ['uid']) &&
+                                                            (trip['passengers']
+                                                                        [index][
+                                                                    'status'] ==
+                                                                'BOOKED'))
+                                                          ElevatedButton(
+                                                              onPressed: () =>
+                                                                  _setBoardedStatus(
+                                                                      index),
+                                                              child: const Text(
+                                                                  'BOARD')),
                                                         ElevatedButton(
                                                             onPressed: () =>
                                                                 _callPhone(
@@ -425,6 +444,20 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     if (trip['status'] == 'WAITING' || trip['status'] == 'STARTED') {
       _getLocations();
     }
+  }
+
+  void _getUID() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    uid = preferences.getString('uid');
+  }
+
+  void _setBoardedStatus(int index) async {
+    trip['passengers'][index]['status'] = 'BOARDED';
+    setState(() {});
+    await FirebaseFirestore.instance
+        .collection('trips')
+        .doc(trip['id'])
+        .update(trip);
   }
 
   void _callPhone(String phone) async {
