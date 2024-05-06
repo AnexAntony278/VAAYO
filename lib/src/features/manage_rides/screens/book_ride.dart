@@ -194,5 +194,11 @@ class _BookRidePageState extends State<BookRidePage> {
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
+    vaayoLocalNotificationServices.scheduleNotification(
+        time: ride!['departure_time'],
+        id: 2,
+        title: 'RIDE START',
+        body:
+            'Your ride from ${ride!['departure']} to ${ride!['destination']} in 2 hours');
   }
 }

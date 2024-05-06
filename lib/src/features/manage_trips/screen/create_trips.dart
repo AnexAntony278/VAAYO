@@ -286,6 +286,6 @@ class _CreateTripPageState extends State<CreateTripPage> {
         time: tripDateTime.add(const Duration(hours: -2)),
         id: 1,
         title: 'CONFIRM TRIP',
-        body: 'Confirm your trip Departure from $_departure to $_destination');
+        body: 'Confirm trip from $_departure to $_destination');
   }
 }
