@@ -159,8 +159,10 @@ class _RidesPageState extends State<RidesPage> {
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('trips')
-          .where('passengers',
-              arrayContains: {'status': 'BOOKED', 'uid': uid}).get();
+          .where('passengers', arrayContainsAny: [
+        {'status': 'BOOKED', 'uid': uid},
+        {'status': 'BOARDED', 'uid': uid}
+      ]).get();
       for (var i in querySnapshot.docs) {
         if (i.exists) {
           _rides.add(i.data() as Map<String, dynamic>);

@@ -83,7 +83,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
           child: ListView(
             controller: ScrollController(initialScrollOffset: 300),
             children: [
-              if (trip['status'] != "CREATED")
+              if (trip['status'] != "FINISHED")
                 Card(
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width - 30,
@@ -327,7 +327,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                                     TextButton(
                                       onPressed: () {
                                         //CONFIRM  TRIP
-                                        _confirmTrip();
+                                        _setTripStatus(status: 'CONFIRMED');
                                         Navigator.pop(context);
                                         Navigator.pop(context);
                                         navKey.currentState?.pushNamed('Home');
@@ -340,12 +340,95 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                             );
                           },
                           child: const Text('CONFIRM TRIP')),
+                    //START
+                    if (trip['status'] == 'CONFIRMED' && isReadyToStart())
+                      ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Start Trip"),
+                                  content: const Text("Start Travel "),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Cancel"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        //START  TRIP
+                                        _setTripStatus(status: 'STARTED');
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        navKey.currentState?.pushNamed('Home');
+                                      },
+                                      child: const Text("Confirm "),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text('START TRIP')),
+                    //FINISH
+                    if (trip['status'] == 'STARTED' && isFinished())
+                      ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("End Trip"),
+                                  content: const Text("Reached Destination "),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Cancel"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        //START  TRIP
+                                        _setTripStatus(status: 'FINISHED');
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        navKey.currentState?.pushNamed('Home');
+                                      },
+                                      child: const Text("Confirm "),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text('END TRIP')),
                   ],
                 ),
               )
             ],
           ),
         ));
+  }
+
+  bool isReadyToStart() {
+    bool flag = true;
+    if (DateTime.now()
+        .isBefore((trip['departure_time'] as Timestamp).toDate())) {
+      flag = false;
+    }
+    for (var passenger in passengers) {
+      if (passenger['status'] != 'BOARDED') flag = false;
+    }
+    return flag;
+  }
+
+  bool isFinished() {
+    bool flag = false;
+    return true;
   }
 
   void _deleteTrip() async {
@@ -359,9 +442,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     }
   }
 
-  void _confirmTrip() async {
+  void _setTripStatus({required String status}) async {
     try {
-      trip['status'] = 'CONFIRMED';
+      trip['status'] = status;
       await FirebaseFirestore.instance
           .collection('trips')
           .doc(trip['id'])
@@ -386,7 +469,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     } //GETLOCATION
-    if (trip['status'] == 'WAITING' || trip['status'] == 'STARTED') {
+    if (trip['status'] == 'CREATED' ||
+        trip['status'] == 'WAITING' ||
+        trip['status'] == 'STARTED') {
       _getLocations();
     }
   }
@@ -403,7 +488,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     sourceLocation = await _getLocationCoordinates(address: trip['departure']);
     destinationLocation =
         await _getLocationCoordinates(address: trip['destination']);
-    if (trip['status'] == 'WAITING') {
+    if (trip['status'] == 'CREATED' ||
+        trip['status'] == 'WAITING' ||
+        trip['status'] == 'CONFIRMED') {
       _routePolyLinePoints =
           await _getPolyLineRoute(start: userLocation, end: sourceLocation);
     } else if (trip['status'] == 'STARTED') {

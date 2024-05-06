@@ -330,6 +330,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                                                 trip['passengers']
                                                                         [index]
                                                                     ['uid']) &&
+                                                            (trip['status'] !=
+                                                                'CREATED') &&
                                                             (trip['passengers']
                                                                         [index][
                                                                     'status'] ==
