@@ -125,7 +125,7 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                                               softWrap: true,
                                             ),
                                             Text(
-                                              "${date.day} ${date.toMonth()} ${date.year}    ${date.hour % 12}: ${(date.minute == 0) ? '00' : date.minute} ${date.hour > 12 ? "AM" : "PM"}",
+                                              "${date.day} ${date.toMonth()} ${date.year}\t\t  ${date.hour % 12}:${date.minute} ${date.toAMPM()}",
                                               textAlign: TextAlign.center,
                                               style: VaayoTheme.mediumBold,
                                             ),

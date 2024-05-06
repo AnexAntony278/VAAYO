@@ -110,7 +110,7 @@ class _TripsPageState extends State<TripsPage> {
                                   ),
                                   Text(
                                     // TIME
-                                    "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour % 12} :${date.minute} ${(date.hour <= 12 || date.hour == 24) ? 'AM' : 'PM'}",
+                                    "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour % 12} :${date.minute} ${date.toAMPM()}",
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600),

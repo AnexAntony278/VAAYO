@@ -164,7 +164,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                           ),
                           //TIME
                           Text(
-                            "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour % 12} :${date.minute} ${(date.hour <= 12 || date.hour == 24) ? 'AM' : 'PM'}",
+                            "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour % 12} :${date.minute} ${date.toAMPM()}",
                             textAlign: TextAlign.center,
                             style: VaayoTheme.mediumBold,
                           ),
@@ -232,8 +232,15 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                                                               )
                                                             : const Icon(
                                                                 Icons.female,
-                                                                color:
-                                                                    Colors.pink)
+                                                                color: Colors
+                                                                    .pink),
+                                                        Text(
+                                                          '${trip['passengers'][index]['status']}',
+                                                          style: TextStyle(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                        )
                                                       ],
                                                     ),
                                                     ElevatedButton(
@@ -367,11 +374,10 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
 
   void _getPassengerDetails() async {
     try {
-      for (String passengerId in trip['passengers']) {
-        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(passengerId)
-            .get();
+      for (Map<String, dynamic> passenger in trip['passengers']) {
+        String uid = passenger['uid'];
+        DocumentSnapshot documentSnapshot =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
         if (documentSnapshot.exists) {
           passengers.add(documentSnapshot.data() as Map<String, dynamic>);
         }
@@ -379,7 +385,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       setState(() {});
     } on FirebaseException catch (e) {
       debugPrint(e.message);
-    }
+    } //GETLOCATION
     if (trip['status'] == 'WAITING' || trip['status'] == 'STARTED') {
       _getLocations();
     }

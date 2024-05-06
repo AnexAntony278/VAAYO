@@ -103,7 +103,7 @@ class _BookRidePageState extends State<BookRidePage> {
                           ),
                           //TIME
                           Text(
-                            "${date.day} ${date.toMonth()} ${date.year}\n   ${date.hour % 12}:${(date.minute == 0) ? '00' : date.minute} ${date.hour > 12 ? "AM" : "PM"}",
+                            "${date.day} ${date.toMonth()} ${date.year}\n   ${date.hour % 12}:${date.minute} ${date.toAMPM()}",
                             textAlign: TextAlign.center,
                             style: VaayoTheme.mediumBold,
                           ),
@@ -185,7 +185,7 @@ class _BookRidePageState extends State<BookRidePage> {
   void _bookTrip() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uid = prefs.getString('uid');
-    (ride!['passengers'] as List).add(uid);
+    (ride!['passengers'] as List).add({'uid': uid, 'status': 'BOOKED'});
     try {
       await FirebaseFirestore.instance
           .collection('trips')

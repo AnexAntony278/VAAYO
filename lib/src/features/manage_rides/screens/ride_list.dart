@@ -149,10 +149,11 @@ class _RidesPageState extends State<RidesPage> {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? uid = prefs.getString('uid');
+
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('trips')
-          .where('passengers', arrayContains: uid)
-          .get();
+          .where('passengers',
+              arrayContains: {'status': 'BOOKED', 'uid': uid}).get();
       for (var i in querySnapshot.docs) {
         if (i.exists) {
           _rides.add(i.data() as Map<String, dynamic>);
@@ -165,12 +166,12 @@ class _RidesPageState extends State<RidesPage> {
           _drivers.add(value.data() as Map<String, dynamic>);
         });
       }
-      for (var trip in _rides) {
+      for (var ride in _rides) {
         if ((DateTime.now()
             .add(const Duration(hours: 2))
-            .isAfter((trip['departure_time'] as Timestamp).toDate()))) {
-          trip['status'] = 'WAITING';
-          updateTripStatus(trip: trip);
+            .isAfter((ride['departure_time'] as Timestamp).toDate()))) {
+          ride['status'] = 'WAITING';
+          updateTripStatus(trip: ride);
         }
       }
       if (mounted) {

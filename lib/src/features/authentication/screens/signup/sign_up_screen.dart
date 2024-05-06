@@ -32,12 +32,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return 'Name is required';
     }
 
-    RegExp regex = RegExp(r'^[a-zA-Z]+$');
-    RegExp regex1 = RegExp(r'^[a-zA-Z]+ +$');
-    RegExp regex2 = RegExp(r'^[a-zA-Z]+ [a-zA-Z]+$');
-    if (!regex.hasMatch(name) &&
-        !regex1.hasMatch(name) &&
-        !regex2.hasMatch(name)) {
+    RegExp regex = RegExp(r'^[a-zA-Z]+(?: [a-zA-Z]+)?$');
+    if (!regex.hasMatch(name)) {
       return 'Name must contain only alphabetic characters (a-z)';
     }
     return null;

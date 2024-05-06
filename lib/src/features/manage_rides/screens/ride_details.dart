@@ -30,7 +30,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
         // 'destination': 'Cheruthoni',
         // 'available_seats': 3,
         // 'driver_uid': 'b9vDMSNhYjQXRndiJCequ1pviH82',
-        // 'passengers': ['zqMqFXzEguPEtnSChHf4Z1XLaMB2'],
+        // 'passengers': [{'uid':'zqMqFXzEguPEtnSChHf4Z1XLaMB2','status':'BOARDED'}],
         // 'car_no': 'KL21K2222'
       },
       driver = {
@@ -181,7 +181,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                           ),
                           //TIME
                           Text(
-                            "${date.day} ${date.toMonth()} ${date.year}\n   ${date.hour % 12}:${(date.minute == 0) ? '00' : date.minute} ${date.hour > 12 ? "AM" : "PM"}",
+                            "${date.day} ${date.toMonth()} ${date.year}\n   ${date.hour % 12}:${date.minute} ${date.toAMPM()}",
                             textAlign: TextAlign.center,
                             style: VaayoTheme.mediumBold,
                           ),
@@ -308,18 +308,30 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                                               )
                                                             : const Icon(
                                                                 Icons.female,
-                                                                color:
-                                                                    Colors.pink)
+                                                                color: Colors
+                                                                    .pink),
+                                                        Text(
+                                                          '${trip['passengers'][index]['status']}',
+                                                          style: TextStyle(
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                        )
                                                       ],
                                                     ),
-                                                    ElevatedButton(
-                                                        onPressed: () =>
-                                                            _callPhone(
-                                                                passengers[
-                                                                        index]
-                                                                    ['phone']),
-                                                        child:
-                                                            const Text('CALL'))
+                                                    Row(
+                                                      children: [
+                                                        ElevatedButton(
+                                                            onPressed: () =>
+                                                                _callPhone(
+                                                                    passengers[
+                                                                            index]
+                                                                        [
+                                                                        'phone']),
+                                                            child: const Text(
+                                                                'CALL')),
+                                                      ],
+                                                    )
                                                   ],
                                                 ),
                                               ),
@@ -384,7 +396,8 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
   void _cancelRide() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? uid = prefs.getString('uid');
-    (trip['passengers'] as List).removeWhere((element) => (element == uid));
+    (trip['passengers'] as List)
+        .removeWhere((element) => (element['uid'] == uid));
     try {
       await FirebaseFirestore.instance
           .collection('trips')
@@ -397,11 +410,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
 
   void _getPassengerDetails() async {
     try {
-      for (String passengerId in trip['passengers']) {
-        DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(passengerId)
-            .get();
+      for (Map<String, dynamic> passenger in trip['passengers']) {
+        String uid = passenger['uid'];
+        DocumentSnapshot documentSnapshot =
+            await FirebaseFirestore.instance.collection('users').doc(uid).get();
         if (documentSnapshot.exists) {
           passengers.add(documentSnapshot.data() as Map<String, dynamic>);
         }
