@@ -283,7 +283,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
       },
     );
     vaayoLocalNotificationServices.scheduleNotification(
-        time: tripDateTime.add(const Duration(hours: -1)),
+        time: tripDateTime.add(const Duration(hours: -2)),
         id: 1,
         title: 'CONFIRM TRIP',
         body: 'Confirm your trip Departure from $_departure to $_destination');

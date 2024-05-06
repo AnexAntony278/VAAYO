@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,6 +10,7 @@ class LocalNotificationServices {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationPlugins =
       FlutterLocalNotificationsPlugin();
 
+  Int32List flags = Int32List.fromList([32]);
   //init function
   Future init() async {
     InitializationSettings initializationSettings =
@@ -45,10 +49,12 @@ class LocalNotificationServices {
         title,
         body,
         tz.TZDateTime.now(tz.local).fromDateTime(time),
-        const NotificationDetails(
+        NotificationDetails(
             android: AndroidNotificationDetails(
                 'your channel id', 'your channel name',
-                channelDescription: 'your channel description')),
+                channelDescription: 'your channel description',
+                autoCancel: false,
+                additionalFlags: flags)),
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
