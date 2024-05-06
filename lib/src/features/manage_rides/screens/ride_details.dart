@@ -72,10 +72,7 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     if (arguments != null && arguments.isNotEmpty && arguments.length >= 2) {
       trip = arguments[0];
       driver = arguments[1];
-      if ((trip['passengers'] as List).isNotEmpty &&
-          trip['passengers'].length != passengers.length) {
-        _getPassengerDetails();
-      }
+      _getPassengerDetails();
     }
   }
 
@@ -447,8 +444,10 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
     LatLng loc = LatLng(
         userLocationData!.latitude ?? 0, userLocationData!.longitude ?? 0);
     location.onLocationChanged.listen((newLocData) {
-      userLocation =
-          LatLng(newLocData.latitude ?? 0, newLocData.longitude ?? 0);
+      setState(() {
+        userLocation =
+            LatLng(newLocData.latitude ?? 0, newLocData.longitude ?? 0);
+      });
     });
     return loc;
   }
