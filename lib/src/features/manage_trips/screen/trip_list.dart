@@ -166,14 +166,15 @@ class _TripsPageState extends State<TripsPage> {
       _trips = List<Map<String, dynamic>>.from(
           querySnapshot.docs.map((doc) => doc.data()).toList());
       for (var trip in _trips) {
-        if ((DateTime.now()
-            .add(const Duration(hours: 2))
-            .isAfter((trip['departure_time'] as Timestamp).toDate()))) {
+        if (trip['status'] == 'CREATED' &&
+            (DateTime.now()
+                .add(const Duration(hours: 2))
+                .isAfter((trip['departure_time'] as Timestamp).toDate()))) {
           trip['status'] = 'WAITING';
           updateTripStatus(trip: trip);
         }
       }
-      setState(() {});
+      (mounted) ? setState(() {}) : null;
     });
   }
 

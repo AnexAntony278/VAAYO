@@ -51,10 +51,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
   late LatLng? userLocation, sourceLocation, destinationLocation;
 
   List<LatLng> _routePolyLinePoints = [];
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -168,7 +164,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                           ),
                           //TIME
                           Text(
-                            "${date.day} ${date.toMonth()} ${date.year}\n   ${date.hour % 12}:${(date.minute == 0) ? '00' : date.minute} ${date.hour > 12 ? "AM" : "PM"}",
+                            "${date.day} ${date.toMonth()} ${date.year}  \n ${date.hour % 12} :${date.minute} ${(date.hour <= 12 || date.hour == 24) ? 'AM' : 'PM'}",
                             textAlign: TextAlign.center,
                             style: VaayoTheme.mediumBold,
                           ),
@@ -269,38 +265,74 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text("Confirm Delete"),
-                                content: const Text(
-                                    "Are you sure you want to delete this trip?"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Cancel"),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      //DELETE TRIP CODE
-                                      _deleteTrip();
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                      navKey.currentState?.pushNamed("Home");
-                                    },
-                                    child: const Text("Delete"),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: const Text("CANCEL RIDE")),
+                    //CANCEL
+                    if (trip['status'] == 'CREATED')
+                      ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Confirm Delete"),
+                                  content: const Text(
+                                      "Are you sure you want to delete this trip?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Cancel"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        //DELETE TRIP CODE
+                                        _deleteTrip();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        navKey.currentState?.pushNamed("Home");
+                                      },
+                                      child: const Text("Delete"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text("CANCEL RIDE")),
+                    //CONFIRM
+                    if (trip['status'] == 'WAITING')
+                      ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Confirm Trip"),
+                                  content:
+                                      const Text("Confirm trip departure "),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Cancel"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        //CONFIRM  TRIP
+                                        _confirmTrip();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        navKey.currentState?.pushNamed('Home');
+                                      },
+                                      child: const Text("Confirm "),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: const Text('CONFIRM TRIP')),
                   ],
                 ),
               )
@@ -318,6 +350,19 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
     } on FirebaseException catch (e) {
       debugPrint(e.message);
     }
+  }
+
+  void _confirmTrip() async {
+    try {
+      trip['status'] = 'CONFIRMED';
+      await FirebaseFirestore.instance
+          .collection('trips')
+          .doc(trip['id'])
+          .update(trip);
+    } on FirebaseException catch (e) {
+      debugPrint(e.message);
+    }
+    setState(() {});
   }
 
   void _getPassengerDetails() async {

@@ -164,11 +164,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             const Text("Car No"),
-                                            TextField(
+                                            TextFormField(
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
                                               controller: carNoTextController,
+                                              validator: (value) {
+                                                RegExp carNoRegEx = RegExp(
+                                                    r'^[A-Z]{2}[0-9]{1,2}[A-Z]?(?:[0-9]{1,4})?[A-Z]{1,2}[0-9]{1,4}$');
+                                                if (carNoRegEx
+                                                    .hasMatch(value ?? '')) {
+                                                  return null;
+                                                } else {
+                                                  return 'Enter valid car no without spaces';
+                                                }
+                                              },
                                             ),
                                             const Text("Car Model "),
-                                            TextField(
+                                            TextFormField(
                                               controller:
                                                   carModelTextController,
                                             ),
