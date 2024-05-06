@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vaayo/main.dart';
 import 'package:vaayo/src/common_widgets/custom_extensions.dart';
@@ -69,52 +70,58 @@ class _RidesPageState extends State<RidesPage> {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Card(
                     child: SizedBox(
-                        height: 150,
+                        height: 160,
                         child: Padding(
                           padding: const EdgeInsets.all(15),
                           child: Row(children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "${_rides[index]['departure']}->\n${_rides[index]['destination']}"),
-                                Text(
-                                  "${date.day} ${date.toMonth()} ${date.year}  ${date.hour % 12} :${date.minute} ${(date.hour > 12) ? (date.hour == 24) ? 'AM' : 'PM' : "AM"}",
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                // Text(
-                                //   "Pick UP POint:$index",
-                                //   style: const TextStyle(fontSize: 20),
-                                // ),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                              "${List.from(_rides[index]['passengers']).length}/${_rides[index]['total_seats']}"),
-                                          const Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 3)),
-                                          const Icon(Icons.person)
-                                        ],
-                                      ),
-                                      Text(
-                                        // RIDE STATUS
-                                        "${_rides[index]['status']}",
-                                        style: const TextStyle(
-                                            color: Colors.green),
-                                      ),
-                                    ],
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width / 1.8,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${_rides[index]['departure']}\t--->\n${_rides[index]['destination']}",
+                                    softWrap: true,
+                                    maxLines: 3,
                                   ),
-                                ),
-                              ],
+                                  Text(
+                                    "${date.day} ${date.toMonth()} ${date.year}  ${date.hour % 12} :${date.minute} ${(date.hour > 12) ? (date.hour == 24) ? 'AM' : 'PM' : "AM"}",
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  // Text(
+                                  //   "Pick UP POint:$index",
+                                  //   style: const TextStyle(fontSize: 20),
+                                  // ),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                                "${List.from(_rides[index]['passengers']).length}/${_rides[index]['total_seats']}"),
+                                            const Padding(
+                                                padding:
+                                                    EdgeInsets.only(right: 3)),
+                                            const Icon(Icons.person)
+                                          ],
+                                        ),
+                                        Text(
+                                          // RIDE STATUS
+                                          "${_rides[index]['status']}",
+                                          style: const TextStyle(
+                                              color: Colors.green),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Expanded(
                               child: Column(

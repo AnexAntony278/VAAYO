@@ -69,7 +69,7 @@ class _TripsPageState extends State<TripsPage> {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Card(
                     child: SizedBox(
-                        height: 150,
+                        height: 160,
                         child: Padding(
                           padding: const EdgeInsets.all(15),
                           child: Row(children: [
@@ -95,7 +95,7 @@ class _TripsPageState extends State<TripsPage> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        width: 150,
+                                        width: 50,
                                       ),
                                       Flexible(
                                         child: Text(
