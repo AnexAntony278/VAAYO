@@ -105,6 +105,9 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                                       markerId: const MarkerId('destination'),
                                       position: destinationLocation!),
                                   Marker(
+                                      icon:
+                                          BitmapDescriptor.defaultMarkerWithHue(
+                                              BitmapDescriptor.hueAzure),
                                       markerId: const MarkerId('user'),
                                       position: userLocation!),
                                 },
@@ -374,7 +377,7 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
                           },
                           child: const Text('START TRIP')),
                     //FINISH
-                    if (trip['status'] == 'STARTED' && isFinished())
+                    if (trip['status'] == 'STARTED')
                       ElevatedButton(
                           onPressed: () {
                             showDialog(
@@ -424,11 +427,6 @@ class _TripDetailsPageState extends State<TripDetailsPage> {
       if (passenger['status'] != 'BOARDED') flag = false;
     }
     return flag;
-  }
-
-  bool isFinished() {
-    bool flag = false;
-    return true;
   }
 
   void _deleteTrip() async {

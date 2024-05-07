@@ -57,6 +57,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ),
                         CircleAvatar(
                           radius: MediaQuery.of(context).size.width / 6,
+                          child: Icon(
+                            Icons.account_circle,
+                            size: MediaQuery.of(context).size.width / 4,
+                          ),
                         ),
                       ],
                     ),

@@ -132,7 +132,12 @@ class _RidesPageState extends State<RidesPage> {
                                   Text("${_rides[index]['car_no']}",
                                       style: VaayoTheme.mediumBold),
                                   const CircleAvatar(
-                                      radius: 35, child: Placeholder()),
+                                    radius: 35,
+                                    child: Icon(
+                                      Icons.account_circle,
+                                      size: 40,
+                                    ),
+                                  ),
                                   Text(
                                     "${_drivers[index]['name']}",
                                     style: VaayoTheme.mediumBold,

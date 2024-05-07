@@ -125,6 +125,9 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                               const MarkerId('destination'),
                                           position: destinationLocation!),
                                       Marker(
+                                          icon: BitmapDescriptor
+                                              .defaultMarkerWithHue(
+                                                  BitmapDescriptor.hueAzure),
                                           markerId: const MarkerId('user'),
                                           position: userLocation!),
                                     },
