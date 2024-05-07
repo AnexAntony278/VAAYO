@@ -189,12 +189,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                                   carModelTextController,
                                             ),
                                             ElevatedButton(
-                                                onPressed: () => _addCar(
-                                                    no: carNoTextController
-                                                        .text,
-                                                    model:
-                                                        carModelTextController
-                                                            .text),
+                                                onPressed: () {
+                                                  _addCar(
+                                                      no: carNoTextController
+                                                          .text,
+                                                      model:
+                                                          carModelTextController
+                                                              .text);
+                                                  Navigator.pop(context);
+                                                },
                                                 child: const Text("SUBMIT"))
                                           ],
                                         )

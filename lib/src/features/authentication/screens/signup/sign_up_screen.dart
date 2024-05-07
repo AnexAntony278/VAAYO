@@ -198,6 +198,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           height: 10.0,
                         ),
                         TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            return (value == null) ? 'Enter Bio' : null;
+                          },
                           controller: _bioTextController,
                           decoration: const InputDecoration(
                             label: Text('Bio'),
