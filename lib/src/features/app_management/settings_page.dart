@@ -17,7 +17,11 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SETTINGS",style: VaayoTheme.mediumBold,),
+        leading: null,
+        title: const Text(
+          "SETTINGS",
+          style: VaayoTheme.mediumBold,
+        ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Column(children: [

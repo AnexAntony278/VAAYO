@@ -154,8 +154,12 @@ class _SearchRidesPageState extends State<SearchRidesPage> {
                                                   style: const TextStyle(
                                                       fontSize: 20)),
                                               const CircleAvatar(
-                                                  radius: 35,
-                                                  child: Placeholder()),
+                                                radius: 35,
+                                                child: Icon(
+                                                  Icons.account_circle,
+                                                  size: 40,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         )

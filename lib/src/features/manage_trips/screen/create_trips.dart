@@ -137,8 +137,7 @@ class _CreateTripPageState extends State<CreateTripPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      const Placeholder(child: Text("TAGS")),
+
                       const SizedBox(height: 10),
                       const Text("Car select"),
                       //CARS DROPDOWN

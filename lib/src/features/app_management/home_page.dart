@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
         canPop: false,
         child: Scaffold(
             appBar: AppBar(
+              leading: null,
               title: const Text(
                 "VAAYO",
                 style: VaayoTheme.largeBold,

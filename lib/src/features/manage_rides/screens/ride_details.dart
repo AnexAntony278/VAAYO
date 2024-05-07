@@ -247,7 +247,12 @@ class _RideDetailsPageState extends State<RideDetailsPage> {
                                   Column(
                                     children: [
                                       const CircleAvatar(
-                                          radius: 40, child: Placeholder()),
+                                        radius: 40,
+                                        child: Icon(
+                                          Icons.account_circle,
+                                          size: 40,
+                                        ),
+                                      ),
                                       Text("${trip['car_no']}",
                                           style: VaayoTheme.mediumBold),
                                     ],

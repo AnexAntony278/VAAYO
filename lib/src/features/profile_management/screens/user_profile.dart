@@ -253,7 +253,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Future<void> _getUSerData() async {
     final prefs = await SharedPreferences.getInstance();
     uid = prefs.getString('uid');
-    debugPrint("Profile Page :uid is '$uid'"); //TODO
     try {
       _snapshot = await db.collection("users").doc(uid).get();
       setState(() {
@@ -291,6 +290,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (user != null) {
       List<Map<String, dynamic>> updatedCars = List.from(user?['cars']);
       updatedCars.add({'no': no, 'model': model});
+
       try {
         await db.collection("users").doc(uid).update({'cars': updatedCars});
         setState(() {

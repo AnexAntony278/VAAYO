@@ -27,6 +27,7 @@ class _TripsPageState extends State<TripsPage> {
       child: Scaffold(
         backgroundColor: Colors.blueGrey[100],
         appBar: AppBar(
+          leading: null,
           backgroundColor: Theme.of(context).primaryColor,
           title: const Text(
             "MY TRIPS",
@@ -157,7 +158,6 @@ class _TripsPageState extends State<TripsPage> {
 
   void _getTripData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     await FirebaseFirestore.instance
         .collection('trips')
         .where('driver_uid', isEqualTo: prefs.getString('uid'))

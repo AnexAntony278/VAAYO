@@ -28,6 +28,7 @@ class _RidesPageState extends State<RidesPage> {
       child: Scaffold(
         backgroundColor: Colors.blueGrey[100],
         appBar: AppBar(
+          leading: null,
           backgroundColor: Theme.of(context).primaryColor,
           title: const Text(
             "My Rides",
