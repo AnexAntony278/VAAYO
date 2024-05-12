@@ -4,13 +4,14 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This is a Simple Flutter Firebase project by myself.
+It is simple and not so well organised as far as professional projects go. For this is my first mobile app. Learned Lots.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To run/build this app, you need a flutter sdk version with your developement IDE and resolve dependencies.
+To intitialize the app, there are multiple changes to be done such as,
+  - Initialize a new firebase project 
+  - Change firebaseoptions.dart according to the new project created 
+  - Create a Google Cloud Console account if ome does not exist already
+  - Enable Maps SDK for android API and for web.
+  - Generate an API key using billing address
+  - Update this key as vaayoMapsAPIKey in the lib/src/constants/keys.dart file 
