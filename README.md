@@ -14,4 +14,5 @@ To intitialize the app, there are multiple changes to be done such as,
   - Create a Google Cloud Console account if ome does not exist already
   - Enable Maps SDK for android API and for web.
   - Generate an API key using billing address
-  - Update this key as vaayoMapsAPIKey in the lib/src/constants/keys.dart file 
+  - Update this key as vaayoMapsAPIKey in the lib/src/constants/keys.dart file.
+  - 
