@@ -16,13 +16,12 @@ To intitialize the app, there are multiple changes to be done such as,
   - Generate an API key using billing address
   - Update this key as vaayoMapsAPIKey in the lib/src/constants/keys.dart file 
 ## Screenshots
-
-![Screenshot 1](screenshots/welcome.jpg)
-![Screenshot 2](screenshots/sighnup.jpg)
-![Screenshot 3](screenshots/profile.jpg)
-![Screenshot 4](screenshots/ridedetails.jpg)
-![Screenshot 5](screenshots/createtrips.jpg)
-![Screenshot 6](screenshots/tripspage.jpg)
-![Screenshot 7](screenshots/trips.jpg)
-![Screenshot 8](screenshots/search.jpg)
-![Screenshot 9](screenshots/settings.jpg)
+<img src="screenshots/welcome.jpg" alt="Screenshot 1" width="300">
+<img src="screenshots/sighnup.jpg" alt="Screenshot 2" width="300">
+<img src="screenshots/profile.jpg" alt="Screenshot 3" width="300">
+<img src="screenshots/ridedetails.jpg" alt="Screenshot 4" width="300">
+<img src="screenshots/createtrips.jpg" alt="Screenshot 5" width="300">
+<img src="screenshots/tripspage.jpg" alt="Screenshot 6" width="300">
+<img src="screenshots/trips.jpg" alt="Screenshot 7" width="300">
+<img src="screenshots/search.jpg" alt="Screenshot 8" width="300">
+<img src="screenshots/settings.jpg" alt="Screenshot 9" width="300">
