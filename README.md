@@ -15,3 +15,14 @@ To intitialize the app, there are multiple changes to be done such as,
   - Enable Maps SDK for android API and for web.
   - Generate an API key using billing address
   - Update this key as vaayoMapsAPIKey in the lib/src/constants/keys.dart file 
+## Screenshots
+
+![Screenshot 1](screenshots/welcome.jpg)
+![Screenshot 2](screenshots/sighnup.jpg)
+![Screenshot 3](screenshots/profile.jpg)
+![Screenshot 4](screenshots/ridedetails.jpg)
+![Screenshot 5](screenshots/createtrips.jpg)
+![Screenshot 6](screenshots/tripspage.jpg)
+![Screenshot 7](screenshots/trips.jpg)
+![Screenshot 8](screenshots/search.jpg)
+![Screenshot 9](screenshots/settings.jpg)
